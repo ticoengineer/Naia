@@ -90,9 +90,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BL_Naia_ASPNET\BLL_Naia_ASPNET.csproj">
+    <ProjectReference Include="..\BL_Naia_ASPNET\BL_Naia_ASPNET.csproj">
       <Project>{2438d379-7926-46bd-b2e7-e1252a946900}</Project>
-      <Name>BLL_Naia_ASPNET</Name>
+      <Name>BL_Naia_ASPNET</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL_Naia_ASPNET\DAL_Naia_ASPNET.csproj">
       <Project>{3c24d309-ea4a-4460-8515-a49dc78d0d49}</Project>
