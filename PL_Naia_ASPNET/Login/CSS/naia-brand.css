@@ -1,0 +1,31 @@
+/* Naia brand tokens */
+:root {
+  --naia-charcoal-blue: #383F51;
+  --naia-lavender: #DDDBF1;
+  --naia-dusk-blue: #3C4F76;
+  --naia-pale-oak: #D1BEB0;
+  --naia-lilac-ash: #AB9F9D;
+  --naia-white: #FFFFFF;
+}
+
+/* Example header logo */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  color: var(--naia-charcoal-blue);
+  text-decoration: none;
+}
+.brand__logo {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+}
+.brand__name {
+  font-family: Inter, "Avenir Next", Montserrat, Arial, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
