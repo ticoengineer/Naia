@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BLL_Naia_ASPNET/BLL_Naia_ASPNET.csproj" Id="985b55f2-6945-44d3-b740-33efd6b4b6d3" />
+  <Project Path="DAL_Naia_ASPNET/DAL_Naia_ASPNET.csproj" Id="e4e3d12d-afa9-4235-8833-67c80c790ae7" />
+  <Project Path="PL_Naia_ASPNET/PL_Naia_ASPNET.csproj" Id="b7b59942-7a91-4ca1-ae09-112a96610860" />
+</Solution>
