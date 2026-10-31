@@ -97,7 +97,7 @@
         <section class="auth-panel">
 
             <p class="auth-panel__switch">
-                ¿Tu universidad aún no usa Naia? <a href="#">Regístrala</a>
+                ¿Tu universidad aún no usa Naia? <a href="../RegistroInstitucion/frmRegistroInstitucion.aspx">Regístrala</a>
             </p>
 
             <div class="auth-card">
@@ -156,7 +156,7 @@
                 </p>
             </div>
 
-            <p class="auth-panel__footer-mobile">¿Tu universidad aún no usa Naia? <a class="link" href="#">Regístrala</a><br>© 2026 Naia Inc.</p>
+            <p class="auth-panel__footer-mobile">¿Tu universidad aún no usa Naia? <a class="link" href="../RegistroInstitucion/frmRegistroInstitucion.aspx">Regístrala</a><br>© 2026 Naia Inc.</p>
         </section>
 
     </main>
