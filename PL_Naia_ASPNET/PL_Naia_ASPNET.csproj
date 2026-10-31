@@ -82,6 +82,21 @@
     <Content Include="Login\Images\icon-tag.png" />
     <Content Include="Login\Images\icon-ticket.png" />
     <Content Include="Login\Images\naia-icon.png" />
+    <Content Include="RegistroInstitucion\CSS\naia.css" />
+    <Content Include="RegistroInstitucion\frmRegistroInstitucion.aspx" />
+    <Content Include="RegistroInstitucion\Images\favicon.png" />
+    <Content Include="RegistroInstitucion\Images\icon-arrow.png" />
+    <Content Include="RegistroInstitucion\Images\icon-check-ok.png" />
+    <Content Include="RegistroInstitucion\Images\icon-check.png" />
+    <Content Include="RegistroInstitucion\Images\icon-chevron-down.png" />
+    <Content Include="RegistroInstitucion\Images\icon-id-card.png" />
+    <Content Include="RegistroInstitucion\Images\icon-image.png" />
+    <Content Include="RegistroInstitucion\Images\icon-info.png" />
+    <Content Include="RegistroInstitucion\Images\icon-lock.png" />
+    <Content Include="RegistroInstitucion\Images\icon-mail.png" />
+    <Content Include="RegistroInstitucion\Images\icon-school.png" />
+    <Content Include="RegistroInstitucion\Images\icon-tag.png" />
+    <Content Include="RegistroInstitucion\Images\naia-icon.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +111,13 @@
       <DependentUpon>frmLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistroInstitucion\frmRegistroInstitucion.aspx.cs">
+      <DependentUpon>frmRegistroInstitucion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RegistroInstitucion\frmRegistroInstitucion.aspx.designer.cs">
+      <DependentUpon>frmRegistroInstitucion.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -110,6 +132,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Login\JS\" />
     <Folder Include="Models\" />
+    <Folder Include="RegistroInstitucion\JS\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL_Naia_ASPNET\BLL_Naia_ASPNET.csproj">

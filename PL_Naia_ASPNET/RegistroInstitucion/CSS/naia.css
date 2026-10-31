@@ -1,0 +1,1627 @@
+/* ==========================================================================
+   NAIA · Hoja de estilos principal
+   Paleta: Charcoal Blue #383F51 · Dusk Blue #3C4F76 · Lavender #DDDBF1
+           Pale Oak #D1BEB0 · Lilac Ash #AB9F9D
+   ========================================================================== */
+
+/* ---------- 1. Variables (tokens de diseño) ---------- */
+:root {
+    /* Marca */
+    --naia-charcoal: #383F51;
+    --naia-dusk: #3C4F76;
+    --naia-lavender: #DDDBF1;
+    --naia-oak: #D1BEB0;
+    --naia-ash: #AB9F9D;
+    /* Superficies y texto */
+    --color-bg: #F6F5FA;
+    --color-surface: #FFFFFF;
+    --color-border: #E7E5EF;
+    --color-text: #383F51;
+    --color-muted: #7C8191;
+    --color-faint: #A3A7B3;
+    /* Tonos suaves para estados */
+    --color-lavender-50: #F1F0FA;
+    --color-dusk-50: #ECEEF5;
+    --color-oak-50: #F6F0EB;
+    --color-oak-700: #80604A;
+    /* Forma y espaciado */
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-focus: 0 0 0 4px rgba(60, 79, 118, .14);
+    --font-base: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-base);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text);
+    background: var(--color-surface);
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---------- 3. Marca (logo + nombre) ---------- */
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    text-decoration: none;
+    color: var(--naia-charcoal);
+}
+
+.brand__logo {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.brand__name {
+    font-size: 1.75rem;
+    font-weight: 650;
+    letter-spacing: -.05em;
+    line-height: 1;
+}
+
+.brand--light {
+    color: #FFFFFF;
+}
+
+.brand--mobile {
+    display: none;
+    margin-bottom: 1.75rem;
+}
+
+/* ---------- 4. Layout de autenticación (login / registro) ---------- */
+.auth {
+    display: grid;
+    grid-template-columns: 1.08fr 1fr;
+    min-height: 100vh;
+}
+
+/* Panel izquierdo */
+.auth-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 2.75rem 3.5rem;
+    background: var(--naia-charcoal);
+    color: #FFFFFF;
+}
+
+.auth-hero__deco {
+    position: absolute;
+    right: -120px;
+    bottom: -110px;
+    width: 440px;
+    height: 440px;
+    opacity: .09;
+    pointer-events: none;
+}
+
+.auth-hero__content {
+    position: relative;
+    margin: auto 0;
+    max-width: 520px;
+}
+
+.auth-hero__title {
+    margin: 0;
+    font-size: clamp(2rem, 3.2vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -.035em;
+    font-weight: 650;
+}
+
+    .auth-hero__title em {
+        font-style: normal;
+        color: var(--naia-oak);
+    }
+
+.auth-hero__lead {
+    margin: 1rem 0 0;
+    max-width: 480px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #C9CBD6;
+}
+
+.auth-hero__footer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: .8rem;
+    color: #9EA2B1;
+}
+
+    .auth-hero__footer a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+        .auth-hero__footer a:hover {
+            color: #FFFFFF;
+        }
+
+/* Lista de beneficios */
+.feature-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: .8rem;
+}
+
+.feature-list__item {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-size: .95rem;
+    color: #E7E8EE;
+}
+
+.feature-list__icon {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: var(--radius-md);
+    background: rgba(221, 219, 241, .12);
+    color: var(--naia-lavender);
+    flex-shrink: 0;
+}
+
+    .feature-list__icon svg {
+        width: 1.05rem;
+        height: 1.05rem;
+    }
+
+/* Tarjeta decorativa de tiquete */
+.ticket-preview {
+    position: absolute;
+    top: 6rem;
+    right: 3.5rem;
+    width: 340px;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, .07);
+    backdrop-filter: blur(4px);
+}
+
+.ticket-preview__top {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin-bottom: 1rem;
+}
+
+.ticket-preview__icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: rgba(209, 190, 176, .2);
+    color: var(--naia-oak);
+    flex-shrink: 0;
+}
+
+    .ticket-preview__icon svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+.ticket-preview__lines {
+    flex: 1;
+    display: grid;
+    gap: .45rem;
+}
+
+.ticket-preview__line {
+    display: block;
+    width: 55%;
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, .14);
+}
+
+.ticket-preview__line--long {
+    width: 90%;
+    background: rgba(255, 255, 255, .28);
+}
+
+/* Flujo de estados dentro de la tarjeta decorativa */
+.flow-preview {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    /* Línea que une los puntos */
+    .flow-preview::before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: rgba(255, 255, 255, .15);
+    }
+
+    .flow-preview::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 10%;
+        width: 0;
+        height: 2px;
+        background: var(--naia-oak);
+        animation: naia-flow-line 10s linear .4s forwards; /* se llena en 10 s, una sola vez */
+    }
+
+.flow-preview__step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .45rem;
+    font-size: .64rem;
+    color: #9EA2B1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.flow-preview__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .25);
+    background: var(--naia-charcoal);
+}
+
+.flow-preview__step.is-done .flow-preview__dot {
+    border-color: var(--naia-oak);
+    background: var(--naia-oak);
+}
+
+.flow-preview__step.is-current {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+    .flow-preview__step.is-current .flow-preview__dot {
+        border-color: var(--naia-oak);
+        background: var(--naia-charcoal);
+        box-shadow: 0 0 0 4px rgba(209, 190, 176, .2);
+    }
+
+/* ----- Animación del flujo: Nuevo → Cerrado en 10 segundos, una sola vez ----- */
+/* Cada punto se enciende cuando la línea llega a él (cada 2,5 s). */
+.flow-preview__step:nth-child(1) {
+    --delay: .4s;
+}
+
+.flow-preview__step:nth-child(2) {
+    --delay: 2.9s;
+}
+
+.flow-preview__step:nth-child(3) {
+    --delay: 5.4s;
+}
+
+.flow-preview__step:nth-child(4) {
+    --delay: 7.9s;
+}
+
+.flow-preview__step:nth-child(5) {
+    --delay: 10.4s;
+}
+
+.flow-preview__step {
+    animation: naia-flow-label .4s ease var(--delay) forwards;
+}
+
+    .flow-preview__step .flow-preview__dot {
+        animation: naia-flow-dot .6s ease-out var(--delay) forwards;
+    }
+
+    /* El último paso (Cerrado) queda resaltado al terminar */
+    .flow-preview__step:last-child {
+        animation-name: naia-flow-label-final;
+    }
+
+@keyframes naia-flow-line {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 80%;
+    }
+}
+
+@keyframes naia-flow-dot {
+    0% {
+        border-color: rgba(255, 255, 255, .25);
+        background: var(--naia-charcoal);
+        box-shadow: 0 0 0 0 rgba(209, 190, 176, .45);
+    }
+
+    50% {
+        border-color: var(--naia-oak);
+        background: var(--naia-oak);
+        box-shadow: 0 0 0 6px rgba(209, 190, 176, .18);
+    }
+
+    100% {
+        border-color: var(--naia-oak);
+        background: var(--naia-oak);
+        box-shadow: 0 0 0 0 rgba(209, 190, 176, 0);
+    }
+}
+
+@keyframes naia-flow-label {
+    to {
+        color: #E7E8EE;
+    }
+}
+
+@keyframes naia-flow-label-final {
+    to {
+        color: #FFFFFF;
+        font-weight: 600;
+    }
+}
+
+/* Sin animación: se muestra directamente el estado final */
+@media (prefers-reduced-motion: reduce) {
+    .flow-preview::after {
+        animation: none;
+        width: 80%;
+    }
+
+    .flow-preview__step,
+    .flow-preview__step .flow-preview__dot {
+        animation-duration: 0s;
+        animation-delay: 0s;
+    }
+}
+
+.flow-preview__extra {
+    display: flex;
+    gap: .45rem;
+    margin-top: .9rem;
+    padding-top: .75rem;
+    border-top: 1px dashed rgba(255, 255, 255, .12);
+}
+
+.state-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    height: 1.3rem;
+    padding: 0 .55rem;
+    border-radius: 999px;
+    font-size: .66rem;
+    font-weight: 500;
+}
+
+    .state-chip::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+.state-chip--wait {
+    background: rgba(171, 159, 157, .18);
+    color: #D6CFCD;
+}
+
+.state-chip--cancel {
+    background: rgba(255, 255, 255, .06);
+    color: #9EA2B1;
+}
+
+/* Panel derecho */
+.auth-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    background: var(--color-surface);
+}
+
+.auth-panel__switch {
+    position: absolute;
+    top: 1.6rem;
+    right: 2.25rem;
+    margin: 0;
+    font-size: .85rem;
+    color: var(--color-muted);
+}
+
+    .auth-panel__switch a,
+    .link {
+        color: var(--naia-dusk);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .auth-panel__switch a:hover,
+        .link:hover {
+            text-decoration: underline;
+        }
+
+.auth-panel__footer-mobile {
+    display: none;
+    margin: 2rem 0 0;
+    font-size: .8rem;
+    color: var(--color-faint);
+}
+
+/* Tarjeta del formulario */
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-card__title {
+    margin: 0 0 .35rem;
+    font-size: 1.85rem;
+    font-weight: 650;
+    letter-spacing: -.03em;
+}
+
+.auth-card__subtitle {
+    margin: 0 0 1.75rem;
+    font-size: .95rem;
+    color: var(--color-muted);
+}
+
+.auth-card__note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    margin: 1.75rem 0 0;
+    font-size: .8rem;
+    color: var(--color-faint);
+    text-align: center;
+}
+
+    .auth-card__note svg {
+        width: .9rem;
+        height: .9rem;
+        flex-shrink: 0;
+    }
+
+/* ---------- 5. Formularios ---------- */
+.form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+}
+
+.field__label {
+    display: block;
+    margin-bottom: .45rem;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    height: 2.85rem;
+    padding: 0 .9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+    .input:focus-within {
+        border-color: var(--naia-dusk);
+        box-shadow: var(--shadow-focus);
+    }
+
+.input__icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--color-faint);
+    flex-shrink: 0;
+}
+
+.input:focus-within .input__icon {
+    color: var(--naia-dusk);
+}
+
+.input__control {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: .95rem;
+    color: var(--color-text);
+}
+
+    .input__control::placeholder {
+        color: var(--color-faint);
+    }
+
+.input__action {
+    display: grid;
+    place-items: center;
+    padding: .25rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-faint);
+    cursor: pointer;
+}
+
+    .input__action:hover {
+        color: var(--naia-dusk);
+        background: var(--color-lavender-50);
+    }
+
+    .input__action svg {
+        width: 1.05rem;
+        height: 1.05rem;
+    }
+
+.form__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin: .1rem 0 .5rem;
+    font-size: .85rem;
+}
+
+/* Checkbox personalizado */
+.checkbox {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    color: var(--color-muted);
+    cursor: pointer;
+}
+
+    .checkbox input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+.checkbox__box {
+    width: 1.05rem;
+    height: 1.05rem;
+    border: 1.5px solid #C8CAD4;
+    border-radius: 5px;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.checkbox input:checked + .checkbox__box {
+    border-color: var(--naia-dusk);
+    background: var(--naia-dusk) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 70% no-repeat;
+}
+
+.checkbox input:focus-visible + .checkbox__box {
+    box-shadow: var(--shadow-focus);
+}
+
+/* ---------- 5b. Animación de foco en los campos ---------- */
+/* Al hacer clic en un campo: la etiqueta cambia de color, el borde se tiñe,
+   aparece un halo suave, una línea se dibuja desde el centro y el ícono
+   se desplaza levemente. Todo en ~0.3 s, sin rebotes. */
+
+.field__label {
+    transition: color .25s ease, transform .25s ease;
+}
+
+.field:focus-within .field__label {
+    color: var(--naia-dusk);
+    transform: translateX(2px);
+}
+
+.input {
+    position: relative;
+    transition: border-color .25s ease, box-shadow .3s ease, background-color .25s ease;
+}
+
+    /* Línea inferior que se dibuja desde el centro */
+    .input::after {
+        content: "";
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: -1px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--naia-oak), var(--naia-dusk), var(--naia-oak));
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+        pointer-events: none;
+    }
+
+    .input:focus-within {
+        background-color: #FCFCFE;
+        animation: naia-halo .6s ease-out;
+    }
+
+        .input:focus-within::after {
+            transform: scaleX(1);
+        }
+
+/* Ícono: leve desplazamiento y cambio de color */
+.input__icon {
+    transition: color .25s ease, transform .3s cubic-bezier(.2, .7, .2, 1);
+}
+
+.input:focus-within .input__icon {
+    transform: translateX(2px) scale(1.08);
+}
+
+/* Halo que se expande una sola vez y se queda suave */
+@keyframes naia-halo {
+    0% {
+        box-shadow: 0 0 0 0 rgba(60, 79, 118, .28);
+    }
+
+    100% {
+        box-shadow: var(--shadow-focus);
+    }
+}
+
+/* Respeta a quienes desactivan las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+    .field__label,
+    .input,
+    .input::after,
+    .input__icon {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* ---------- 6. Botones ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    height: 2.6rem;
+    padding: 0 1.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .15s ease, transform .05s ease, box-shadow .15s ease;
+}
+
+    .btn svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+        outline: 0;
+        box-shadow: var(--shadow-focus);
+    }
+
+.btn--primary {
+    background: var(--naia-dusk);
+    color: #FFFFFF;
+}
+
+    .btn--primary:hover {
+        background: #33446A;
+    }
+
+.btn--secondary {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+    .btn--secondary:hover {
+        background: var(--color-bg);
+    }
+
+.btn--block {
+    width: 100%;
+    height: 2.95rem;
+    font-size: .95rem;
+}
+
+/* ---------- 7. Etiquetas de estado ---------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    height: 1.35rem;
+    padding: 0 .6rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+.badge--progress {
+    background: var(--color-oak-50);
+    color: var(--color-oak-700);
+}
+
+/* ---------- 7b. Registro de usuario ---------- */
+
+/* Layout: panel de marca más angosto y formulario con scroll propio */
+.auth--register {
+    grid-template-columns: .82fr 1.18fr;
+}
+
+.auth-panel--scroll {
+    justify-content: flex-start;
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+}
+
+.auth-card--wide {
+    max-width: 560px;
+}
+
+.required {
+    color: #A9545E;
+}
+
+.auth-hero__aside {
+    margin: 2.25rem 0 0;
+    padding: .9rem 1rem;
+    max-width: 420px;
+    border-left: 2px solid var(--naia-oak);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: rgba(255, 255, 255, .05);
+    font-size: .85rem;
+    line-height: 1.5;
+    color: #C9CBD6;
+}
+
+/* Pasos del panel izquierdo */
+.steps {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.1rem;
+}
+
+.steps__item {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+}
+
+    .steps__item strong {
+        display: block;
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    .steps__item span:not(.steps__number) {
+        font-size: .85rem;
+        color: #9EA2B1;
+    }
+
+.steps__number {
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    border: 1.5px solid rgba(221, 219, 241, .35);
+    font-size: .8rem;
+    font-weight: 600;
+    color: #C9CBD6;
+    flex-shrink: 0;
+}
+
+.steps__item.is-current .steps__number {
+    border-color: var(--naia-oak);
+    background: var(--naia-oak);
+    color: var(--naia-charcoal);
+}
+
+/* Estructura del formulario */
+.form__section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.form__grid--id {
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+}
+
+.field__hint {
+    margin: .4rem 0 0;
+    font-size: .75rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+}
+
+.form__actions {
+    display: grid;
+    grid-template-columns: minmax(0, .4fr) minmax(0, 1fr);
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+    .form__actions .btn {
+        height: 2.95rem;
+    }
+
+.checkbox--terms {
+    align-items: flex-start;
+    font-size: .85rem;
+    line-height: 1.45;
+}
+
+    .checkbox--terms .checkbox__box {
+        margin-top: .1rem;
+        flex-shrink: 0;
+    }
+
+    .checkbox--terms .link {
+        font-size: inherit;
+    }
+
+/* Selector segmentado (radio buttons con estilo de pestañas) */
+.segmented {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: .25rem;
+    padding: .25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+}
+
+    .segmented input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+    .segmented label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        height: 2.4rem;
+        border-radius: var(--radius-sm);
+        font-size: .88rem;
+        font-weight: 500;
+        color: var(--color-muted);
+        cursor: pointer;
+        transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+        .segmented label svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .segmented label:hover {
+            color: var(--color-text);
+        }
+
+    .segmented input:checked + label {
+        background: var(--color-surface);
+        color: var(--naia-dusk);
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(56, 63, 81, .12);
+    }
+
+    .segmented input:focus-visible + label {
+        box-shadow: var(--shadow-focus);
+    }
+
+/* Listas desplegables (select) con el mismo estilo de los inputs */
+.select {
+    position: relative;
+}
+
+.select__control {
+    width: 100%;
+    height: 2.85rem;
+    padding: 0 2.4rem 0 .9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font: inherit;
+    font-size: .95rem;
+    color: var(--color-text);
+    appearance: none;
+    cursor: pointer;
+    transition: border-color .25s ease, box-shadow .3s ease;
+}
+
+    .select__control:invalid {
+        color: var(--color-faint); /* muestra la opción "Selecciona" en gris */
+    }
+
+    .select__control option {
+        color: var(--color-text);
+    }
+
+    .select__control:focus {
+        outline: 0;
+        border-color: var(--naia-dusk);
+        box-shadow: var(--shadow-focus);
+    }
+
+.select__chevron {
+    position: absolute;
+    top: 50%;
+    right: .9rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: transform .25s ease, color .25s ease;
+}
+
+.select:focus-within .select__chevron {
+    color: var(--naia-dusk);
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Validación visual de la contraseña (solo CSS) */
+.input__ok {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: #4F7A69;
+    opacity: 0;
+    transform: scale(.6);
+    transition: opacity .25s ease, transform .25s ease;
+    flex-shrink: 0;
+}
+
+.input--validate:has(.input__control:valid) .input__ok {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.input--validate:has(.input__control:not(:placeholder-shown):invalid):not(:focus-within) {
+    border-color: #D9A3AA;
+}
+
+/* Textos que cambian según el tipo de usuario elegido (Rol.TipoNumeroInterno) */
+.role-text--profesor {
+    display: none;
+}
+
+.form:has(#rol-profesor:checked) .role-text--estudiante {
+    display: none;
+}
+
+.form:has(#rol-profesor:checked) .role-text--profesor {
+    display: inline;
+}
+
+/* El panel de marca se queda fijo mientras el formulario hace scroll */
+.auth--register .auth-hero {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: start;
+}
+
+@media (max-width: 1100px) {
+    .auth--register {
+        grid-template-columns: .9fr 1.1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .form__grid,
+    .form__grid--id,
+    .form__grid--email,
+    .form__actions {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+        .form__actions .btn--secondary {
+            order: 2;
+        }
+}
+
+/* ---------- 7c. Registro de universidad ---------- */
+
+.form__section + .form__section {
+    margin-top: .9rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.form__heading {
+    float: left; /* saca la leyenda del borde del fieldset */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: 1rem;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 650;
+    letter-spacing: -.01em;
+    color: var(--color-text);
+}
+
+.form__heading-number {
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--color-lavender-50);
+    color: var(--naia-dusk);
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.form__heading + * {
+    clear: both;
+}
+
+.form__intro {
+    margin: -.35rem 0 1rem;
+    font-size: .85rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+}
+
+    .form__intro strong {
+        color: var(--color-text);
+    }
+
+.form__stack {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+}
+
+.form__grid--name {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .38fr);
+}
+
+.field__optional {
+    font-weight: 400;
+    color: var(--color-faint);
+}
+
+.steps__number svg {
+    width: .85rem;
+    height: .85rem;
+}
+
+/* Tarjetas de plan (radio buttons) */
+.plan-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+    .plan-options input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+.plan-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    padding: 1rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: border-color .25s ease, box-shadow .25s ease, transform .2s ease;
+}
+
+    .plan-card:hover {
+        border-color: #C9C6E6;
+        transform: translateY(-1px);
+    }
+
+.plan-card__name {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+}
+
+.plan-card__price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -.03em;
+    color: var(--color-text);
+}
+
+    .plan-card__price small {
+        font-size: .75rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        color: var(--color-muted);
+    }
+
+.plan-card__detail {
+    font-size: .78rem;
+    color: var(--color-muted);
+}
+
+.plan-card__tag {
+    position: absolute;
+    top: -.6rem;
+    right: .75rem;
+    padding: .1rem .5rem;
+    border-radius: 999px;
+    background: var(--naia-oak);
+    color: var(--naia-charcoal);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.plan-options input:checked + .plan-card {
+    border-color: var(--naia-dusk);
+    background: var(--color-lavender-50);
+    box-shadow: 0 0 0 3px rgba(60, 79, 118, .1);
+}
+
+    .plan-options input:checked + .plan-card .plan-card__name {
+        color: var(--naia-dusk);
+    }
+
+.plan-options input:focus-visible + .plan-card {
+    box-shadow: var(--shadow-focus);
+}
+
+/* Prefijo dentro del input (nombre@) */
+.input__prefix {
+    margin-right: -.35rem;
+    font-size: .95rem;
+    color: var(--color-faint);
+    white-space: nowrap;
+}
+
+/* Carga de archivo */
+.upload {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .85rem 1rem;
+    border: 1.5px dashed #D3D1E3;
+    border-radius: var(--radius-md);
+    background: #FCFCFE;
+    cursor: pointer;
+    transition: border-color .25s ease, background .25s ease;
+}
+
+    .upload:hover,
+    .upload:focus-within {
+        border-color: var(--naia-dusk);
+        background: var(--color-lavender-50);
+    }
+
+.upload__icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-md);
+    background: var(--color-lavender-50);
+    color: var(--naia-dusk);
+    flex-shrink: 0;
+}
+
+    .upload__icon svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+.upload__text {
+    display: grid;
+    font-size: .85rem;
+}
+
+    .upload__text strong {
+        font-weight: 600;
+        color: var(--naia-dusk);
+    }
+
+    .upload__text span {
+        font-size: .75rem;
+        color: var(--color-muted);
+    }
+
+.upload__control {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Recuadro informativo */
+.note-box {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    padding: .85rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-lavender-50);
+    font-size: .82rem;
+    line-height: 1.5;
+    color: var(--naia-dusk);
+}
+
+    .note-box svg {
+        width: 1rem;
+        height: 1rem;
+        margin-top: .1rem;
+        flex-shrink: 0;
+    }
+
+@media (max-width: 560px) {
+    .plan-options,
+    .form__grid--name {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ---------- 7d. Animaciones del registro de universidad ---------- */
+
+/* ===== Pasos del panel izquierdo: se completan en ~12 s, una sola vez ===== */
+.steps--animated {
+    position: relative;
+}
+
+    /* Riel vertical que une los números */
+    .steps--animated::before,
+    .steps--animated::after {
+        content: "";
+        position: absolute;
+        left: calc(.95rem - 1px);
+        top: 1.9rem;
+        bottom: 2.4rem;
+        width: 2px;
+        border-radius: 2px;
+    }
+
+    .steps--animated::before {
+        background: rgba(221, 219, 241, .15);
+    }
+
+    /* Línea de progreso que baja de paso en paso */
+    .steps--animated::after {
+        background: var(--naia-oak);
+        transform: scaleY(0);
+        transform-origin: top;
+        animation: naia-steps-line 10.5s linear .5s forwards;
+    }
+
+    .steps--animated .steps__number {
+        position: relative;
+        z-index: 1;
+        background: var(--naia-charcoal);
+    }
+
+    .steps--animated .steps__item strong {
+        color: #9EA2B1;
+    }
+
+    .steps--animated .steps__item:nth-child(1) {
+        --delay: .5s;
+    }
+
+    .steps--animated .steps__item:nth-child(2) {
+        --delay: 4s;
+    }
+
+    .steps--animated .steps__item:nth-child(3) {
+        --delay: 7.5s;
+    }
+
+    .steps--animated .steps__item:nth-child(4) {
+        --delay: 11s;
+    }
+
+    .steps--animated .steps__number {
+        animation: naia-step-number .7s ease-out var(--delay) forwards;
+    }
+
+    .steps--animated .steps__item strong {
+        animation: naia-step-text .5s ease var(--delay) forwards;
+    }
+
+@keyframes naia-steps-line {
+    to {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes naia-step-number {
+    0% {
+        border-color: rgba(221, 219, 241, .35);
+        background: var(--naia-charcoal);
+        color: #C9CBD6;
+        box-shadow: 0 0 0 0 rgba(209, 190, 176, .45);
+    }
+
+    50% {
+        border-color: var(--naia-oak);
+        background: var(--naia-oak);
+        color: var(--naia-charcoal);
+        box-shadow: 0 0 0 7px rgba(209, 190, 176, .16);
+    }
+
+    100% {
+        border-color: var(--naia-oak);
+        background: var(--naia-oak);
+        color: var(--naia-charcoal);
+        box-shadow: 0 0 0 0 rgba(209, 190, 176, 0);
+    }
+}
+
+@keyframes naia-step-text {
+    to {
+        color: #FFFFFF;
+    }
+}
+
+/* ===== Tarjetas de plan: el resaltado se desliza suavemente ===== */
+.plan-options {
+    position: relative;
+    --plan-gap: .75rem;
+    gap: var(--plan-gap);
+}
+
+    /* Marco que viaja detrás de la tarjeta elegida */
+    .plan-options::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc((100% - 2 * var(--plan-gap)) / 3);
+        height: 100%;
+        border: 1.5px solid var(--naia-dusk);
+        border-radius: var(--radius-lg);
+        background: var(--color-lavender-50);
+        box-shadow: 0 6px 18px rgba(60, 79, 118, .12);
+        transition: transform .5s cubic-bezier(.22, .8, .2, 1);
+        pointer-events: none;
+    }
+
+    .plan-options:has(input:nth-of-type(2):checked)::before {
+        transform: translateX(calc(100% + var(--plan-gap)));
+    }
+
+    .plan-options:has(input:nth-of-type(3):checked)::before {
+        transform: translateX(calc(200% + 2 * var(--plan-gap)));
+    }
+
+.plan-card {
+    z-index: 1;
+    transition: border-color .3s ease, transform .3s ease, background .3s ease;
+}
+
+/* La tarjeta elegida deja ver el marco que se desliza */
+.plan-options input:checked + .plan-card {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+    .plan-options input:checked + .plan-card .plan-card__price {
+        animation: naia-plan-pop .45s cubic-bezier(.22, .8, .2, 1);
+    }
+
+@keyframes naia-plan-pop {
+    0% {
+        transform: translateY(4px);
+        opacity: .55;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ===== Correo del administrador: el dominio queda fijo ===== */
+.form__grid--email {
+    grid-template-columns: minmax(0, .62fr) minmax(0, 1.38fr);
+}
+
+.input__suffix {
+    max-width: 62%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: .6rem;
+    border-left: 1px solid var(--color-border);
+    font-size: .92rem;
+    color: var(--color-faint);
+    transition: color .25s ease;
+}
+
+    .input__suffix.is-filled {
+        color: var(--naia-dusk);
+        font-weight: 600;
+    }
+
+@media (max-width: 560px) {
+    .form__grid--email {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* En celular las tarjetas van una debajo de otra: el marco baja en vez de correrse */
+    .plan-options::before {
+        width: 100%;
+        height: calc((100% - 2 * var(--plan-gap)) / 3);
+    }
+
+    .plan-options:has(input:nth-of-type(2):checked)::before {
+        transform: translateY(calc(100% + var(--plan-gap)));
+    }
+
+    .plan-options:has(input:nth-of-type(3):checked)::before {
+        transform: translateY(calc(200% + 2 * var(--plan-gap)));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .steps--animated::after {
+        animation: none;
+        transform: scaleY(1);
+    }
+
+    .steps--animated .steps__number,
+    .steps--animated .steps__item strong {
+        animation-duration: 0s;
+        animation-delay: 0s;
+    }
+
+    .plan-options::before {
+        transition: none;
+    }
+
+    .plan-options input:checked + .plan-card .plan-card__price {
+        animation: none;
+    }
+}
+
+/* ---------- 8. Responsive ---------- */
+@media (max-width: 1100px), (max-height: 780px) {
+    .ticket-preview {
+        display: none;
+    }
+}
+
+@media (max-width: 860px) {
+    .auth,
+    .auth--register {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .auth-hero {
+        display: none;
+    }
+
+    .auth-panel {
+        justify-content: flex-start;
+        padding: 4.5rem 1.25rem 2rem;
+        background: var(--color-bg);
+    }
+
+    .auth-card {
+        padding: 2rem 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        background: var(--color-surface);
+    }
+
+    .brand--mobile {
+        display: inline-flex;
+    }
+
+    .auth-panel__switch {
+        right: 1.25rem;
+    }
+
+    .auth-panel__footer-mobile {
+        display: block;
+    }
+}
+
+@media (max-width: 420px) {
+    .form__row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

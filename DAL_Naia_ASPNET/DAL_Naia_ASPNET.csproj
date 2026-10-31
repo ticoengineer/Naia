@@ -44,5 +44,10 @@
     <Compile Include="BD\cls_BD_DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="BD\Scripts\dataBase_Creation.sql" />
+    <Content Include="BD\Scripts\Stored_Procedures\storedProcedures_Script.sql" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
