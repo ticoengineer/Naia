@@ -341,3 +341,101 @@ CREATE INDEX IX_Adjunto_Ticket         ON dbo.Adjunto (TicketId);
 CREATE INDEX IX_HistorialEstado_Ticket ON dbo.HistorialEstado (TicketId, Fecha);
 CREATE INDEX IX_Auditoria_Fecha        ON dbo.Auditoria (InstitucionId, Fecha DESC);
 GO
+
+/* ================================================================================================
+   NAIA INC. · DATOS FIJOS DE LOS CATÁLOGOS GLOBALES
+   Ejecutar DESPUÉS de crear las tablas y ANTES de usar los procedimientos.
+   ================================================================================================ */
+
+USE NaiaInc
+GO
+
+-- ROLES · 1 Estudiante · 2 Profesor · 3 Soporte técnico · 4 Administrativo
+INSERT INTO dbo.Rol (RolId, Nombre, Descripcion, TipoNumeroInterno, PuedeResolverTickets, PuedeAdministrar)
+SELECT V.RolId, V.Nombre, V.Descripcion, V.TipoNumeroInterno, V.PuedeResolverTickets, V.PuedeAdministrar
+FROM (VALUES
+ (1, N'Estudiante',      N'Crea tiquetes y da seguimiento a los suyos.',                     N'Carné',           0, 0),
+ (2, N'Profesor',        N'Crea tiquetes y da seguimiento a los suyos.',                     N'N.º de empleado', 0, 0),
+ (3, N'Soporte técnico', N'Atiende y resuelve tiquetes.',                                    N'N.º de empleado', 1, 0),
+ (4, N'Administrativo',  N'Resuelve tiquetes y administra usuarios, catálogos y auditoría.', N'N.º de empleado', 1, 1)
+) V (RolId, Nombre, Descripcion, TipoNumeroInterno, PuedeResolverTickets, PuedeAdministrar)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.Rol R WHERE R.RolId = V.RolId);
+
+-- TIPOS DE IDENTIFICACIÓN · 1 Cédula · 2 DIMEX · 3 Pasaporte · 4 Otro
+INSERT INTO dbo.TipoIdentificacion (TipoIdentificacionId, Nombre)
+SELECT V.TipoIdentificacionId, V.Nombre
+FROM (VALUES
+ (1, N'Cédula de identidad'),
+ (2, N'DIMEX'),
+ (3, N'Pasaporte'),
+ (4, N'Otro')
+) V (TipoIdentificacionId, Nombre)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TipoIdentificacion T WHERE T.TipoIdentificacionId = V.TipoIdentificacionId);
+
+-- PRIORIDADES · el número más bajo es el más urgente · SlaHoras = tiempo para resolver
+INSERT INTO dbo.Prioridad (PrioridadId, Nombre, Nivel, SlaHoras, ColorHex)
+SELECT V.PrioridadId, V.Nombre, V.Nivel, V.SlaHoras, V.ColorHex
+FROM (VALUES
+ (1, N'Crítica', 1,  2, '#7E2F3A'),
+ (2, N'Alta',    2,  4, '#A9545E'),
+ (3, N'Media',   3,  8, '#D1BEB0'),
+ (4, N'Baja',    4, 24, '#3C4F76')
+) V (PrioridadId, Nombre, Nivel, SlaHoras, ColorHex)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.Prioridad P WHERE P.PrioridadId = V.PrioridadId);
+
+-- ESTADOS DEL TIQUETE · 6 y 7 son finales
+INSERT INTO dbo.EstadoTicket (EstadoId, Nombre, Orden, EsFinal)
+SELECT V.EstadoId, V.Nombre, V.Orden, V.EsFinal
+FROM (VALUES
+ (1, N'Nuevo',       1, 0),
+ (2, N'Asignado',    2, 0),
+ (3, N'En progreso', 3, 0),
+ (4, N'En espera',   4, 0),
+ (5, N'Resuelto',    5, 0),
+ (6, N'Cerrado',     6, 1),
+ (7, N'Cancelado',   7, 1)
+) V (EstadoId, Nombre, Orden, EsFinal)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.EstadoTicket E WHERE E.EstadoId = V.EstadoId);
+
+-- REGLAS DE CAMBIO DE ESTADO (de qué estado a cuál, quién puede y si pide motivo)
+INSERT INTO dbo.TransicionEstado (EstadoOrigenId, EstadoDestinoId, RequiereMotivo, PermiteSolicitante, PermiteSoporte)
+SELECT V.Origen, V.Destino, V.Motivo, V.Solicitante, V.Soporte
+FROM (VALUES
+ (1, 2, 0, 0, 1),   -- Nuevo       → Asignado   (se hace con SP_ASIGNA_TICKETS)
+ (1, 7, 1, 1, 1),   -- Nuevo       → Cancelado
+ (2, 3, 0, 0, 1),   -- Asignado    → En progreso
+ (2, 4, 1, 0, 1),   -- Asignado    → En espera
+ (2, 7, 1, 1, 1),   -- Asignado    → Cancelado
+ (3, 4, 1, 0, 1),   -- En progreso → En espera
+ (3, 5, 0, 0, 1),   -- En progreso → Resuelto   (exige solución)
+ (3, 2, 1, 0, 1),   -- En progreso → Asignado   (reasignar)
+ (3, 7, 1, 0, 1),   -- En progreso → Cancelado
+ (4, 3, 0, 0, 1),   -- En espera   → En progreso
+ (4, 2, 1, 0, 1),   -- En espera   → Asignado   (reasignar)
+ (4, 7, 1, 0, 1),   -- En espera   → Cancelado
+ (5, 6, 0, 1, 0),   -- Resuelto    → Cerrado    (el solicitante confirma)
+ (5, 2, 1, 1, 0)    -- Resuelto    → Asignado   (el solicitante reabre)
+) V (Origen, Destino, Motivo, Solicitante, Soporte)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.TransicionEstado T WHERE T.EstadoOrigenId = V.Origen AND T.EstadoDestinoId = V.Destino);
+
+-- PLANES · se fuerzan los Id 1, 2 y 3 para que coincidan con la documentación
+SET IDENTITY_INSERT dbo.PlanSuscripcion ON;
+INSERT INTO dbo.PlanSuscripcion (PlanId, Nombre, MaxUsuarios, PrecioMensual)
+SELECT V.PlanId, V.Nombre, V.MaxUsuarios, V.PrecioMensual
+FROM (VALUES
+ (1, N'Básico',         500, 149.00),
+ (2, N'Profesional',   3000, 399.00),
+ (3, N'Institucional', NULL, 899.00)
+) V (PlanId, Nombre, MaxUsuarios, PrecioMensual)
+WHERE NOT EXISTS (SELECT 1 FROM dbo.PlanSuscripcion P WHERE P.PlanId = V.PlanId OR P.Nombre = V.Nombre);
+SET IDENTITY_INSERT dbo.PlanSuscripcion OFF;
+GO
+
+-- Verificación: debe mostrar 4 · 4 · 4 · 7 · 14 · 3
+SELECT (SELECT COUNT(*) FROM dbo.Rol)                AS Roles,
+       (SELECT COUNT(*) FROM dbo.TipoIdentificacion) AS TiposIdentificacion,
+       (SELECT COUNT(*) FROM dbo.Prioridad)          AS Prioridades,
+       (SELECT COUNT(*) FROM dbo.EstadoTicket)       AS Estados,
+       (SELECT COUNT(*) FROM dbo.TransicionEstado)   AS Transiciones,
+       (SELECT COUNT(*) FROM dbo.PlanSuscripcion)    AS Planes;
+GO
