@@ -35,7 +35,6 @@ CREATE TABLE dbo.Institucion (
     Nombre         NVARCHAR(150)      NOT NULL,
     Siglas         NVARCHAR(10)       NOT NULL,
     DominioCorreo  VARCHAR(100)       NOT NULL CONSTRAINT UQ_Institucion_DominioCorreo UNIQUE,  -- ej. uam.ac.cr
-    LogoUrl        NVARCHAR(300)      NULL,
     Activa         BIT                NOT NULL CONSTRAINT DF_Institucion_Activa DEFAULT (1),
     FechaCreacion  DATETIME2(0)       NOT NULL CONSTRAINT DF_Institucion_Fecha  DEFAULT (SYSDATETIME()),
     CONSTRAINT FK_Institucion_Plan FOREIGN KEY (PlanId) REFERENCES dbo.PlanSuscripcion (PlanId)
