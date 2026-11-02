@@ -449,7 +449,6 @@ CREATE OR ALTER PROCEDURE SP_INSERTA_INSTITUCIONES
 @NombreInstitucion     NVARCHAR(150),
 @Siglas                NVARCHAR(10),
 @DominioCorreo         VARCHAR(100),
-@LogoUrl               NVARCHAR(300),     -- puede ser NULL
 @TipoIdentificacionId  TINYINT,           -- datos del administrador ↓
 @Identificacion        VARCHAR(30),
 @NumeroInterno         VARCHAR(30),
@@ -517,8 +516,8 @@ AS BEGIN
 		BEGIN TRANSACTION
 
 			-- 1. Universidad
-			INSERT INTO Institucion (PlanId, Nombre, Siglas, DominioCorreo, LogoUrl)
-			VALUES (@PlanId, @NombreInstitucion, @Siglas, @DominioCorreo, @LogoUrl)
+			INSERT INTO Institucion (PlanId, Nombre, Siglas, DominioCorreo)
+			VALUES (@PlanId, @NombreInstitucion, @Siglas, @DominioCorreo)
 			SET @NuevaInstitucionId = SCOPE_IDENTITY()
 
 			-- 2. Departamento por defecto del administrador
@@ -587,13 +586,13 @@ GO
 USE NaiaInc
 GO
 
--- Pantalla "Configuración" de la universidad y encabezado de la app (nombre, siglas, logo).
+-- Pantalla "Configuración" de la universidad y encabezado de la app (nombre y siglas).
 CREATE OR ALTER PROCEDURE SP_INFO_INSTITUCION
 (
 @InstitucionId INT
 )
 AS BEGIN
-	SELECT INS.InstitucionId, INS.Nombre AS NombreInstitucion, INS.Siglas, INS.DominioCorreo, INS.LogoUrl,
+	SELECT INS.InstitucionId, INS.Nombre AS NombreInstitucion, INS.Siglas, INS.DominioCorreo,
 	       INS.PlanId, PLA.Nombre AS NombrePlan, PLA.MaxUsuarios, PLA.PrecioMensual,
 	       (SELECT COUNT(*) FROM Usuario USR WHERE USR.InstitucionId=INS.InstitucionId AND USR.Activo=1) AS UsuariosActivos,
 	       INS.Activa, INS.FechaCreacion
@@ -606,7 +605,7 @@ GO
 USE NaiaInc
 GO
 
--- Pantalla "Configuración": el administrador edita nombre, siglas, logo o cambia de plan.
+-- Pantalla "Configuración": el administrador edita nombre, siglas o cambia de plan.
 -- El dominio de correo NO se puede cambiar: todos los correos de los usuarios dependen de él.
 CREATE OR ALTER PROCEDURE SP_ACTUALIZA_INSTITUCIONES
 (
@@ -614,7 +613,6 @@ CREATE OR ALTER PROCEDURE SP_ACTUALIZA_INSTITUCIONES
 @PlanId             INT,
 @NombreInstitucion  NVARCHAR(150),
 @Siglas             NVARCHAR(10),
-@LogoUrl            NVARCHAR(300),
 @IdUsuarioGlobal    INT,
 @DireccionIp        VARCHAR(45)
 )
@@ -628,7 +626,7 @@ AS BEGIN
 	DECLARE @DSC NVARCHAR(MAX)
 	DECLARE @ELEMENTO NVARCHAR(150)
 	DECLARE @MaxUsuarios INT
-	DECLARE @AntPlanId INT, @AntPlan NVARCHAR(50), @AntNombre NVARCHAR(150), @AntSiglas NVARCHAR(10), @AntLogo NVARCHAR(300)
+	DECLARE @AntPlanId INT, @AntPlan NVARCHAR(50), @AntNombre NVARCHAR(150), @AntSiglas NVARCHAR(10)
 
 	BEGIN TRY
 		IF NOT EXISTS (SELECT 1 FROM Institucion WHERE InstitucionId=@InstitucionId)
@@ -640,7 +638,7 @@ AS BEGIN
 		SET @NombreInstitucion = LTRIM(RTRIM(@NombreInstitucion))
 		SET @Siglas = LTRIM(RTRIM(@Siglas))
 
-		SELECT @AntPlanId=INS.PlanId, @AntPlan=PLA.Nombre, @AntNombre=INS.Nombre, @AntSiglas=INS.Siglas, @AntLogo=INS.LogoUrl
+		SELECT @AntPlanId=INS.PlanId, @AntPlan=PLA.Nombre, @AntNombre=INS.Nombre, @AntSiglas=INS.Siglas
 		FROM Institucion INS INNER JOIN PlanSuscripcion PLA ON PLA.PlanId=INS.PlanId
 		WHERE INS.InstitucionId=@InstitucionId
 
@@ -684,13 +682,11 @@ AS BEGIN
 			SET @Cambios = @Cambios + N'Siglas: ' + @AntSiglas + N' → ' + @Siglas + N'; '
 		IF @AntPlanId <> @PlanId
 			SET @Cambios = @Cambios + N'Plan: ' + @AntPlan + N' → ' + (SELECT Nombre FROM PlanSuscripcion WHERE PlanId=@PlanId) + N'; '
-		IF ISNULL(@AntLogo,N'') <> ISNULL(@LogoUrl,N'')
-			SET @Cambios = @Cambios + N'Logo: actualizado; '
 		IF @Cambios = N'' SET @Cambios = N'Se guardó sin cambios.'
 
 		BEGIN TRANSACTION
 			UPDATE Institucion
-			SET PlanId=@PlanId, Nombre=@NombreInstitucion, Siglas=@Siglas, LogoUrl=@LogoUrl
+			SET PlanId=@PlanId, Nombre=@NombreInstitucion, Siglas=@Siglas
 			WHERE InstitucionId=@InstitucionId
 
 			-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
@@ -881,7 +877,7 @@ AS BEGIN
 		       USR.UsuarioId, USR.InstitucionId, USR.RolId, ROL.Nombre AS Rol,
 		       ROL.PuedeResolverTickets, ROL.PuedeAdministrar,
 		       USR.Nombre, USR.Apellidos, USR.Nombre + ' ' + USR.Apellidos AS NombreCompleto, USR.Correo,
-		       INS.Nombre AS NombreInstitucion, INS.Siglas, INS.LogoUrl
+		       INS.Nombre AS NombreInstitucion, INS.Siglas
 		FROM Usuario USR
 		INNER JOIN Rol ROL ON ROL.RolId = USR.RolId
 		INNER JOIN Institucion INS ON INS.InstitucionId = USR.InstitucionId

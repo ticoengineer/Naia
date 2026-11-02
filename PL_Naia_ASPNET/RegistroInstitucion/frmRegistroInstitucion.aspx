@@ -10,7 +10,7 @@
     <!-- Rutas relativas a /RegistroInstitucion/ (donde vive esta página) -->
     <link rel="icon" type="image/png" href="Images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/naia.css">
 </head>
@@ -97,13 +97,14 @@
                 <p class="auth-card__subtitle">Los campos marcados con <span class="required">*</span> son obligatorios.</p>
 
                 <!--
-                    Este formulario ejecuta dbo.sp_Institucion_Registrar, que en una sola transacción:
+                    Este formulario ejecuta dbo.SP_INSERTA_INSTITUCIONES (vía JavaScript/RegistroInstitucion.js → WebMethod),
+                    que en una sola transacción:
                       1. Crea la Institucion
                       2. Crea el Departamento "Administración General"
                       3. Crea las 3 Ubicaciones virtuales
                       4. Crea el Usuario administrador (RolId = 4)
                 -->
-                <form id="frmRegistroInstitucion" class="form" runat="server" enctype="multipart/form-data">
+                <form id="frmRegistroInstitucion" class="form" action="javascript: RegistrarInstitucion()">
 
                     <!-- ===================== 1. PLAN ===================== -->
                     <fieldset class="form__section">
@@ -112,29 +113,9 @@
                             Elige tu plan
                         </legend>
 
-                        <!-- @PlanId → tabla PlanSuscripcion -->
-                        <div class="plan-options">
-                            <input type="radio" name="PlanId" id="rbPlan1" value="1" runat="server">
-                            <label class="plan-card" for="rbPlan1">
-                                <span class="plan-card__name">Básico</span>
-                                <span class="plan-card__price">$149<small>/mes</small></span>
-                                <span class="plan-card__detail">Hasta 500 usuarios</span>
-                            </label>
-
-                            <input type="radio" name="PlanId" id="rbPlan2" value="2" runat="server" checked>
-                            <label class="plan-card" for="rbPlan2">
-                                <span class="plan-card__tag">Recomendado</span>
-                                <span class="plan-card__name">Profesional</span>
-                                <span class="plan-card__price">$399<small>/mes</small></span>
-                                <span class="plan-card__detail">Hasta 3 000 usuarios</span>
-                            </label>
-
-                            <input type="radio" name="PlanId" id="rbPlan3" value="3" runat="server">
-                            <label class="plan-card" for="rbPlan3">
-                                <span class="plan-card__name">Institucional</span>
-                                <span class="plan-card__price">$899<small>/mes</small></span>
-                                <span class="plan-card__detail">Usuarios ilimitados</span>
-                            </label>
+                        <!-- @PlanId → se llena desde la base de datos (SP_LISTAR_PLANES) con CargarPlanes() de RegistroInstitucion.js -->
+                        <div class="plan-options" id="contenedorPlanes">
+                            <p class="field__hint">Cargando planes…</p>
                         </div>
                     </fieldset>
 
@@ -152,8 +133,8 @@
                                     <label class="field__label" for="txtNombreInstitucion">Nombre de la universidad <span class="required">*</span></label>
                                     <div class="input">
                                         <img class="input__icon" src="Images/icon-school.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtNombreInstitucion" runat="server" CssClass="input__control" MaxLength="150"
-                                            placeholder="Ej. Universidad Americana" required="required" />
+                                        <input id="txtNombreInstitucion" class="input__control" type="text" maxlength="150"
+                                            placeholder="Ej. Universidad Americana" required>
                                     </div>
                                 </div>
 
@@ -161,8 +142,8 @@
                                 <div class="field">
                                     <label class="field__label" for="txtSiglas">Siglas <span class="required">*</span></label>
                                     <div class="input">
-                                        <asp:TextBox ID="txtSiglas" runat="server" CssClass="input__control" MaxLength="10"
-                                            placeholder="Ej. UAM" required="required" />
+                                        <input id="txtSiglas" class="input__control" type="text" maxlength="10"
+                                            placeholder="Ej. UAM" required>
                                     </div>
                                 </div>
                             </div>
@@ -172,25 +153,11 @@
                                 <label class="field__label" for="txtDominio">Dominio de correo institucional <span class="required">*</span></label>
                                 <div class="input">
                                     <span class="input__prefix">nombre@</span>
-                                    <asp:TextBox ID="txtDominio" runat="server" CssClass="input__control" MaxLength="100"
-                                        placeholder="universidad.ac.cr" pattern="[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" required="required" />
+                                    <input id="txtDominio" class="input__control" type="text" maxlength="100"
+                                        placeholder="universidad.ac.cr" pattern="[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                                        title="Escribe solo el dominio, por ejemplo universidad.ac.cr" required>
                                 </div>
                                 <p class="field__hint">Todos los usuarios de tu universidad iniciarán sesión con un correo de este dominio.</p>
-                            </div>
-
-                            <!-- @LogoUrl → Institucion.LogoUrl (opcional) -->
-                            <div class="field">
-                                <span class="field__label">Logo de la universidad <span class="field__optional">(opcional)</span></span>
-                                <label class="upload" for="fuLogo">
-                                    <span class="upload__icon">
-                                        <img src="Images/icon-image.png" alt="" aria-hidden="true" width="18" height="18">
-                                    </span>
-                                    <span class="upload__text">
-                                        <strong>Subir logo</strong>
-                                        <span>PNG · se mostrará en el menú de Naia</span>
-                                    </span>
-                                    <input class="upload__control" type="file" id="fuLogo" runat="server" accept="image/png">
-                                </label>
                             </div>
                         </div>
                     </fieldset>
@@ -212,8 +179,8 @@
                                 <div class="field">
                                     <label class="field__label" for="txtNombre">Nombre <span class="required">*</span></label>
                                     <div class="input">
-                                        <asp:TextBox ID="txtNombre" runat="server" CssClass="input__control" MaxLength="60"
-                                            placeholder="Ej. María" autocomplete="given-name" required="required" />
+                                        <input id="txtNombre" class="input__control" type="text" maxlength="60"
+                                            placeholder="Ej. María" autocomplete="given-name" required>
                                     </div>
                                 </div>
 
@@ -221,8 +188,8 @@
                                 <div class="field">
                                     <label class="field__label" for="txtApellidos">Apellidos <span class="required">*</span></label>
                                     <div class="input">
-                                        <asp:TextBox ID="txtApellidos" runat="server" CssClass="input__control" MaxLength="80"
-                                            placeholder="Ej. Solano Vargas" autocomplete="family-name" required="required" />
+                                        <input id="txtApellidos" class="input__control" type="text" maxlength="80"
+                                            placeholder="Ej. Solano Vargas" autocomplete="family-name" required>
                                     </div>
                                 </div>
                             </div>
@@ -232,11 +199,12 @@
                                 <div class="field">
                                     <label class="field__label" for="ddlTipoIdentificacion">Tipo de identificación <span class="required">*</span></label>
                                     <div class="select">
-                                        <select class="select__control" id="ddlTipoIdentificacion" runat="server" required>
+                                        <select class="select__control" id="ddlTipoIdentificacion" required>
                                             <option value="" selected>Selecciona</option>
                                             <option value="1">Cédula de identidad</option>
                                             <option value="2">DIMEX</option>
                                             <option value="3">Pasaporte</option>
+                                            <option value="4">Otro</option>
                                         </select>
                                         <img class="select__chevron" src="Images/icon-chevron-down.png" alt="" aria-hidden="true" width="16" height="16">
                                     </div>
@@ -247,8 +215,8 @@
                                     <label class="field__label" for="txtIdentificacion">Número de identificación <span class="required">*</span></label>
                                     <div class="input">
                                         <img class="input__icon" src="Images/icon-id-card.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtIdentificacion" runat="server" CssClass="input__control" MaxLength="30"
-                                            placeholder="Ej. 1-0987-0654" required="required" />
+                                        <input id="txtIdentificacion" class="input__control" type="text" maxlength="30"
+                                            placeholder="Ej. 1-0987-0654" required>
                                     </div>
                                 </div>
                             </div>
@@ -259,21 +227,21 @@
                                     <label class="field__label" for="txtNumeroInterno">N.º de empleado <span class="required">*</span></label>
                                     <div class="input">
                                         <img class="input__icon" src="Images/icon-tag.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtNumeroInterno" runat="server" CssClass="input__control" MaxLength="30"
-                                            placeholder="Ej. EMP-0001" required="required" />
+                                        <input id="txtNumeroInterno" class="input__control" type="text" maxlength="30"
+                                            placeholder="Ej. EMP-0001" required>
                                     </div>
                                 </div>
 
                                 <!-- @Correo → Usuario.Correo
                                      Solo se escribe la parte antes de la @. El servidor arma el correo completo:
-                                     Correo = txtCorreoUsuario.Text + "@" + txtDominio.Text -->
+                                     Correo = txtCorreoUsuario + "@" + txtDominio -->
                                 <div class="field">
                                     <label class="field__label" for="txtCorreoUsuario">Correo institucional <span class="required">*</span></label>
                                     <div class="input input--email-split">
                                         <img class="input__icon" src="Images/icon-mail.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtCorreoUsuario" runat="server" CssClass="input__control" MaxLength="60"
+                                        <input id="txtCorreoUsuario" class="input__control" type="text" maxlength="60"
                                             placeholder="msolano" autocomplete="off" pattern="[A-Za-z0-9._%+\-]+"
-                                            ToolTip="Solo la parte antes de la @" required="required" />
+                                            title="Solo la parte antes de la @" required>
                                         <span class="input__suffix" id="sufijo-dominio" data-vacio="@dominio">@dominio</span>
                                     </div>
                                     <p class="field__hint">El dominio se completa con el que registraste arriba.</p>
@@ -286,9 +254,9 @@
                                     <label class="field__label" for="txtContrasena">Contraseña <span class="required">*</span></label>
                                     <div class="input input--validate">
                                         <img class="input__icon" src="Images/icon-lock.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtContrasena" runat="server" CssClass="input__control" TextMode="Password"
-                                            minlength="8" MaxLength="256" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
-                                            placeholder="Mínimo 8 caracteres" autocomplete="new-password" required="required" />
+                                        <input id="txtContrasena" class="input__control" type="password"
+                                            minlength="8" maxlength="256" pattern="(?=.*[A-Z])(?=.*\d).{8,}" title="Al menos 8 caracteres, una mayúscula y un número"
+                                            placeholder="Mínimo 8 caracteres" autocomplete="new-password" required>
                                         <img class="input__ok" src="Images/icon-check-ok.png" alt="" aria-hidden="true" width="17" height="17">
                                     </div>
                                     <p class="field__hint">Al menos 8 caracteres, una mayúscula y un número.</p>
@@ -299,8 +267,8 @@
                                     <label class="field__label" for="txtConfirmar">Confirmar contraseña <span class="required">*</span></label>
                                     <div class="input">
                                         <img class="input__icon" src="Images/icon-lock.png" alt="" aria-hidden="true" width="17" height="17">
-                                        <asp:TextBox ID="txtConfirmar" runat="server" CssClass="input__control" TextMode="Password"
-                                            placeholder="Repite la contraseña" autocomplete="new-password" required="required" />
+                                        <input id="txtConfirmar" class="input__control" type="password"
+                                            placeholder="Repite la contraseña" autocomplete="new-password" required>
                                     </div>
                                 </div>
                             </div>
@@ -316,15 +284,15 @@
                     </div>
 
                     <label class="checkbox checkbox--terms">
-                        <input type="checkbox" id="chkAceptaTerminos" runat="server" required>
+                        <input type="checkbox" id="chkAceptaTerminos" required>
                         <span class="checkbox__box" aria-hidden="true"></span>
                         <span>Acepto los <a class="link" href="#">términos del servicio</a> y la <a class="link" href="#">política de privacidad</a> en nombre de mi institución</span>
                     </label>
 
                     <div class="form__actions">
                         <a class="btn btn--secondary" href="../Login/frmLogin.aspx">Cancelar</a>
-                        <!-- Botón de servidor: luego se le agrega OnServerClick="btnRegistrar_Click" -->
-                        <button id="btnRegistrar" class="btn btn--primary" type="submit" runat="server">
+                        <!-- Al enviarse, el form ejecuta RegistrarInstitucion() de RegistroInstitucion.js -->
+                        <button id="btnRegistrar" class="btn btn--primary" type="submit">
                             Registrar universidad
                             <img src="Images/icon-arrow.png" alt="" aria-hidden="true" width="16" height="16">
                         </button>
@@ -337,25 +305,9 @@
 
     </main>
 
-    <!--
-        Script mínimo (mejora visual): copia el dominio escrito en la sección 2 al final del
-        correo del administrador. La seguridad NO depende de esto: el servidor arma el correo
-        con txtDominio.
-    -->
-    <script>
-        (function () {
-            var dominio = document.getElementById('txtDominio');
-            var sufijo = document.getElementById('sufijo-dominio');
-            function actualizar() {
-                var valor = dominio.value.trim().replace(/^@+/, '').toLowerCase();
-                sufijo.textContent = valor ? '@' + valor : sufijo.dataset.vacio;
-                sufijo.title = sufijo.textContent;
-                sufijo.classList.toggle('is-filled', valor.length > 0);
-            }
-            dominio.addEventListener('input', actualizar);
-            actualizar();
-        })();
-    </script>
+    <!-- Librerías y lógica del registro -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../RegistroInstitucion/JS/RegistroInstitucion.js"></script>
 </body>
 </html>
-

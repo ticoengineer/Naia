@@ -10,7 +10,7 @@
     <!-- Rutas relativas a /Login/ (donde vive esta página) -->
     <link rel="icon" type="image/png" href="Images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/naia.css">
 </head>
@@ -111,14 +111,19 @@
                 <h2 class="auth-card__title">Iniciar sesión</h2>
                 <p class="auth-card__subtitle">Ingresa con tu correo institucional para continuar.</p>
 
-                <form id="frmLogin" class="form" runat="server">
+                <!--
+                    Este formulario ejecuta dbo.SP_INICIAR_SESION
+                    (vía Login/JS/InicioSesion.js → WebMethod IniciarSesion → cls_Usuarios_BLL).
+                    Según el rol del usuario, el JS lo envía a su página de inicio.
+                -->
+                <form id="frmLogin" class="form" action="javascript: IniciarSesion()">
 
                     <div class="field">
                         <label class="field__label" for="txtCorreo">Correo institucional</label>
                         <div class="input">
                             <img class="input__icon" src="Images/icon-mail.png" alt="" aria-hidden="true" width="18" height="18">
-                            <asp:TextBox ID="txtCorreo" runat="server" CssClass="input__control" TextMode="Email"
-                                placeholder="nombre@universidad.ac.cr" autocomplete="username" required="required" />
+                            <input id="txtCorreo" class="input__control" type="email" maxlength="150"
+                                placeholder="nombre@universidad.ac.cr" autocomplete="username" required>
                         </div>
                     </div>
 
@@ -126,25 +131,21 @@
                         <label class="field__label" for="txtContrasena">Contraseña</label>
                         <div class="input">
                             <img class="input__icon" src="Images/icon-lock.png" alt="" aria-hidden="true" width="18" height="18">
-                            <asp:TextBox ID="txtContrasena" runat="server" CssClass="input__control" TextMode="Password"
-                                placeholder="Ingresa tu contraseña" autocomplete="current-password" required="required" />
-                            <button class="input__action" type="button" aria-label="Mostrar contraseña">
+                            <input id="txtContrasena" class="input__control" type="password" maxlength="256"
+                                placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+                            <!-- Muestra u oculta la contraseña (InicioSesion.js) -->
+                            <button id="btnVerContrasena" class="input__action" type="button" aria-label="Mostrar contraseña">
                                 <img src="Images/icon-eye.png" alt="" aria-hidden="true" width="18" height="18">
                             </button>
                         </div>
                     </div>
 
-                    <div class="form__row">
-                        <label class="checkbox">
-                            <input type="checkbox" id="chkRecordarme" runat="server">
-                            <span class="checkbox__box" aria-hidden="true"></span>
-                            Recordarme
-                        </label>
-                        <a class="link" href="#">¿Olvidaste tu contraseña?</a>
+                    <div class="form__row form__row--end">
+                        <a id="lnkOlvidoContrasena" class="link" href="#">¿Olvidaste tu contraseña?</a>
                     </div>
 
-                    <!-- Botón de servidor: luego se le agrega OnServerClick="btnIngresar_Click" -->
-                    <button id="btnIngresar" class="btn btn--primary btn--block" type="submit" runat="server">
+                    <!-- Al enviarse, el form ejecuta IniciarSesion() de InicioSesion.js -->
+                    <button id="btnIngresar" class="btn btn--primary btn--block" type="submit">
                         Ingresar
                         <img src="Images/icon-arrow.png" alt="" aria-hidden="true" width="18" height="18">
                     </button>
@@ -161,5 +162,10 @@
 
     </main>
 
+    <!-- Librerías y lógica del inicio de sesión -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../JavaScript/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../Login/JS/InicioSesion.js"></script>
 </body>
 </html>

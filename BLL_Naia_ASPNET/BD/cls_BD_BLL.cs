@@ -122,9 +122,10 @@ namespace BLL_Naia_ASPNET.BD
 
                         #endregion
 
+                        // si el valor viene vacío (null), se envía NULL real a SQL Server en vez de ""
                         Obj_BD_DAL.Obj_DAP.SelectCommand.Parameters.Add(dr[0].ToString(),             // nombre del parametro
                                                                         TipoDatoSQL                  // el tipo de datos que entiende el sql - resultado del switch
-                                                                        ).Value = dr[2].ToString(); // el valor del parametro
+                                                                        ).Value = (dr[2] == DBNull.Value) ? (object)DBNull.Value : dr[2].ToString(); // el valor del parametro
 
                     }
                 }
@@ -236,6 +237,11 @@ namespace BLL_Naia_ASPNET.BD
                                     TipoDatoSQL = SqlDbType.Money;
                                     break;
                                 }
+                            case "11": // TinyInt (RolId, TipoIdentificacionId, PrioridadId, EstadoId)
+                                {
+                                    TipoDatoSQL = SqlDbType.TinyInt;
+                                    break;
+                                }
 
                             default:
                                 break;
@@ -243,9 +249,10 @@ namespace BLL_Naia_ASPNET.BD
 
                         #endregion
 
+                        // si el valor viene vacío (null), se envía NULL real a SQL Server en vez de ""
                         Obj_BD_DAL.Obj_CMD.Parameters.Add(dr[0].ToString(), // nombre del parametro
                                                           TipoDatoSQL  // el tipo de datos que entiende el sql - resultado del switch
-                                                          ).Value = dr[2].ToString(); // el valor del parametro
+                                                          ).Value = (dr[2] == DBNull.Value) ? (object)DBNull.Value : dr[2].ToString(); // el valor del parametro
 
                     }
                 }

@@ -37,7 +37,7 @@ CREATE TABLE #Sesion (
     Codigo INT, UsuarioId INT, InstitucionId INT, RolId TINYINT, Rol NVARCHAR(30),
     PuedeResolverTickets BIT, PuedeAdministrar BIT, Nombre NVARCHAR(60), Apellidos NVARCHAR(80),
     NombreCompleto NVARCHAR(150), Correo VARCHAR(150), NombreInstitucion NVARCHAR(150),
-    Siglas NVARCHAR(10), LogoUrl NVARCHAR(300)
+    Siglas NVARCHAR(10)
 );
 
 CREATE TABLE #Resultado (
@@ -100,7 +100,7 @@ END
 ---------------------------------------- 1. REGISTRO DE LA UNIVERSIDAD ----------------------------------------
 -- Pantalla "Registra tu universidad": plan + datos de la universidad + primer administrador
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Ficticia', N'UFIC', @Dominio, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Ficticia', N'UFIC', @Dominio,
      1, '1-1111-1111', 'EMP-0001', N'Ana', N'Demo Admin', @CorreoAna, 'Admin123', @IP
 SELECT @Inst = Codigo FROM #R
 EXEC #Verificar N'1.1 Registrar universidad correctamente', '>0'
@@ -113,27 +113,27 @@ EXEC #Verificar N'1.3 Se crearon las 3 ubicaciones virtuales (cuenta = 3)', '3',
 
 SET @CorreoMal = 'otra.persona@' + @Dominio
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Repetida', N'UREP', @Dominio, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Repetida', N'UREP', @Dominio,
      1, '1-2222-0000', 'EMP-0001', N'Otra', N'Persona', @CorreoMal, 'Admin123', @IP
 EXEC #Verificar N'1.4 Registrar otra universidad con el MISMO dominio', '-1'
 
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Otra', N'UOTR', @Dominio2, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Otra', N'UOTR', @Dominio2,
      1, '1-3333-0000', 'EMP-0001', N'Beto', N'Prueba', 'beto.prueba@gmail.com', 'Admin123', @IP
 EXEC #Verificar N'1.5 Correo del administrador que no es del dominio', '-4'
 
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES 999, N'Universidad Otra', N'UOTR', @Dominio2, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES 999, N'Universidad Otra', N'UOTR', @Dominio2,
      1, '1-3333-0000', 'EMP-0001', N'Beto', N'Prueba', 'beto@ufic.ac.cr', 'Admin123', @IP
 EXEC #Verificar N'1.6 Plan que no existe', '-4'
 
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'', N'UOTR', @Dominio2, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'', N'UOTR', @Dominio2,
      1, '1-3333-0000', 'EMP-0001', N'Beto', N'Prueba', 'beto@ufic.ac.cr', 'Admin123', @IP
 EXEC #Verificar N'1.7 Nombre de la universidad vacío', '-4'
 
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Otra', N'UOTR', 'sinpunto', NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Otra', N'UOTR', 'sinpunto',
      1, '1-3333-0000', 'EMP-0001', N'Beto', N'Prueba', 'beto@sinpunto', 'Admin123', @IP
 EXEC #Verificar N'1.8 Dominio inválido (sin punto)', '-4'
 
@@ -484,7 +484,7 @@ EXEC #Verificar N'5.36 La profesora intenta comentar en un tiquete ajeno', '-3'
 ---------------------------------------- 6. SEGURIDAD: UNIVERSIDAD DESACTIVADA ----------------------------------------
 SET @CorreoMal = 'admin.b@' + @Dominio2
 DELETE FROM #R
-INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Ficticia B', N'UFB', @Dominio2, NULL,
+INSERT INTO #R EXEC SP_INSERTA_INSTITUCIONES @PlanBasico, N'Universidad Ficticia B', N'UFB', @Dominio2,
      1, '5-5555-5555', 'EMP-0001', N'Beatriz', N'Demo Admin', @CorreoMal, 'Admin123', @IP
 SELECT @Inst2 = Codigo FROM #R
 EXEC #Verificar N'6.1 Registrar una segunda universidad', '>0'
