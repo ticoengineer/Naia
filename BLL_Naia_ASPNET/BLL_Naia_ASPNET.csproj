@@ -45,6 +45,8 @@
     <Compile Include="BD\cls_BD_BLL.cs" />
     <Compile Include="Entidades\cls_Instituciones_BLL.cs" />
     <Compile Include="Entidades\cls_Planes_BLL.cs" />
+    <Compile Include="Entidades\cls_Ubicaciones_BLL.cs" />
+    <Compile Include="Entidades\cls_Categorias_BLL.cs" />
     <Compile Include="Entidades\cls_Usuarios_BLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
