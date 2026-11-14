@@ -44,6 +44,7 @@
     <Compile Include="BD\cls_BD_DAL.cs" />
     <Compile Include="Entidades\cls_Instituciones_DAL.cs" />
     <Compile Include="Entidades\cls_Planes_DAL.cs" />
+    <Compile Include="Entidades\cls_Tickets_DAL.cs" />
     <Compile Include="Entidades\cls_Usuarios_DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

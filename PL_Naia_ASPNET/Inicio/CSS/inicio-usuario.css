@@ -1,0 +1,734 @@
+/* =====================================================================================
+   NAIA · Inicio de usuario (Estudiante / Profesor) · inicio-usuario.css
+   ===================================================================================== */
+
+/* ---------- 1. Colores y medidas ---------- */
+:root {
+    --naia-charcoal: #383F51;
+    --naia-dusk: #3C4F76;
+    --naia-lavender: #DDDBF1;
+    --naia-oak: #D1BEB0;
+    --naia-ash: #AB9F9D;
+
+    --color-bg: #F6F5FA;
+    --color-surface: #FFFFFF;
+    --color-border: #E7E5EF;
+    --color-border-strong: #D6D4E3;
+    --color-text: #383F51;
+    --color-text-soft: #555B6B;
+    --color-muted: #6B7080;
+    --color-lavender-50: #F1F0FA;
+    --color-dusk-50: #ECEEF5;
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-focus: 0 0 0 4px rgba(60, 79, 118, .18);
+    --font-base: "Inter", "Segoe UI", Arial, sans-serif;
+
+    --drawer-width: 25%;
+    --drawer-min: 380px;
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-base);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+h1, h2, p {
+    margin: 0;
+}
+
+a {
+    color: var(--naia-dusk);
+}
+
+a:hover {
+    color: var(--naia-charcoal);
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+}
+
+/* ---------- 3. Botones ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: .95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .05s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn--primary {
+    background: var(--naia-dusk);
+    color: #FFFFFF;
+}
+
+.btn--primary:hover {
+    background: #2F3F60;
+    color: #FFFFFF;
+}
+
+.btn--primary:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.btn--secondary {
+    background: var(--color-surface);
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+}
+
+.btn--secondary:hover {
+    background: var(--color-lavender-50);
+    color: var(--color-text);
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: .9rem;
+}
+
+.btn--ghost:hover {
+    background: var(--color-lavender-50);
+    color: var(--color-text);
+}
+
+.btn--hero {
+    min-height: 56px;
+    padding: 0 1.75rem;
+    border-radius: var(--radius-md);
+    background: var(--naia-lavender);
+    color: var(--naia-charcoal);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.btn--hero:hover {
+    background: #FFFFFF;
+}
+
+.btn--grow {
+    flex: 2;
+}
+
+.link {
+    font-weight: 600;
+    font-size: .95rem;
+}
+
+/* ---------- 4. Encabezado ---------- */
+.topbar {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.topbar__inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: .9rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.topbar__brand,
+.topbar__user {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+}
+
+.topbar__logo {
+    width: 34px;
+    height: 34px;
+}
+
+.topbar__name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.04em;
+}
+
+.topbar__uni {
+    margin-left: .5rem;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    background: var(--color-lavender-50);
+    color: var(--naia-dusk);
+    font-size: .82rem;
+}
+
+.topbar__uni:empty {
+    display: none;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--naia-dusk);
+    color: #FFFFFF;
+    display: grid;
+    place-items: center;
+    font-size: .95rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.topbar__who {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    margin-right: .5rem;
+}
+
+.topbar__username {
+    font-weight: 600;
+    font-size: .95rem;
+}
+
+.topbar__role {
+    font-size: .82rem;
+    color: var(--color-muted);
+}
+
+/* ---------- 5. Contenido ---------- */
+.page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* Banner */
+.hero {
+    background: var(--naia-charcoal);
+    color: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.hero__text {
+    flex: 999 1 420px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.hero__title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+}
+
+.hero__lead {
+    font-size: 1.05rem;
+    color: #E2E1EE;
+}
+
+/* Secciones */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.section__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.ticket-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+/* ---------- 6. Fila desplegable de tiquete (<details>) ---------- */
+.ticket {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.ticket:hover {
+    border-color: var(--color-border-strong);
+}
+
+.ticket[open] {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 6px 18px rgba(56, 63, 81, .06);
+}
+
+/* Quitar el triángulo por defecto del navegador */
+.ticket__summary,
+.history__summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.ticket__summary::-webkit-details-marker,
+.history__summary::-webkit-details-marker {
+    display: none;
+}
+
+.ticket__summary {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ticket__main {
+    flex: 999 1 360px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.ticket__meta {
+    font-size: .82rem;
+    color: var(--color-muted);
+}
+
+.ticket__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.ticket__chevron,
+.history__chevron {
+    flex-shrink: 0;
+    transition: transform .2s ease;
+}
+
+.ticket[open] .ticket__chevron,
+.history[open] .history__chevron {
+    transform: rotate(180deg);
+}
+
+.ticket__body {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid #F0EFF5;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ticket__data {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .75rem 1.5rem;
+}
+
+.ticket__data div {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+}
+
+.ticket__data-label,
+.ticket__label {
+    font-size: .82rem;
+    color: var(--color-muted);
+}
+
+.ticket__data-value {
+    font-size: .95rem;
+}
+
+.ticket__block {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.ticket__text {
+    font-size: .95rem;
+    white-space: pre-line;
+}
+
+.ticket__message {
+    padding: .9rem 1rem;
+    border-radius: 12px;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.ticket__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+/* ---------- 7. Etiquetas de estado (estado--EstadoId) ---------- */
+.estado {
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.estado--1 { background: var(--color-dusk-50); color: var(--naia-dusk); }   /* Nuevo */
+.estado--2 { background: #EAE8F7;              color: #4A4573; }            /* Asignado */
+.estado--3 { background: #F6F0EB;              color: #80604A; }            /* En progreso */
+.estado--4 { background: #FBEFE2;              color: #8A5418; }            /* En espera */
+.estado--5 { background: #E6EFEA;              color: #3E6656; }            /* Resuelto */
+.estado--6 { background: #EFEFF2;              color: #555B6B; }            /* Cerrado */
+.estado--7 { background: #F6E9EB;              color: #8E3B47; }            /* Cancelado */
+
+/* Mensajes de carga y error dentro de las listas */
+.loading {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: .95rem;
+}
+
+.loading--error {
+    color: #8E3B47;
+    border-color: #EBC9CE;
+    background: #FBF3F4;
+}
+
+/* Sin tiquetes abiertos */
+.empty {
+    padding: 2rem 1.5rem;
+    border: 1.5px dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    text-align: center;
+    color: var(--color-text-soft);
+}
+
+/* ---------- 8. Historial (<details>) ---------- */
+.history {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.history__summary {
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    color: var(--color-muted);
+}
+
+.history__summary strong {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.history__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    color: var(--naia-dusk);
+    font-weight: 600;
+    font-size: .95rem;
+}
+
+#lstHistorial {
+    border-top: 1px solid #F0EFF5;
+}
+
+.history__row {
+    padding: .8rem 1.25rem;
+    border-bottom: 1px solid #F0EFF5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    min-height: 56px;
+}
+
+.history__row:last-child {
+    border-bottom: 0;
+}
+
+.history__number {
+    flex: 0 0 100px;
+    font-size: .85rem;
+    color: var(--color-muted);
+}
+
+.history__title {
+    flex: 999 1 260px;
+    min-width: 0;
+    font-weight: 600;
+    font-size: .95rem;
+}
+
+.history__info {
+    font-size: .85rem;
+    color: var(--color-muted);
+}
+
+/* ---------- 9. Panel lateral (nuevo tiquete) ---------- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(56, 63, 81, .35);
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.overlay.is-open {
+    opacity: 1;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    width: var(--drawer-width);
+    min-width: var(--drawer-min);
+    max-width: 100%;
+    background: var(--color-surface);
+    box-shadow: -12px 0 32px rgba(56, 63, 81, .18);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(105%);
+    visibility: hidden;
+    transition: transform .35s cubic-bezier(.22, .8, .2, 1), visibility .35s;
+}
+
+.drawer.is-open {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.drawer__header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+}
+
+.drawer__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.drawer__close {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-lavender-50);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.drawer__close:hover {
+    background: var(--naia-lavender);
+}
+
+.drawer__form {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.drawer__actions {
+    margin-top: auto;
+    padding-top: .5rem;
+    display: flex;
+    gap: .6rem;
+}
+
+.drawer__actions .btn {
+    min-height: 48px;
+    flex: 1;
+}
+
+.drawer__actions .btn--grow {
+    flex: 2;
+}
+
+/* ---------- 10. Campos del formulario ---------- */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+}
+
+.field__label {
+    font-size: .95rem;
+    font-weight: 600;
+}
+
+.required {
+    color: #9A3B47;
+}
+
+.field__control {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 .9rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 1rem;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+select.field__control {
+    appearance: none;
+    padding-right: 2.5rem;
+    background: var(--color-surface) url("../Images/icon-chevron-down.png") no-repeat right .8rem center / 18px 18px;
+}
+
+.field__control:focus {
+    outline: none;
+    border-color: var(--naia-dusk);
+    box-shadow: var(--shadow-focus);
+}
+
+.field__control--area {
+    padding: .75rem .9rem;
+    min-height: 140px;
+    resize: vertical;
+}
+
+.field__hint,
+.field__counter {
+    font-size: .82rem;
+    color: var(--color-muted);
+}
+
+.field__counter {
+    align-self: flex-end;
+}
+
+.field__info {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    padding: .7rem .85rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-lavender-50);
+    color: var(--naia-dusk);
+    font-size: .88rem;
+}
+
+.field__info img {
+    margin-top: .15rem;
+    flex-shrink: 0;
+}
+
+/* ---------- 11. Celular ---------- */
+@media (max-width: 640px) {
+    .topbar__who,
+    .topbar__uni {
+        display: none;
+    }
+
+    .hero {
+        padding: 1.5rem;
+    }
+
+    .hero__title {
+        font-size: 1.5rem;
+    }
+
+    .btn--hero {
+        width: 100%;
+    }
+
+    .drawer {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* Respeta a quienes desactivan las animaciones */
+@media (prefers-reduced-motion: reduce) {
+    .drawer,
+    .overlay,
+    .ticket__chevron,
+    .history__chevron {
+        transition: none;
+    }
+}

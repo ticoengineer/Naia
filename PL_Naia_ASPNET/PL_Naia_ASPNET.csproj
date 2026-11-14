@@ -68,9 +68,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Inicio\CSS\inicio-usuario.css" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
     <Content Include="Inicio\frmInicioUsuario.aspx" />
+    <Content Include="Inicio\Images\favicon.png" />
+    <Content Include="Inicio\Images\icon-chevron-down.png" />
+    <Content Include="Inicio\Images\icon-close.png" />
+    <Content Include="Inicio\Images\icon-inbox.png" />
+    <Content Include="Inicio\Images\icon-info.png" />
+    <Content Include="Inicio\Images\naia-icon.png" />
+    <Content Include="Inicio\JS\InicioUsuario.js" />
     <Content Include="JavaScript\jquery.cookie.js" />
     <Content Include="JavaScript\Sesion.js" />
     <Content Include="Login\CSS\naia-brand.css" />
