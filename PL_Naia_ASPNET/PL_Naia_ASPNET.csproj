@@ -67,6 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\CSS\panel.css" />
+    <Content Include="Admin\frmPanelAdmin.aspx" />
+    <Content Include="Admin\JS\Panel.js" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
@@ -106,6 +109,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\frmPanelAdmin.aspx.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.aspx.designer.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -156,6 +166,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Admin\Secciones\" />
+    <Folder Include="Admin\WebMethods\" />
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
