@@ -1,0 +1,569 @@
+/* ==========================================================================
+   NAIA · Panel de Administracion · Estilos
+   Paleta: Charcoal Blue #383F51 · Dusk Blue #3C4F76 · Lavender #DDDBF1
+           Pale Oak #D1BEB0 · Lilac Ash #AB9F9D
+   ========================================================================== */
+
+/* ---------- 1. Variables ---------- */
+:root {
+    --naia-charcoal: #383F51;
+    --naia-dusk: #3C4F76;
+    --naia-lavender: #DDDBF1;
+    --naia-oak: #D1BEB0;
+    --naia-ash: #AB9F9D;
+
+    --color-bg: #F6F5FA;
+    --color-surface: #FFFFFF;
+    --color-border: #E7E5EF;
+    --color-text: #383F51;
+    --color-muted: #7C8191;
+    --color-faint: #A3A7B3;
+
+    --color-lavender-50: #F1F0FA;
+    --color-dusk-50: #ECEEF5;
+    --color-oak-50: #F6F0EB;
+
+    --color-success: #2E7D32;
+    --color-success-bg: #E8F5E9;
+    --color-danger: #C62828;
+    --color-danger-bg: #FFEBEE;
+
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(56,63,81,.08);
+    --shadow-md: 0 4px 16px rgba(56,63,81,.12);
+    --shadow-focus: 0 0 0 4px rgba(60, 79, 118, .14);
+    --font-base: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+/* ---------- 2. Reset / Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+    font-family: var(--font-base);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 3. Barra superior ---------- */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem 1.5rem;
+    background: var(--naia-charcoal);
+    color: #fff;
+}
+.topbar__brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.topbar__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: var(--naia-dusk);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.topbar__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.topbar__title small {
+    font-weight: 400;
+    opacity: .7;
+    margin-left: .25rem;
+}
+.topbar__user {
+    font-size: .875rem;
+    opacity: .85;
+}
+.topbar__logout {
+    color: var(--naia-lavender);
+    text-decoration: none;
+}
+.topbar__logout:hover {
+    text-decoration: underline;
+}
+
+/* ---------- 4. Layout principal ---------- */
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 52px);
+}
+
+/* ---------- 5. Navegacion lateral ---------- */
+.admin-nav {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: 1.25rem .75rem;
+}
+.admin-nav__heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--color-muted);
+    margin: 0 0 .75rem .5rem;
+    font-weight: 600;
+}
+.admin-nav__item {
+    display: block;
+    width: 100%;
+    padding: .6rem .75rem;
+    margin-bottom: .25rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    text-align: left;
+    font-size: .9rem;
+    font-family: inherit;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background .15s;
+}
+.admin-nav__item:hover {
+    background: var(--color-lavender-50);
+}
+.admin-nav__item--active {
+    background: var(--naia-dusk);
+    color: #fff;
+    font-weight: 500;
+}
+.admin-nav__item--active:hover {
+    background: var(--naia-dusk);
+}
+
+/* ---------- 6. Area de contenido ---------- */
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* ---------- 7. Seccion (cada user control) ---------- */
+.admin-section {
+    max-width: 960px;
+}
+
+.admin-section__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+.admin-section__title {
+    margin: 0 0 .25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--naia-charcoal);
+}
+.admin-section__subtitle {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: .9rem;
+}
+
+/* ---------- 8. Buscador ---------- */
+.admin-search {
+    margin-bottom: 1rem;
+}
+
+/* ---------- 9. Input generico ---------- */
+.input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input--search {
+    max-width: 360px;
+}
+.input__icon {
+    position: absolute;
+    left: .75rem;
+    width: 16px;
+    height: 16px;
+    opacity: .45;
+    pointer-events: none;
+}
+.input__control {
+    width: 100%;
+    padding: .55rem .75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: .9rem;
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: border-color .15s, box-shadow .15s;
+}
+.input__control:focus {
+    outline: none;
+    border-color: var(--naia-dusk);
+    box-shadow: var(--shadow-focus);
+}
+.input--search .input__control {
+    padding-left: 2.25rem;
+}
+.input__control--textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* Color input */
+.input--color {
+    gap: .5rem;
+}
+.input__control--color {
+    width: 48px;
+    height: 36px;
+    padding: 2px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+.input__suffix {
+    font-size: .85rem;
+    color: var(--color-muted);
+    font-family: monospace;
+}
+
+/* ---------- 10. Select ---------- */
+.select {
+    position: relative;
+}
+.select__control {
+    width: 100%;
+    padding: .55rem .75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: .9rem;
+    color: var(--color-text);
+    background: var(--color-surface);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%237C8191' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    padding-right: 2rem;
+}
+.select__control:focus {
+    outline: none;
+    border-color: var(--naia-dusk);
+    box-shadow: var(--shadow-focus);
+}
+
+/* ---------- 11. Tabla ---------- */
+.admin-table-wrapper {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
+}
+.admin-table thead {
+    background: var(--color-lavender-50);
+}
+.admin-table th {
+    padding: .65rem .75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--color-muted);
+    border-bottom: 1px solid var(--color-border);
+}
+.admin-table td {
+    padding: .65rem .75rem;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.admin-table tbody tr:hover {
+    background: var(--color-lavender-50);
+}
+.admin-table__actions-col {
+    width: 120px;
+    text-align: center;
+}
+.admin-table__loading {
+    text-align: center;
+    padding: 2rem .75rem !important;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+/* Botones de accion en tabla */
+.admin-table .btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: .25rem .4rem;
+    border-radius: var(--radius-sm);
+    font-size: .85rem;
+    transition: background .15s;
+}
+.admin-table .btn-action:hover {
+    background: var(--color-dusk-50);
+}
+
+/* ---------- 12. Botones ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    padding: .55rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+    white-space: nowrap;
+}
+.btn--primary {
+    background: var(--naia-dusk);
+    color: #fff;
+    border-color: var(--naia-dusk);
+}
+.btn--primary:hover {
+    background: var(--naia-charcoal);
+    border-color: var(--naia-charcoal);
+}
+.btn--secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+}
+.btn--secondary:hover {
+    background: var(--color-lavender-50);
+}
+.btn--danger {
+    background: var(--color-danger);
+    color: #fff;
+    border-color: var(--color-danger);
+}
+.btn--danger:hover {
+    opacity: .85;
+}
+
+/* ---------- 13. Modal ---------- */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(56, 63, 81, .45);
+}
+.modal__content {
+    position: relative;
+    z-index: 1001;
+    width: 90%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+}
+.modal__content--wide {
+    max-width: 600px;
+}
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+.modal__title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+.modal__close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-muted);
+    padding: .15rem .35rem;
+    border-radius: var(--radius-sm);
+    line-height: 1;
+    transition: background .15s;
+}
+.modal__close:hover {
+    background: var(--color-lavender-50);
+}
+.modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+/* ---------- 14. Formulario ---------- */
+.form__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* ---------- 15. Campo ---------- */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+.field__label {
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+.field__hint {
+    margin: .15rem 0 0;
+    font-size: .8rem;
+    color: var(--color-muted);
+}
+.required {
+    color: var(--color-danger);
+}
+
+/* ---------- 16. Radio ---------- */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+}
+.radio {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    cursor: pointer;
+    font-size: .9rem;
+}
+.radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.radio__mark {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    position: relative;
+    transition: border-color .15s;
+    flex-shrink: 0;
+}
+.radio input[type="radio"]:checked + .radio__mark {
+    border-color: var(--naia-dusk);
+}
+.radio input[type="radio"]:checked + .radio__mark::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: var(--naia-dusk);
+    border-radius: 50%;
+}
+.radio input[type="radio"]:focus + .radio__mark {
+    box-shadow: var(--shadow-focus);
+}
+
+/* ---------- 17. Badges de estado ---------- */
+.badge {
+    display: inline-block;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 500;
+}
+.badge--active {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+.badge--inactive {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+/* ---------- 18. Color swatch ---------- */
+.color-swatch {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+/* ---------- 19. Responsive ---------- */
+@media (max-width: 768px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+    .admin-nav {
+        width: 100%;
+        display: flex;
+        gap: .5rem;
+        padding: .75rem;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        overflow-x: auto;
+    }
+    .admin-nav__heading {
+        display: none;
+    }
+    .admin-content {
+        padding: 1rem;
+    }
+    .admin-section__header {
+        flex-direction: column;
+    }
+    .form__grid {
+        grid-template-columns: 1fr;
+    }
+    .topbar {
+        flex-direction: column;
+        gap: .5rem;
+        text-align: center;
+    }
+}

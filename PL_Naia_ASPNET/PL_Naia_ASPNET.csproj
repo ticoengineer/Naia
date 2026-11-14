@@ -107,6 +107,9 @@
     <Content Include="Admin\ucCategorias.ascx" />
     <Content Include="Admin\JS\Ubicaciones.js" />
     <Content Include="Admin\JS\Categorias.js" />
+    <Content Include="Admin\frmPanelAdmin.aspx" />
+    <Content Include="Admin\CSS\panel-admin.css" />
+    <Content Include="Admin\JS\Panel.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +146,13 @@
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs" />
     <Compile Include="Admin\frmPanelAdmin.Categorias.cs" />
+    <Compile Include="Admin\frmPanelAdmin.aspx.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.aspx.designer.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistroInstitucion\frmRegistroInstitucion.aspx.cs">
       <DependentUpon>frmRegistroInstitucion.aspx</DependentUpon>
