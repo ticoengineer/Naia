@@ -182,11 +182,11 @@
     <script src="JS/Categorias.js"></script>
     <script src="JS/Carreras.js"></script>
     <script src="JS/Departamentos.js"></script>
-    <script src="JS/Equipos.js"></script>
-    <script src="JS/Usuarios.js"></script>
-    <script src="JS/Auditoria.js"></script>
-    <script src="JS/Configuracion.js"></script>
-    <script src="JS/Resumen.js"></script>
+    <script src="JS/Equipos.js?v=2"></script>
+    <script src="JS/Usuarios.js?v=2"></script>
+    <script src="JS/Auditoria.js?v=2"></script>
+    <script src="JS/Configuracion.js?v=2"></script>
+    <script src="JS/Resumen.js?v=2"></script>
     <script src="JS/Panel.js"></script>
 
 </body>

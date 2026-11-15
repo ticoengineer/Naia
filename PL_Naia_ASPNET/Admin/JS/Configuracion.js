@@ -38,7 +38,7 @@ function Configuracion_CargarPlanes(callback) {
 
 // ==================== CARGAR INFO INSTITUCION ====================
 function Configuracion_CargarInfo() {
-    var params = [SesionInstitucion(), SesionUsuario()];
+    var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
         type: "POST",
@@ -91,8 +91,8 @@ function Configuracion_Guardar() {
     }
 
     var params = [
-        SesionInstitucion(),  // [0] InstitucionId
-        SesionUsuario(),      // [1] IdUsuarioGlobal
+        g_InstitucionId,  // [0] InstitucionId
+        g_UsuarioId,      // [1] IdUsuarioGlobal
         planId,               // [2] PlanId
         nombre,               // [3] NombreInstitucion
         siglas,               // [4] Siglas

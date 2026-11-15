@@ -13,7 +13,7 @@ namespace PL_Naia_ASPNET.Admin
         // ==================== EQUIPOS DE SOPORTE ====================
 
         [WebMethod]
-        public static List<Dictionary<string, string>> ListarEquipos(List<string> obj_Parametros_JS)
+        public static List<Dictionary<string, string>> ListarEquiposTodos(List<string> obj_Parametros_JS)
         {
             List<Dictionary<string, string>> lista = new List<Dictionary<string, string>>();
             try

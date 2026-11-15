@@ -1,116 +1,96 @@
+using BLL_Naia_ASPNET.BD;
 using DAL_Naia_ASPNET.BD;
 using DAL_Naia_ASPNET.Entidades;
-using BLL_Naia_ASPNET.BD;
+using System;
 using System.Configuration;
-using System.Data;
 
 namespace BLL_Naia_ASPNET.Entidades
 {
     public class cls_Auditoria_BLL
     {
         // ==================== LISTAR ====================
-        public void Listar_Auditoria(ref cls_Auditoria_DAL obj_DAL)
+        public void Listar_Auditoria(ref cls_Auditoria_DAL obj)
         {
-            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
-            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+            try
+            {
+                cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+                cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
 
-            obj_BD_DAL.sNombreBD = "Auditoria";
-            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_LISTAR_AUDITORIA"];
-            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+                obj.dtParametros = null;
+                obj.dtParametros = obj_BD_BLL.ObtieneDTParametros(obj.dtParametros);
+                obj.dtParametros.Rows.Add("@InstitucionId", "1", obj.iInstitucionId);
+                obj.dtParametros.Rows.Add("@IdUsuarioGlobal", "1", obj.iIdUsuarioGlobal);
 
-            DataRow fila;
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@InstitucionId";
-            fila["sTipoDato"] = "1";
-            fila["sValor"] = obj_DAL.iInstitucionId;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                obj_BD_DAL.sNomSP = ConfigurationManager.AppSettings["SP_LISTAR_AUDITORIA"];
+                obj_BD_DAL.sNomTabla = "Auditoria";
+                obj_BD_DAL.DT_Parametros = obj.dtParametros;
 
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@IdUsuarioGlobal";
-            fila["sTipoDato"] = "1";
-            fila["sValor"] = obj_DAL.iIdUsuarioGlobal;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
 
-            obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
-            obj_DAL.dtDatos = obj_BD_DAL.dtDatos;
-            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+                obj.sMSJError = obj_BD_DAL.sMsjErrorBD;
+                obj.dtDatos = (obj_BD_DAL.sMsjErrorBD == string.Empty) ? obj_BD_DAL.DS.Tables["Auditoria"] : null;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         // ==================== FILTRAR ====================
-        public void Filtrar_Auditoria(ref cls_Auditoria_DAL obj_DAL)
+        public void Filtrar_Auditoria(ref cls_Auditoria_DAL obj)
         {
-            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
-            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+            try
+            {
+                cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+                cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
 
-            obj_BD_DAL.sNombreBD = "Auditoria";
-            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_FILTRAR_AUDITORIA"];
-            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+                obj.dtParametros = null;
+                obj.dtParametros = obj_BD_BLL.ObtieneDTParametros(obj.dtParametros);
+                obj.dtParametros.Rows.Add("@InstitucionId", "1", obj.iInstitucionId);
+                obj.dtParametros.Rows.Add("@IdUsuarioGlobal", "1", obj.iIdUsuarioGlobal);
 
-            DataRow fila;
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@InstitucionId";
-            fila["sTipoDato"] = "1";
-            fila["sValor"] = obj_DAL.iInstitucionId;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // FechaInicio - puede ser NULL
+                obj.dtParametros.Rows.Add("@FechaInicio",
+                    string.IsNullOrEmpty(obj.sFechaInicio) ? "0" : "6",
+                    string.IsNullOrEmpty(obj.sFechaInicio) ? (object)System.DBNull.Value : obj.sFechaInicio);
 
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@IdUsuarioGlobal";
-            fila["sTipoDato"] = "1";
-            fila["sValor"] = obj_DAL.iIdUsuarioGlobal;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // FechaFin - puede ser NULL
+                obj.dtParametros.Rows.Add("@FechaFin",
+                    string.IsNullOrEmpty(obj.sFechaFin) ? "0" : "6",
+                    string.IsNullOrEmpty(obj.sFechaFin) ? (object)System.DBNull.Value : obj.sFechaFin);
 
-            // FechaInicio - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@FechaInicio";
-            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sFechaInicio) ? "0" : "6";
-            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sFechaInicio) ? (object)System.DBNull.Value : obj_DAL.sFechaInicio;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // SeccionSistema - puede ser NULL
+                obj.dtParametros.Rows.Add("@SeccionSistema",
+                    string.IsNullOrEmpty(obj.sSeccionSistema) ? "0" : "7",
+                    string.IsNullOrEmpty(obj.sSeccionSistema) ? (object)System.DBNull.Value : obj.sSeccionSistema);
 
-            // FechaFin - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@FechaFin";
-            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sFechaFin) ? "0" : "6";
-            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sFechaFin) ? (object)System.DBNull.Value : obj_DAL.sFechaFin;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // Accion - puede ser NULL
+                obj.dtParametros.Rows.Add("@Accion",
+                    string.IsNullOrEmpty(obj.sAccion) ? "0" : "7",
+                    string.IsNullOrEmpty(obj.sAccion) ? (object)System.DBNull.Value : obj.sAccion);
 
-            // SeccionSistema - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@SeccionSistema";
-            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sSeccionSistema) ? "0" : "7";
-            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sSeccionSistema) ? (object)System.DBNull.Value : obj_DAL.sSeccionSistema;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // UsuarioId - puede ser NULL
+                obj.dtParametros.Rows.Add("@UsuarioId",
+                    obj.iUsuarioId == 0 ? "0" : "1",
+                    obj.iUsuarioId == 0 ? (object)System.DBNull.Value : obj.iUsuarioId);
 
-            // Accion - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@Accion";
-            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sAccion) ? "0" : "7";
-            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sAccion) ? (object)System.DBNull.Value : obj_DAL.sAccion;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // Exitoso - puede ser NULL (-1 = todos)
+                obj.dtParametros.Rows.Add("@Exitoso",
+                    obj.iExitoso < 0 ? "0" : "9",
+                    obj.iExitoso < 0 ? (object)System.DBNull.Value : (object)(obj.iExitoso == 1));
 
-            // UsuarioId - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@UsuarioId";
-            fila["sTipoDato"] = obj_DAL.iUsuarioId == 0 ? "0" : "1";
-            fila["sValor"] = obj_DAL.iUsuarioId == 0 ? (object)System.DBNull.Value : obj_DAL.iUsuarioId;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                // Filtro texto - puede ser NULL
+                obj.dtParametros.Rows.Add("@Filtro",
+                    string.IsNullOrEmpty(obj.sFiltro) ? "0" : "7",
+                    string.IsNullOrEmpty(obj.sFiltro) ? (object)System.DBNull.Value : obj.sFiltro);
 
-            // Exitoso - puede ser NULL (-1 = todos)
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@Exitoso";
-            fila["sTipoDato"] = obj_DAL.iExitoso < 0 ? "0" : "9";
-            fila["sValor"] = obj_DAL.iExitoso < 0 ? (object)System.DBNull.Value : (obj_DAL.iExitoso == 1);
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                obj_BD_DAL.sNomSP = ConfigurationManager.AppSettings["SP_FILTRAR_AUDITORIA"];
+                obj_BD_DAL.sNomTabla = "Auditoria";
+                obj_BD_DAL.DT_Parametros = obj.dtParametros;
 
-            // Filtro texto - puede ser NULL
-            fila = obj_BD_DAL.dtParametros.NewRow();
-            fila["sParametro"] = "@Filtro";
-            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sFiltro) ? "0" : "7";
-            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sFiltro) ? (object)System.DBNull.Value : obj_DAL.sFiltro;
-            obj_BD_DAL.dtParametros.Rows.Add(fila);
+                obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
 
-            obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
-            obj_DAL.dtDatos = obj_BD_DAL.dtDatos;
-            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+                obj.sMSJError = obj_BD_DAL.sMsjErrorBD;
+                obj.dtDatos = (obj_BD_DAL.sMsjErrorBD == string.Empty) ? obj_BD_DAL.DS.Tables["Auditoria"] : null;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }

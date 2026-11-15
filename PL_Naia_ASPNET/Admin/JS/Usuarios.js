@@ -19,7 +19,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Roles
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarRoles",
-        data: JSON.stringify({ obj_Parametros_JS: [Sesion.InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             usr_roles = r.d || [];
@@ -36,7 +36,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Tipos de identificacion
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarTiposIdentificacion",
-        data: JSON.stringify({ obj_Parametros_JS: [Sesion.InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             usr_tiposId = r.d || [];
@@ -53,7 +53,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Carreras (reutiliza el WebMethod existente de Carreras)
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarCarreras",
-        data: JSON.stringify({ obj_Parametros_JS: [Sesion.InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             var ddl = $("#usr_ddlCarrera");
@@ -71,7 +71,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Departamentos (reutiliza el WebMethod existente de Departamentos)
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarDepartamentos",
-        data: JSON.stringify({ obj_Parametros_JS: [Sesion.InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             var ddl = $("#usr_ddlDepartamento");
@@ -89,7 +89,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Equipos de soporte (reutiliza el WebMethod de Equipos)
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarEquipos",
-        data: JSON.stringify({ obj_Parametros_JS: [Sesion.InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             var ddl = $("#usr_ddlEquipo");
@@ -105,7 +105,7 @@ function Usuarios_CargarDropdowns(callback) {
 
 // -------------------- LISTAR --------------------
 function Usuarios_Listar() {
-    var params = [Sesion.InstitucionId];
+    var params = [g_InstitucionId];
 
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarUsuarios",
@@ -123,7 +123,7 @@ function Usuarios_Filtrar() {
     var filtro = $.trim($("#usr_txtFiltro").val());
     if (filtro.length === 0) { Usuarios_Listar(); return; }
 
-    var params = [Sesion.InstitucionId, Sesion.UsuarioId, filtro];
+    var params = [g_InstitucionId, g_UsuarioId, filtro];
 
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/FiltrarUsuarios",
@@ -239,7 +239,7 @@ function Usuarios_AbrirModalNuevo() {
 
 // -------------------- EDITAR --------------------
 function Usuarios_Editar(usuarioId) {
-    var params = [Sesion.InstitucionId, Sesion.UsuarioId, usuarioId.toString()];
+    var params = [g_InstitucionId, g_UsuarioId, usuarioId.toString()];
 
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/InfoUsuario",
@@ -320,13 +320,13 @@ function Usuarios_Guardar() {
         var activo = $("#usr_ddlEstado").val();
         // [0]=Inst, [1]=UsrGlobal, [2]=UsrId, [3]=Rol, [4]=Carrera, [5]=Depto, [6]=Equipo,
         // [7]=TipoId, [8]=Identificacion, [9]=NumInterno, [10]=Nombre, [11]=Apellidos, [12]=Correo, [13]=Contra, [14]=Activo
-        params = [Sesion.InstitucionId, Sesion.UsuarioId, usuarioId, rolId, carreraId, departamentoId, equipoId,
+        params = [g_InstitucionId, g_UsuarioId, usuarioId, rolId, carreraId, departamentoId, equipoId,
                   tipoIdId, identificacion, numeroInterno, nombre, apellidos, correo, contrasena, activo];
         metodo = "ActualizarUsuario";
     } else {
         // [0]=Inst, [1]=UsrGlobal, [2]=Rol, [3]=Carrera, [4]=Depto, [5]=Equipo,
         // [6]=TipoId, [7]=Identificacion, [8]=NumInterno, [9]=Nombre, [10]=Apellidos, [11]=Correo, [12]=Contra
-        params = [Sesion.InstitucionId, Sesion.UsuarioId, rolId, carreraId, departamentoId, equipoId,
+        params = [g_InstitucionId, g_UsuarioId, rolId, carreraId, departamentoId, equipoId,
                   tipoIdId, identificacion, numeroInterno, nombre, apellidos, correo, contrasena];
         metodo = "InsertarUsuario";
     }
@@ -366,7 +366,7 @@ function Usuarios_Eliminar(usuarioId, nombre) {
         cancelButtonText: "Cancelar"
     }).then(function (result) {
         if (result.isConfirmed) {
-            var params = [Sesion.InstitucionId, Sesion.UsuarioId, usuarioId.toString()];
+            var params = [g_InstitucionId, g_UsuarioId, usuarioId.toString()];
 
             $.ajax({
                 type: "POST", url: "frmPanelAdmin.aspx/EliminarUsuario",

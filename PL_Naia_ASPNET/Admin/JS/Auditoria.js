@@ -8,7 +8,7 @@ window.Auditoria_AlAbrir = function () {
 
 // ==================== LISTAR ====================
 function Auditoria_Listar() {
-    var params = [SesionInstitucion(), SesionUsuario()];
+    var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
         type: "POST",
@@ -41,8 +41,8 @@ function Auditoria_Filtrar() {
     }
 
     var params = [
-        SesionInstitucion(),  // [0]
-        SesionUsuario(),      // [1]
+        g_InstitucionId,  // [0]
+        g_UsuarioId,      // [1]
         fechaInicio,          // [2] FechaInicio
         fechaFin,             // [3] FechaFin
         seccion,              // [4] SeccionSistema

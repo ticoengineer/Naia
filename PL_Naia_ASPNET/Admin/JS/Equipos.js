@@ -9,11 +9,11 @@ window.Equipos_AlAbrir = function () {
 
 // -------------------- LISTAR --------------------
 function Equipos_Listar() {
-    var params = [Sesion.InstitucionId];
+    var params = [g_InstitucionId];
 
     $.ajax({
         type: "POST",
-        url: "frmPanelAdmin.aspx/ListarEquipos",
+        url: "frmPanelAdmin.aspx/ListarEquiposTodos",
         data: JSON.stringify({ obj_Parametros_JS: params }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -34,7 +34,7 @@ function Equipos_Filtrar() {
         return;
     }
 
-    var params = [Sesion.InstitucionId, Sesion.UsuarioId, filtro];
+    var params = [g_InstitucionId, g_UsuarioId, filtro];
 
     $.ajax({
         type: "POST",
@@ -94,7 +94,7 @@ function Equipos_AbrirModalNuevo() {
 
 // -------------------- EDITAR --------------------
 function Equipos_Editar(equipoId) {
-    var params = [Sesion.InstitucionId, Sesion.UsuarioId, equipoId.toString()];
+    var params = [g_InstitucionId, g_UsuarioId, equipoId.toString()];
 
     $.ajax({
         type: "POST",
@@ -138,10 +138,10 @@ function Equipos_Guardar() {
     if (eqp_esEdicion) {
         var equipoId = $("#eqp_hdnEquipoId").val();
         var activo = $("#eqp_ddlEstado").val();
-        params = [Sesion.InstitucionId, Sesion.UsuarioId, equipoId, nombre, descripcion, activo];
+        params = [g_InstitucionId, g_UsuarioId, equipoId, nombre, descripcion, activo];
         metodo = "ActualizarEquipo";
     } else {
-        params = [Sesion.InstitucionId, Sesion.UsuarioId, nombre, descripcion];
+        params = [g_InstitucionId, g_UsuarioId, nombre, descripcion];
         metodo = "InsertarEquipo";
     }
 
@@ -182,7 +182,7 @@ function Equipos_Eliminar(equipoId, nombre) {
         cancelButtonText: "Cancelar"
     }).then(function (result) {
         if (result.isConfirmed) {
-            var params = [Sesion.InstitucionId, Sesion.UsuarioId, equipoId.toString()];
+            var params = [g_InstitucionId, g_UsuarioId, equipoId.toString()];
 
             $.ajax({
                 type: "POST",

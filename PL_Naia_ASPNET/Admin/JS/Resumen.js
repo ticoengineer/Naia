@@ -9,7 +9,7 @@ window.Resumen_AlAbrir = function () {
 
 // ==================== CARGAR TOTALES ====================
 function Resumen_CargarTotales() {
-    var params = [SesionInstitucion(), SesionUsuario()];
+    var params = [g_InstitucionId, g_UsuarioId];
 
     // Usuarios
     $.ajax({
@@ -138,7 +138,7 @@ function Resumen_CargarTotales() {
 
 // ==================== CARGAR ACTIVIDAD RECIENTE ====================
 function Resumen_CargarActividad() {
-    var params = [SesionInstitucion(), SesionUsuario()];
+    var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
         type: "POST",
