@@ -48,6 +48,8 @@
     <Compile Include="Entidades\cls_Usuarios_BLL.cs" />
     <Compile Include="Entidades\cls_Ubicaciones_BLL.cs" />
     <Compile Include="Entidades\cls_Categorias_BLL.cs" />
+    <Compile Include="Entidades\cls_Carreras_BLL.cs" />
+    <Compile Include="Entidades\cls_Departamentos_BLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

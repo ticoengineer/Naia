@@ -1,0 +1,40 @@
+﻿using System;
+using System.Data;
+
+namespace DAL_Naia_ASPNET.Entidades
+{
+    public class cls_Departamentos_DAL
+    {
+        #region Variables Privadas
+
+        private int _iInstitucionId, _iDepartamentoId, _iCarreraId, _iIdUsuarioGlobal;
+        private string _sNombre, _sCodigo, _sDireccionIp, _sFiltro;
+        private bool _bActivo;
+
+        private string _sValorScalar, _sAXN, _sMSJError;
+        private DataTable _dtDatos, _dtParametros;
+
+        #endregion
+
+        #region Variables Publicas
+
+        public int iInstitucionId { get => _iInstitucionId; set => _iInstitucionId = value; }
+        public int iDepartamentoId { get => _iDepartamentoId; set => _iDepartamentoId = value; }
+        public int iCarreraId { get => _iCarreraId; set => _iCarreraId = value; }
+        public string sNombre { get => _sNombre; set => _sNombre = value; }
+        public string sCodigo { get => _sCodigo; set => _sCodigo = value; }
+        public bool bActivo { get => _bActivo; set => _bActivo = value; }
+        public string sFiltro { get => _sFiltro; set => _sFiltro = value; }
+
+        public int iIdUsuarioGlobal { get => _iIdUsuarioGlobal; set => _iIdUsuarioGlobal = value; }
+        public string sDireccionIp { get => _sDireccionIp; set => _sDireccionIp = value; }
+
+        public string sValorScalar { get => _sValorScalar; set => _sValorScalar = value; }
+        public string sAXN { get => _sAXN; set => _sAXN = value; }
+        public string sMSJError { get => _sMSJError; set => _sMSJError = value; }
+        public DataTable dtDatos { get => _dtDatos; set => _dtDatos = value; }
+        public DataTable dtParametros { get => _dtParametros; set => _dtParametros = value; }
+
+        #endregion
+    }
+}

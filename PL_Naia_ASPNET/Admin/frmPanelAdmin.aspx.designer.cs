@@ -32,5 +32,15 @@ namespace PL_Naia_ASPNET.Admin
         /// Control ucCategorias.
         /// </summary>
         protected global::System.Web.UI.UserControl ucCategorias;
+
+        /// <summary>
+        /// Control ucCarreras.
+        /// </summary>
+        protected global::System.Web.UI.UserControl ucCarreras;
+
+        /// <summary>
+        /// Control ucDepartamentos.
+        /// </summary>
+        protected global::System.Web.UI.UserControl ucDepartamentos;
     }
 }

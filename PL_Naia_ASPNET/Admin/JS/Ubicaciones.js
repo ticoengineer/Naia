@@ -1,8 +1,13 @@
-// =====================================================================================
+﻿// =====================================================================================
 // UBICACIONES · Ubicaciones.js
 // Funciones para listar, filtrar, crear, editar y eliminar ubicaciones.
 // Todas las llamadas van a frmPanelAdmin.aspx/<NombreMetodo> via AJAX.
 // =====================================================================================
+
+// Hook que Panel.js llama al abrir la seccion
+function Ubicaciones_AlAbrir() {
+    ubi_Inicializar();
+}
 
 // Se ejecuta cuando el admin abre la seccion de Ubicaciones desde el menu
 function ubi_Inicializar() {

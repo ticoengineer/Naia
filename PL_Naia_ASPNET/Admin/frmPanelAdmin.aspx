@@ -5,6 +5,8 @@
 
 <%@ Register Src="~/Admin/ucUbicaciones.ascx" TagPrefix="naia" TagName="Ubicaciones" %>
 <%@ Register Src="~/Admin/ucCategorias.ascx" TagPrefix="naia" TagName="Categorias" %>
+<%@ Register Src="~/Admin/ucCarreras.ascx" TagPrefix="naia" TagName="Carreras" %>
+<%@ Register Src="~/Admin/ucDepartamentos.ascx" TagPrefix="naia" TagName="Departamentos" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -132,13 +134,11 @@
                     </section>
 
                     <section id="seccion-carreras" class="panel-seccion seccion" hidden>
-                        <h1>Carreras</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Carreras runat="server" />
                     </section>
 
                     <section id="seccion-departamentos" class="panel-seccion seccion" hidden>
-                        <h1>Departamentos</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Departamentos runat="server" />
                     </section>
 
                     <section id="seccion-equipos" class="panel-seccion seccion" hidden>
@@ -180,6 +180,8 @@
 
     <script src="JS/Ubicaciones.js"></script>
     <script src="JS/Categorias.js"></script>
+    <script src="JS/Carreras.js"></script>
+    <script src="JS/Departamentos.js"></script>
     <script src="JS/Panel.js"></script>
 
 </body>

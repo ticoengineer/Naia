@@ -1,3 +1,8 @@
+﻿// Hook que Panel.js llama al abrir la seccion
+function Categorias_AlAbrir() {
+    cat_Inicializar();
+}
+
 // =====================================================================================
 // CATEGORIAS · Categorias.js
 // Funciones para listar, filtrar, crear, editar y eliminar categorias de tiquetes.

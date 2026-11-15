@@ -75,6 +75,10 @@
     <Content Include="Admin\CSS\panel-admin.css" />
     <Content Include="Admin\ucUbicaciones.ascx" />
     <Content Include="Admin\ucCategorias.ascx" />
+    <Content Include="Admin\ucCarreras.ascx" />
+    <Content Include="Admin\ucDepartamentos.ascx" />
+    <Content Include="Admin\JS\Carreras.js" />
+    <Content Include="Admin\JS\Departamentos.js" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
@@ -125,6 +129,12 @@
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Categorias.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Carreras.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Departamentos.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">

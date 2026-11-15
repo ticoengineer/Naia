@@ -47,6 +47,8 @@
     <Compile Include="Entidades\cls_Usuarios_DAL.cs" />
     <Compile Include="Entidades\cls_Ubicaciones_DAL.cs" />
     <Compile Include="Entidades\cls_Categorias_DAL.cs" />
+    <Compile Include="Entidades\cls_Carreras_DAL.cs" />
+    <Compile Include="Entidades\cls_Departamentos_DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
