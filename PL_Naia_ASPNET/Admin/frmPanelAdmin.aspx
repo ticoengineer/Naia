@@ -3,6 +3,9 @@
     CodeBehind="frmPanelAdmin.aspx.cs"
     Inherits="PL_Naia_ASPNET.Admin.frmPanelAdmin" %>
 
+<%@ Register Src="~/Admin/ucUbicaciones.ascx" TagPrefix="naia" TagName="Ubicaciones" %>
+<%@ Register Src="~/Admin/ucCategorias.ascx" TagPrefix="naia" TagName="Categorias" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head runat="server">
@@ -12,6 +15,7 @@
     <title>Panel del administrador | Naia</title>
 
     <link rel="stylesheet" href="CSS/panel.css" />
+    <link rel="stylesheet" href="CSS/panel-admin.css" />
 </head>
 
 <body data-roles="4">
@@ -143,13 +147,11 @@
                     </section>
 
                     <section id="seccion-ubicaciones" class="panel-seccion seccion" hidden>
-                        <h1>Ubicaciones</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Ubicaciones runat="server" />
                     </section>
 
                     <section id="seccion-categorias" class="panel-seccion seccion" hidden>
-                        <h1>Categorías</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Categorias runat="server" />
                     </section>
 
                     <section id="seccion-auditoria" class="panel-seccion seccion" hidden>
@@ -176,6 +178,8 @@
 
         </form>
 
+    <script src="JS/Ubicaciones.js"></script>
+    <script src="JS/Categorias.js"></script>
     <script src="JS/Panel.js"></script>
 
 </body>

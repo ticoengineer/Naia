@@ -70,6 +70,11 @@
     <Content Include="Admin\CSS\panel.css" />
     <Content Include="Admin\frmPanelAdmin.aspx" />
     <Content Include="Admin\JS\Panel.js" />
+    <Content Include="Admin\JS\Ubicaciones.js" />
+    <Content Include="Admin\JS\Categorias.js" />
+    <Content Include="Admin\CSS\panel-admin.css" />
+    <Content Include="Admin\ucUbicaciones.ascx" />
+    <Content Include="Admin\ucCategorias.ascx" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
@@ -114,6 +119,12 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.aspx.designer.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Categorias.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
