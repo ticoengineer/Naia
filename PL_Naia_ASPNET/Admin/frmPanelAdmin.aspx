@@ -30,7 +30,7 @@
             <aside class="panel-sidebar">
 
                 <div class="panel-logo">
-                    <span>✦</span> Naia
+                    <img src="Images/naia-icon.png" alt="Naia" width="24" height="24" style="vertical-align: middle;" /> Naia
                 </div>
 
                 <nav class="panel-menu" aria-label="Menú del administrador">
@@ -178,6 +178,15 @@
 
         </form>
 
+    <!-- Librerias externas -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../JavaScript/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Sesion (lee cookies y define g_UsuarioId, g_InstitucionId, g_RolId) -->
+    <script src="../JavaScript/Sesion.js"></script>
+
+    <!-- Scripts de secciones -->
     <script src="JS/Ubicaciones.js"></script>
     <script src="JS/Categorias.js"></script>
     <script src="JS/Carreras.js"></script>

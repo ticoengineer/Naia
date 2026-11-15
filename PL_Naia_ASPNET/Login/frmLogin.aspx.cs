@@ -75,7 +75,7 @@ namespace PL_Naia_ASPNET.Login
                     string sDestino;
                     switch (Convert.ToInt32(fila["RolId"]))
                     {
-                        case 4: sDestino = "../Inicio/frmInicioAdmin.aspx"; break;   // Administrativo
+                        case 4: sDestino = "../Admin/frmPanelAdmin.aspx"; break;   // Administrativo
                         case 3: sDestino = "../Inicio/frmInicioSoporte.aspx"; break;   // Soporte técnico
                         default: sDestino = "../Inicio/frmInicioUsuario.aspx"; break;   // Estudiante y Profesor
                     }

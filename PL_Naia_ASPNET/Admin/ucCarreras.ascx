@@ -22,7 +22,7 @@
     <!-- ====== Buscador ====== -->
     <div class="admin-search">
         <div class="input input--search">
-            <img class="input__icon" src="Admin/Images/icon-search.png" alt="" aria-hidden="true" width="16" height="16">
+            <img class="input__icon" src="Images/icon-tag.png" alt="" aria-hidden="true" width="16" height="16">
             <input id="txtCarBuscar" class="input__control" type="text" placeholder="Buscar por nombre o codigo..."
                    onkeyup="car_Filtrar()">
         </div>

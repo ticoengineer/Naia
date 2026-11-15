@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" %>
 
 <%--
     User Control: Seccion de Departamentos del panel de administracion.
@@ -19,7 +19,7 @@
 
     <div class="admin-search">
         <div class="input input--search">
-            <img class="input__icon" src="Admin/Images/icon-search.png" alt="" aria-hidden="true" width="16" height="16">
+            <img class="input__icon" src="Images/icon-tag.png" alt="" aria-hidden="true" width="16" height="16">
             <input id="txtDepBuscar" class="input__control" type="text" placeholder="Buscar por nombre, codigo o carrera..."
                    onkeyup="dep_Filtrar()">
         </div>

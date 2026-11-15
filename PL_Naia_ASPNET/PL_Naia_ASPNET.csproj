@@ -73,6 +73,10 @@
     <Content Include="Admin\JS\Ubicaciones.js" />
     <Content Include="Admin\JS\Categorias.js" />
     <Content Include="Admin\CSS\panel-admin.css" />
+    <Content Include="Admin\Images\naia-icon.png" />
+    <Content Include="Admin\Images\favicon.png" />
+    <Content Include="Admin\Images\icon-tag.png" />
+    <Content Include="Admin\Images\icon-activity.png" />
     <Content Include="Admin\ucUbicaciones.ascx" />
     <Content Include="Admin\ucCategorias.ascx" />
     <Content Include="Admin\ucCarreras.ascx" />
