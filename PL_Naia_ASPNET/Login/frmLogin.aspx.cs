@@ -46,7 +46,7 @@ namespace PL_Naia_ASPNET.Login
                 /*Sin respuesta de la base de datos*/
                 if (obj_Usuarios_DAL.dtDatos == null || obj_Usuarios_DAL.dtDatos.Rows.Count == 0)
                 {
-                    return "0" + "<SPLITER>" + "No se pudo conectar con la base de datos.";
+                    return "0" + "<SPLITER>" + "Error al comunicarse con el servidor. Intente de nuevo.";
                 }
 
                 /*Recuperamos los valores y los evaluamos*/

@@ -7,6 +7,11 @@
 <%@ Register Src="~/Admin/ucCategorias.ascx" TagPrefix="naia" TagName="Categorias" %>
 <%@ Register Src="~/Admin/ucCarreras.ascx" TagPrefix="naia" TagName="Carreras" %>
 <%@ Register Src="~/Admin/ucDepartamentos.ascx" TagPrefix="naia" TagName="Departamentos" %>
+<%@ Register Src="~/Admin/ucEquipos.ascx" TagPrefix="naia" TagName="Equipos" %>
+<%@ Register Src="~/Admin/ucUsuarios.ascx" TagPrefix="naia" TagName="Usuarios" %>
+<%@ Register Src="~/Admin/ucAuditoria.ascx" TagPrefix="naia" TagName="Auditoria" %>
+<%@ Register Src="~/Admin/ucConfiguracion.ascx" TagPrefix="naia" TagName="Configuracion" %>
+<%@ Register Src="~/Admin/ucResumen.ascx" TagPrefix="naia" TagName="Resumen" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -116,11 +121,7 @@
                 <div class="panel-contenido">
 
                     <section id="seccion-resumen" class="panel-seccion seccion">
-                        <h1>Resumen general</h1>
-                        <p>
-                            Indicadores generales de la universidad,
-                            tiquetes y usuarios activos.
-                        </p>
+                        <naia:Resumen runat="server" />
                     </section>
 
                     <section id="seccion-tiquetes" class="panel-seccion seccion" hidden>
@@ -129,8 +130,7 @@
                     </section>
 
                     <section id="seccion-usuarios" class="panel-seccion seccion" hidden>
-                        <h1>Usuarios</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Usuarios runat="server" />
                     </section>
 
                     <section id="seccion-carreras" class="panel-seccion seccion" hidden>
@@ -142,8 +142,7 @@
                     </section>
 
                     <section id="seccion-equipos" class="panel-seccion seccion" hidden>
-                        <h1>Equipos de soporte</h1>
-                        <p>Sección pendiente de integración.</p>
+                        <naia:Equipos runat="server" />
                     </section>
 
                     <section id="seccion-ubicaciones" class="panel-seccion seccion" hidden>
@@ -155,19 +154,11 @@
                     </section>
 
                     <section id="seccion-auditoria" class="panel-seccion seccion" hidden>
-                        <h1>Auditoría</h1>
-                        <p>
-                            Consulta de movimientos y actividades
-                            registradas en el sistema.
-                        </p>
+                        <naia:Auditoria runat="server" />
                     </section>
 
                     <section id="seccion-configuracion" class="panel-seccion seccion" hidden>
-                        <h1>Configuración</h1>
-                        <p>
-                            Administración de los datos y del plan
-                            de suscripción de la universidad.
-                        </p>
+                        <naia:Configuracion runat="server" />
                     </section>
 
                 </div>
@@ -191,6 +182,11 @@
     <script src="JS/Categorias.js"></script>
     <script src="JS/Carreras.js"></script>
     <script src="JS/Departamentos.js"></script>
+    <script src="JS/Equipos.js"></script>
+    <script src="JS/Usuarios.js"></script>
+    <script src="JS/Auditoria.js"></script>
+    <script src="JS/Configuracion.js"></script>
+    <script src="JS/Resumen.js"></script>
     <script src="JS/Panel.js"></script>
 
 </body>

@@ -49,6 +49,10 @@
     <Compile Include="Entidades\cls_Categorias_DAL.cs" />
     <Compile Include="Entidades\cls_Carreras_DAL.cs" />
     <Compile Include="Entidades\cls_Departamentos_DAL.cs" />
+    <Compile Include="Entidades\cls_Equipos_DAL.cs" />
+    <Compile Include="Entidades\cls_Catalogos_DAL.cs" />
+    <Compile Include="Entidades\cls_Auditoria_DAL.cs" />
+    <Compile Include="Entidades\cls_Configuracion_DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

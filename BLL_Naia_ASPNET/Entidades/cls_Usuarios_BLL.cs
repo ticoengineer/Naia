@@ -1,62 +1,344 @@
-﻿using BLL_Naia_ASPNET.BD;
 using DAL_Naia_ASPNET.BD;
 using DAL_Naia_ASPNET.Entidades;
-using System;
-using System.Collections.Generic;
+using BLL_Naia_ASPNET.BD;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace BLL_Naia_ASPNET.Entidades
 {
     public class cls_Usuarios_BLL
     {
-        /// <summary>
-        /// Ejecuta SP_INICIAR_SESION. El SP siempre devuelve UNA fila cuya primera columna es "Codigo":
-        /// > 0 = UsuarioId (éxito) · -1 credenciales · -3 cuenta inactiva · -6 universidad inactiva · 0 error
-        /// </summary>
-        public void Iniciar_Sesion(ref cls_Usuarios_DAL obj_Usuarios_DAL)
+        // ==================== LISTAR ====================
+        public void Listar_Usuarios(ref cls_Usuarios_DAL obj_DAL)
         {
-            try
-            {
-                /*Objetos de comunicación con la base de datos*/
-                cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
-                cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
 
-                /*Estructura de la tabla de parámetros*/
-                obj_Usuarios_DAL.dtParametros = null;
-                obj_Usuarios_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros(obj_Usuarios_DAL.dtParametros);
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_LISTAR_USUARIOS"];
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
 
-                /*Parámetros del SP: nombre, código de tipo de dato, valor*/
-                obj_Usuarios_DAL.dtParametros.Rows.Add("@Correo", "6", obj_Usuarios_DAL.sCorreo);
-                obj_Usuarios_DAL.dtParametros.Rows.Add("@Contrasena", "6", obj_Usuarios_DAL.sContrasena);
-                obj_Usuarios_DAL.dtParametros.Rows.Add("@DireccionIp", "6", obj_Usuarios_DAL.sDireccionIp);
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
 
-                /*SP (Web.config) y nombre lógico de la tabla de respuesta*/
-                obj_BD_DAL.sNomSP = ConfigurationManager.AppSettings["SP_INICIAR_SESION"];
-                obj_BD_DAL.sNomTabla = "InicioSesion";
-                obj_BD_DAL.DT_Parametros = obj_Usuarios_DAL.dtParametros;
+            obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
+            obj_DAL.dtDatos = obj_BD_DAL.dtDatos;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+        }
 
-                /*Ejecutar*/
-                obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
+        // ==================== FILTRAR ====================
+        public void Filtrar_Usuarios(ref cls_Usuarios_DAL obj_DAL)
+        {
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
 
-                /*Respuesta de la base de datos*/
-                if (obj_BD_DAL.sMsjErrorBD == string.Empty)
-                {
-                    obj_Usuarios_DAL.sMSJError = obj_BD_DAL.sMsjErrorBD;
-                    obj_Usuarios_DAL.dtDatos = obj_BD_DAL.DS.Tables[0];
-                }
-                else
-                {
-                    obj_Usuarios_DAL.sMSJError = obj_BD_DAL.sMsjErrorBD;
-                    obj_Usuarios_DAL.dtDatos = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_FILTRAR_USUARIOS"];
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Filtro";
+            fila["sTipoDato"] = "7";
+            fila["sValor"] = obj_DAL.sFiltro;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
+            obj_DAL.dtDatos = obj_BD_DAL.dtDatos;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+        }
+
+        // ==================== INFO ====================
+        public void Info_Usuario(ref cls_Usuarios_DAL obj_DAL)
+        {
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_INFO_USUARIO"];
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@UsuarioId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iUsuarioId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
+            obj_DAL.dtDatos = obj_BD_DAL.dtDatos;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+        }
+
+        // ==================== INSERTAR ====================
+        public void Insertar_Usuario(ref cls_Usuarios_DAL obj_DAL)
+        {
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_INSERTA_USUARIOS"];
+            obj_BD_DAL.sIndAxn = "SCALAR";
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@RolId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iRolId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@CarreraId";
+            fila["sTipoDato"] = obj_DAL.iCarreraId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iCarreraId == 0 ? (object)System.DBNull.Value : obj_DAL.iCarreraId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@DepartamentoId";
+            fila["sTipoDato"] = obj_DAL.iDepartamentoId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iDepartamentoId == 0 ? (object)System.DBNull.Value : obj_DAL.iDepartamentoId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@EquipoId";
+            fila["sTipoDato"] = obj_DAL.iEquipoId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iEquipoId == 0 ? (object)System.DBNull.Value : obj_DAL.iEquipoId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@TipoIdentificacionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iTipoIdentificacionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Identificacion";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sIdentificacion;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@NumeroInterno";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sNumeroInterno;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Nombre";
+            fila["sTipoDato"] = "7";
+            fila["sValor"] = obj_DAL.sNombre;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Apellidos";
+            fila["sTipoDato"] = "7";
+            fila["sValor"] = obj_DAL.sApellidos;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Correo";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sCorreo;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Contrasena";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sContrasena;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@IdUsuarioGlobal";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iIdUsuarioGlobal;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@DireccionIp";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sDireccionIp;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            obj_BD_BLL.EjecutaProcesosComando(ref obj_BD_DAL);
+            obj_DAL.sValorScalar = obj_BD_DAL.sValorScalar;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+        }
+
+        // ==================== ACTUALIZAR ====================
+        public void Actualizar_Usuario(ref cls_Usuarios_DAL obj_DAL)
+        {
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_ACTUALIZA_USUARIOS"];
+            obj_BD_DAL.sIndAxn = "SCALAR";
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@UsuarioId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iUsuarioId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@RolId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iRolId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@CarreraId";
+            fila["sTipoDato"] = obj_DAL.iCarreraId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iCarreraId == 0 ? (object)System.DBNull.Value : obj_DAL.iCarreraId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@DepartamentoId";
+            fila["sTipoDato"] = obj_DAL.iDepartamentoId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iDepartamentoId == 0 ? (object)System.DBNull.Value : obj_DAL.iDepartamentoId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@EquipoId";
+            fila["sTipoDato"] = obj_DAL.iEquipoId == 0 ? "0" : "1";
+            fila["sValor"] = obj_DAL.iEquipoId == 0 ? (object)System.DBNull.Value : obj_DAL.iEquipoId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@TipoIdentificacionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iTipoIdentificacionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Identificacion";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sIdentificacion;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@NumeroInterno";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sNumeroInterno;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Nombre";
+            fila["sTipoDato"] = "7";
+            fila["sValor"] = obj_DAL.sNombre;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Apellidos";
+            fila["sTipoDato"] = "7";
+            fila["sValor"] = obj_DAL.sApellidos;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Correo";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sCorreo;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Contrasena";
+            fila["sTipoDato"] = string.IsNullOrEmpty(obj_DAL.sContrasena) ? "0" : "6";
+            fila["sValor"] = string.IsNullOrEmpty(obj_DAL.sContrasena) ? (object)System.DBNull.Value : obj_DAL.sContrasena;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@Activo";
+            fila["sTipoDato"] = "9";
+            fila["sValor"] = obj_DAL.bActivo;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@IdUsuarioGlobal";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iIdUsuarioGlobal;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@DireccionIp";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sDireccionIp;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            obj_BD_BLL.EjecutaProcesosComando(ref obj_BD_DAL);
+            obj_DAL.sValorScalar = obj_BD_DAL.sValorScalar;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
+        }
+
+        // ==================== ELIMINAR (DESACTIVAR) ====================
+        public void Eliminar_Usuario(ref cls_Usuarios_DAL obj_DAL)
+        {
+            cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+            cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+            obj_BD_DAL.sNombreBD = "Usuarios";
+            obj_BD_DAL.sNombreSP = ConfigurationManager.AppSettings["SP_ELIMINA_USUARIOS"];
+            obj_BD_DAL.sIndAxn = "SCALAR";
+            obj_BD_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros();
+
+            DataRow fila;
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@InstitucionId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iInstitucionId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@UsuarioId";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iUsuarioId;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@IdUsuarioGlobal";
+            fila["sTipoDato"] = "1";
+            fila["sValor"] = obj_DAL.iIdUsuarioGlobal;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            fila = obj_BD_DAL.dtParametros.NewRow();
+            fila["sParametro"] = "@DireccionIp";
+            fila["sTipoDato"] = "6";
+            fila["sValor"] = obj_DAL.sDireccionIp;
+            obj_BD_DAL.dtParametros.Rows.Add(fila);
+
+            obj_BD_BLL.EjecutaProcesosComando(ref obj_BD_DAL);
+            obj_DAL.sValorScalar = obj_BD_DAL.sValorScalar;
+            obj_DAL.sMSJError = obj_BD_DAL.sMSJError;
         }
     }
 }

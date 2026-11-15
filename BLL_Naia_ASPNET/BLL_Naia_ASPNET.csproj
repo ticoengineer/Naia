@@ -50,6 +50,10 @@
     <Compile Include="Entidades\cls_Categorias_BLL.cs" />
     <Compile Include="Entidades\cls_Carreras_BLL.cs" />
     <Compile Include="Entidades\cls_Departamentos_BLL.cs" />
+    <Compile Include="Entidades\cls_Equipos_BLL.cs" />
+    <Compile Include="Entidades\cls_Catalogos_BLL.cs" />
+    <Compile Include="Entidades\cls_Auditoria_BLL.cs" />
+    <Compile Include="Entidades\cls_Configuracion_BLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

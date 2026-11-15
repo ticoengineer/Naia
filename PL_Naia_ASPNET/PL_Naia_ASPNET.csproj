@@ -83,6 +83,16 @@
     <Content Include="Admin\ucDepartamentos.ascx" />
     <Content Include="Admin\JS\Carreras.js" />
     <Content Include="Admin\JS\Departamentos.js" />
+    <Content Include="Admin\JS\Equipos.js" />
+    <Content Include="Admin\JS\Usuarios.js" />
+    <Content Include="Admin\JS\Auditoria.js" />
+    <Content Include="Admin\JS\Configuracion.js" />
+    <Content Include="Admin\JS\Resumen.js" />
+    <Content Include="Admin\ucEquipos.ascx" />
+    <Content Include="Admin\ucUsuarios.ascx" />
+    <Content Include="Admin\ucAuditoria.ascx" />
+    <Content Include="Admin\ucConfiguracion.ascx" />
+    <Content Include="Admin\ucResumen.ascx" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
@@ -139,6 +149,18 @@
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Departamentos.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Equipos.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Usuarios.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Auditoria.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Configuracion.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
