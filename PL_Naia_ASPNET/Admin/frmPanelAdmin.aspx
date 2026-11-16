@@ -1,0 +1,193 @@
+﻿
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="frmPanelAdmin.aspx.cs"
+    Inherits="PL_Naia_ASPNET.Admin.frmPanelAdmin" %>
+
+<%@ Register Src="~/Admin/ucUbicaciones.ascx" TagPrefix="naia" TagName="Ubicaciones" %>
+<%@ Register Src="~/Admin/ucCategorias.ascx" TagPrefix="naia" TagName="Categorias" %>
+<%@ Register Src="~/Admin/ucCarreras.ascx" TagPrefix="naia" TagName="Carreras" %>
+<%@ Register Src="~/Admin/ucDepartamentos.ascx" TagPrefix="naia" TagName="Departamentos" %>
+<%@ Register Src="~/Admin/ucEquipos.ascx" TagPrefix="naia" TagName="Equipos" %>
+<%@ Register Src="~/Admin/ucUsuarios.ascx" TagPrefix="naia" TagName="Usuarios" %>
+<%@ Register Src="~/Admin/ucAuditoria.ascx" TagPrefix="naia" TagName="Auditoria" %>
+<%@ Register Src="~/Admin/ucConfiguracion.ascx" TagPrefix="naia" TagName="Configuracion" %>
+<%@ Register Src="~/Admin/ucResumen.ascx" TagPrefix="naia" TagName="Resumen" %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Panel del administrador | Naia</title>
+
+    <link rel="stylesheet" href="CSS/panel.css" />
+    <link rel="stylesheet" href="CSS/panel-admin.css" />
+</head>
+
+<body data-roles="4">
+
+    <form id="form1" runat="server">
+
+        <div class="panel-admin">
+
+            <!-- MENÚ LATERAL -->
+            <aside class="panel-sidebar">
+
+                <div class="panel-logo">
+                    <img src="Images/naia-icon.png" alt="Naia" width="24" height="24" style="vertical-align: middle;" /> Naia
+                </div>
+
+                <nav class="panel-menu" aria-label="Menú del administrador">
+
+                    <a href="#resumen" class="activo" data-seccion="resumen">
+                        Resumen
+                    </a>
+
+                    <a href="#tiquetes" data-seccion="tiquetes">
+                        Tiquetes
+                    </a>
+
+                    <a href="#usuarios" data-seccion="usuarios">
+                        Usuarios
+                    </a>
+
+                    <div class="panel-menu-titulo">
+                        CATÁLOGOS
+                    </div>
+
+                    <a href="#carreras" data-seccion="carreras">
+                        Carreras
+                    </a>
+
+                    <a href="#departamentos" data-seccion="departamentos">
+                        Departamentos
+                    </a>
+
+                    <a href="#equipos" data-seccion="equipos">
+                        Equipos de soporte
+                    </a>
+
+                    <a href="#ubicaciones" data-seccion="ubicaciones">
+                        Ubicaciones
+                    </a>
+
+                    <a href="#categorias" data-seccion="categorias">
+                        Categorías
+                    </a>
+
+                    <div class="panel-menu-titulo">
+                        SISTEMA
+                    </div>
+
+                    <a href="#auditoria" data-seccion="auditoria">
+                        Auditoría
+                    </a>
+
+                    <a href="#configuracion" data-seccion="configuracion">
+                        Configuración
+                    </a>
+
+                </nav>
+
+            </aside>
+
+            <!-- ÁREA PRINCIPAL -->
+            <main class="panel-principal">
+
+                <!-- BARRA SUPERIOR -->
+                <header class="panel-header">
+
+                    <div class="panel-universidad" id="panel-nombreUniversidad">
+                        Universidad
+                    </div>
+
+                    <div class="panel-usuario">
+
+                        <span id="panel-nombreAdmin">
+                            Administrador
+                        </span>
+
+                        <!-- Se conectará al cierre de sesión existente -->
+                        <span id="panel-cerrarSesion">
+                            Cerrar sesión
+                        </span>
+
+                    </div>
+
+                </header>
+
+                <!-- CONTENIDO DE LAS SECCIONES -->
+                <div class="panel-contenido">
+
+                    <section id="seccion-resumen" class="panel-seccion seccion">
+                        <naia:Resumen runat="server" />
+                    </section>
+
+                    <section id="seccion-tiquetes" class="panel-seccion seccion" hidden>
+                        <h1>Tiquetes</h1>
+                        <p>Sección pendiente de integración.</p>
+                    </section>
+
+                    <section id="seccion-usuarios" class="panel-seccion seccion" hidden>
+                        <naia:Usuarios runat="server" />
+                    </section>
+
+                    <section id="seccion-carreras" class="panel-seccion seccion" hidden>
+                        <naia:Carreras runat="server" />
+                    </section>
+
+                    <section id="seccion-departamentos" class="panel-seccion seccion" hidden>
+                        <naia:Departamentos runat="server" />
+                    </section>
+
+                    <section id="seccion-equipos" class="panel-seccion seccion" hidden>
+                        <naia:Equipos runat="server" />
+                    </section>
+
+                    <section id="seccion-ubicaciones" class="panel-seccion seccion" hidden>
+                        <naia:Ubicaciones runat="server" />
+                    </section>
+
+                    <section id="seccion-categorias" class="panel-seccion seccion" hidden>
+                        <naia:Categorias runat="server" />
+                    </section>
+
+                    <section id="seccion-auditoria" class="panel-seccion seccion" hidden>
+                        <naia:Auditoria runat="server" />
+                    </section>
+
+                    <section id="seccion-configuracion" class="panel-seccion seccion" hidden>
+                        <naia:Configuracion runat="server" />
+                    </section>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        </form>
+
+    <!-- Librerias externas -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../JavaScript/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Sesion (lee cookies y define g_UsuarioId, g_InstitucionId, g_RolId) -->
+    <script src="../JavaScript/Sesion.js"></script>
+
+    <!-- Scripts de secciones -->
+    <script src="JS/Ubicaciones.js"></script>
+    <script src="JS/Categorias.js"></script>
+    <script src="JS/Carreras.js"></script>
+    <script src="JS/Departamentos.js"></script>
+    <script src="JS/Equipos.js?v=2"></script>
+    <script src="JS/Usuarios.js?v=2"></script>
+    <script src="JS/Auditoria.js?v=2"></script>
+    <script src="JS/Configuracion.js?v=2"></script>
+    <script src="JS/Resumen.js?v=2"></script>
+    <script src="JS/Panel.js"></script>
+
+</body>
+</html>

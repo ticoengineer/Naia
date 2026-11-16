@@ -36,7 +36,7 @@ namespace BLL_Naia_ASPNET.BD
         {
             try
             {
-                Obj_BD_DAL.Obj_CNX = new SqlConnection(ConfigurationManager.ConnectionStrings["SQL_AUT"].ToString());
+                Obj_BD_DAL.Obj_CNX = new SqlConnection(ConfigurationManager.ConnectionStrings["WIN_AUT"].ToString());
 
                 if (Obj_BD_DAL.Obj_CNX.State == ConnectionState.Closed)
                 {
@@ -162,7 +162,7 @@ namespace BLL_Naia_ASPNET.BD
         {
             try
             {
-                Obj_BD_DAL.Obj_CNX = new SqlConnection(ConfigurationManager.ConnectionStrings["SQL_AUT"].ToString());
+                Obj_BD_DAL.Obj_CNX = new SqlConnection(ConfigurationManager.ConnectionStrings["WIN_AUT"].ToString());
 
 
                 if (Obj_BD_DAL.Obj_CNX.State == ConnectionState.Closed)
