@@ -9,6 +9,8 @@ window.Resumen_AlAbrir = function () {
 
 // ==================== CARGAR TOTALES ====================
 function Resumen_CargarTotales() {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId];
 
     // Usuarios
@@ -138,6 +140,8 @@ function Resumen_CargarTotales() {
 
 // ==================== CARGAR ACTIVIDAD RECIENTE ====================
 function Resumen_CargarActividad() {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({

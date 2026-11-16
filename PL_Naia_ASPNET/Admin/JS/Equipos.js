@@ -9,6 +9,8 @@ window.Equipos_AlAbrir = function () {
 
 // -------------------- LISTAR --------------------
 function Equipos_Listar() {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId];
 
     $.ajax({
@@ -28,6 +30,8 @@ function Equipos_Listar() {
 
 // -------------------- FILTRAR --------------------
 function Equipos_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var filtro = $.trim($("#eqp_txtFiltro").val());
     if (filtro.length === 0) {
         Equipos_Listar();
@@ -94,6 +98,8 @@ function Equipos_AbrirModalNuevo() {
 
 // -------------------- EDITAR --------------------
 function Equipos_Editar(equipoId) {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId, equipoId.toString()];
 
     $.ajax({
@@ -125,6 +131,8 @@ function Equipos_Editar(equipoId) {
 
 // -------------------- GUARDAR (INSERTAR / ACTUALIZAR) --------------------
 function Equipos_Guardar() {
+    if (!ValidarSesion()) return;
+
     var nombre = $.trim($("#eqp_txtNombre").val());
     if (nombre.length === 0) {
         Swal.fire("Atencion", "El nombre del equipo es obligatorio.", "warning");
@@ -172,6 +180,8 @@ function Equipos_Guardar() {
 
 // -------------------- ELIMINAR (DESACTIVAR) --------------------
 function Equipos_Eliminar(equipoId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         title: "Desactivar equipo",
         text: "¿Estas seguro de desactivar el equipo \"" + nombre + "\"?",

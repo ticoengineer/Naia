@@ -311,7 +311,7 @@ CREATE TABLE dbo.Auditoria (
     Fecha             DATETIME2(3)          NOT NULL CONSTRAINT DF_Auditoria_Fecha DEFAULT (SYSDATETIME()),
     CONSTRAINT FK_Auditoria_Institucion FOREIGN KEY (InstitucionId) REFERENCES dbo.Institucion (InstitucionId),
     CONSTRAINT FK_Auditoria_Usuario     FOREIGN KEY (UsuarioId)     REFERENCES dbo.Usuario (UsuarioId),
-    CONSTRAINT CK_Auditoria_Accion  CHECK (Accion IN (N'Crear', N'Actualizar', N'Desactivar', N'Asignar', N'CambiarEstado', N'InicioSesion')),
+    CONSTRAINT CK_Auditoria_Accion  CHECK (Accion IN (N'Crear', N'Actualizar', N'Desactivar', N'Asignar', N'CambiarEstado', N'InicioSesion', N'CierreSesion')),
     CONSTRAINT CK_Auditoria_Seccion CHECK (SeccionSistema IN (N'Tiquetes', N'Usuarios', N'Catálogos', N'Configuración', N'Seguridad'))
 );
 GO

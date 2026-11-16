@@ -1,5 +1,4 @@
-﻿
-<%@ Page Language="C#" AutoEventWireup="true"
+﻿<%@ Page Language="C#" AutoEventWireup="true"
     CodeBehind="frmPanelAdmin.aspx.cs"
     Inherits="PL_Naia_ASPNET.Admin.frmPanelAdmin" %>
 
@@ -25,6 +24,7 @@
     <link rel="stylesheet" href="CSS/panel-admin.css" />
 </head>
 
+<!-- data-roles: 4 Administrativo (lo revisa Sesion.js) -->
 <body data-roles="4">
 
     <form id="form1" runat="server">
@@ -98,20 +98,23 @@
                 <!-- BARRA SUPERIOR -->
                 <header class="panel-header">
 
-                    <div class="panel-universidad" id="panel-nombreUniversidad">
+                    <!-- Sesion.js llena la universidad desde la cookie USRUNV -->
+                    <div class="panel-universidad js-usuario-universidad" id="panel-nombreUniversidad">
                         Universidad
                     </div>
 
                     <div class="panel-usuario">
 
-                        <span id="panel-nombreAdmin">
+                        <!-- Sesion.js llena el nombre desde la cookie USRNOM -->
+                        <span id="panel-nombreAdmin" class="js-usuario-nombre">
                             Administrador
                         </span>
 
-                        <!-- Se conectará al cierre de sesión existente -->
-                        <span id="panel-cerrarSesion">
+                        <!-- Sesion.js conecta este enlace con CerrarSesion() (clase js-cerrar-sesion) -->
+                        <a href="#" id="panel-cerrarSesion" class="js-cerrar-sesion"
+                           style="color: inherit; text-decoration: none; cursor: pointer;">
                             Cerrar sesión
-                        </span>
+                        </a>
 
                     </div>
 
@@ -167,27 +170,27 @@
 
         </div>
 
-        </form>
+    </form>
 
-    <!-- Librerias externas -->
+    <!-- Librerías externas (SweetAlert va ANTES de Sesion.js porque Sesion.js lo usa) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../JavaScript/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Sesion (lee cookies y define g_UsuarioId, g_InstitucionId, g_RolId) -->
-    <script src="../JavaScript/Sesion.js"></script>
+<!-- Sesión: valida cookies, rol, datos del usuario y cierre de sesión -->
+<script src="../JavaScript/Sesion.js?v=2"></script>
 
-    <!-- Scripts de secciones -->
-    <script src="JS/Ubicaciones.js"></script>
-    <script src="JS/Categorias.js"></script>
-    <script src="JS/Carreras.js"></script>
-    <script src="JS/Departamentos.js"></script>
-    <script src="JS/Equipos.js?v=2"></script>
-    <script src="JS/Usuarios.js?v=2"></script>
-    <script src="JS/Auditoria.js?v=2"></script>
-    <script src="JS/Configuracion.js?v=2"></script>
-    <script src="JS/Resumen.js?v=2"></script>
-    <script src="JS/Panel.js"></script>
+<!-- Scripts de secciones -->
+<script src="JS/Ubicaciones.js?v=2"></script>
+<script src="JS/Categorias.js?v=2"></script>
+<script src="JS/Carreras.js?v=2"></script>
+<script src="JS/Departamentos.js?v=2"></script>
+<script src="JS/Equipos.js?v=3"></script>
+<script src="JS/Usuarios.js?v=3"></script>
+<script src="JS/Auditoria.js?v=3"></script>
+<script src="JS/Configuracion.js?v=3"></script>
+<script src="JS/Resumen.js?v=3"></script>
+<script src="JS/Panel.js"></script>
 
 </body>
 </html>

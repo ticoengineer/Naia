@@ -160,7 +160,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../JavaScript/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../JavaScript/Sesion.js"></script>
-    <script src="JS/InicioUsuario.js"></script>
+    <script src="../JavaScript/Sesion.js?v=2"></script>
+    <script src="JS/InicioUsuario.js?v=2"></script>
 </body>
 </html>

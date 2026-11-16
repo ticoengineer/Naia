@@ -13,6 +13,8 @@ window.Usuarios_AlAbrir = function () {
 
 // -------------------- CARGAR DROPDOWNS --------------------
 function Usuarios_CargarDropdowns(callback) {
+    if (!ValidarSesion()) return;
+
     var pendientes = 4;
     var listo = function () { pendientes--; if (pendientes === 0 && callback) callback(); };
 
@@ -105,6 +107,8 @@ function Usuarios_CargarDropdowns(callback) {
 
 // -------------------- LISTAR --------------------
 function Usuarios_Listar() {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId];
 
     $.ajax({
@@ -120,6 +124,8 @@ function Usuarios_Listar() {
 
 // -------------------- FILTRAR --------------------
 function Usuarios_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var filtro = $.trim($("#usr_txtFiltro").val());
     if (filtro.length === 0) { Usuarios_Listar(); return; }
 
@@ -239,6 +245,8 @@ function Usuarios_AbrirModalNuevo() {
 
 // -------------------- EDITAR --------------------
 function Usuarios_Editar(usuarioId) {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId, usuarioId.toString()];
 
     $.ajax({
@@ -280,6 +288,8 @@ function Usuarios_Editar(usuarioId) {
 
 // -------------------- GUARDAR --------------------
 function Usuarios_Guardar() {
+    if (!ValidarSesion()) return;
+
     var nombre = $.trim($("#usr_txtNombre").val());
     var apellidos = $.trim($("#usr_txtApellidos").val());
     var rolId = $("#usr_ddlRol").val();
@@ -356,6 +366,8 @@ function Usuarios_Guardar() {
 
 // -------------------- ELIMINAR (DESACTIVAR) --------------------
 function Usuarios_Eliminar(usuarioId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         title: "Desactivar usuario",
         text: "¿Estas seguro de desactivar al usuario \"" + nombre + "\"?",

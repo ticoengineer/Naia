@@ -22,25 +22,5 @@ namespace PL_Naia_ASPNET.Admin
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-
-        /// <summary>
-        /// Control ucUbicaciones.
-        /// </summary>
-        protected global::System.Web.UI.UserControl ucUbicaciones;
-
-        /// <summary>
-        /// Control ucCategorias.
-        /// </summary>
-        protected global::System.Web.UI.UserControl ucCategorias;
-
-        /// <summary>
-        /// Control ucCarreras.
-        /// </summary>
-        protected global::System.Web.UI.UserControl ucCarreras;
-
-        /// <summary>
-        /// Control ucDepartamentos.
-        /// </summary>
-        protected global::System.Web.UI.UserControl ucDepartamentos;
     }
 }

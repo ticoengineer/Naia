@@ -10,6 +10,8 @@ function Carreras_AlAbrir() {
 
 // ==================== LISTAR ====================
 function car_Listar() {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
 
@@ -29,6 +31,8 @@ function car_Listar() {
 
 // ==================== FILTRAR ====================
 function car_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var texto = $("#txtCarBuscar").val().trim();
     if (texto === "") { car_Listar(); return; }
 
@@ -89,6 +93,8 @@ function car_AbrirModalNuevo() {
 
 // ==================== EDITAR ====================
 function car_Editar(carreraId) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -144,6 +150,8 @@ function car_Guardar() {
 
 // ==================== INSERTAR ====================
 function car_Insertar(nombre, codigo) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -180,6 +188,8 @@ function car_Insertar(nombre, codigo) {
 
 // ==================== ACTUALIZAR ====================
 function car_Actualizar(carreraId, nombre, codigo, activa) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -218,6 +228,8 @@ function car_Actualizar(carreraId, nombre, codigo, activa) {
 
 // ==================== ELIMINAR ====================
 function car_Eliminar(carreraId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         icon: "warning",
         title: "\u00BFDesactivar carrera?",

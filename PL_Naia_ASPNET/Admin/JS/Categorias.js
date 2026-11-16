@@ -24,6 +24,8 @@ function cat_Inicializar() {
 // ==================== LISTAR ====================
 // Trae todas las categorias y las pinta en la tabla
 function cat_Listar() {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
 
@@ -46,6 +48,8 @@ function cat_Listar() {
 
 // ==================== FILTRAR ====================
 function cat_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var texto = $("#txtCatBuscar").val().trim();
 
     if (texto === "") {
@@ -111,6 +115,7 @@ function cat_PintarTabla(datos) {
 // ==================== CARGAR PRIORIDADES (dropdown) ====================
 // Trae las prioridades desde la base de datos para el select del modal
 function cat_CargarPrioridades() {
+    if (!ValidarSesion()) return;
     jQuery.ajax({
         type: "POST",
         url: "frmPanelAdmin.aspx/ListarPrioridades",
@@ -138,6 +143,8 @@ function cat_CargarPrioridades() {
 // ==================== CARGAR EQUIPOS (dropdown) ====================
 // Trae los equipos de soporte para el select del modal
 function cat_CargarEquipos() {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
 
@@ -185,6 +192,8 @@ function cat_AbrirModalNuevo() {
 
 // ==================== EDITAR (cargar datos) ====================
 function cat_Editar(categoriaId) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -270,6 +279,8 @@ function cat_Guardar() {
 
 // ==================== INSERTAR ====================
 function cat_Insertar(nombre, descripcion, colorHex, prioridadId, equipoId, requiereUbiFisica) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -312,6 +323,8 @@ function cat_Insertar(nombre, descripcion, colorHex, prioridadId, equipoId, requ
 
 // ==================== ACTUALIZAR ====================
 function cat_Actualizar(categoriaId, nombre, descripcion, colorHex, prioridadId, equipoId, requiereUbiFisica, activa) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -356,6 +369,8 @@ function cat_Actualizar(categoriaId, nombre, descripcion, colorHex, prioridadId,
 
 // ==================== ELIMINAR (desactivar) ====================
 function cat_Eliminar(categoriaId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         icon: 'warning',
         title: '¿Desactivar categoría?',
