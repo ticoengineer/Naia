@@ -12,6 +12,8 @@ window.Configuracion_AlAbrir = function () {
 
 // ==================== CARGAR PLANES ====================
 function Configuracion_CargarPlanes(callback) {
+    if (!ValidarSesion()) return;
+
     var params = ["1"]; // SoloActivos = true
 
     $.ajax({
@@ -38,6 +40,8 @@ function Configuracion_CargarPlanes(callback) {
 
 // ==================== CARGAR INFO INSTITUCION ====================
 function Configuracion_CargarInfo() {
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
@@ -73,6 +77,8 @@ function Configuracion_CargarInfo() {
 
 // ==================== GUARDAR ====================
 function Configuracion_Guardar() {
+    if (!ValidarSesion()) return;
+
     var nombre = $.trim($("#cfg_nombre").val());
     var siglas = $.trim($("#cfg_siglas").val());
     var planId = $("#cfg_plan").val();

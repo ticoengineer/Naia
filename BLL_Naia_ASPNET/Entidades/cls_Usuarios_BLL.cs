@@ -216,7 +216,7 @@ namespace BLL_Naia_ASPNET.Entidades
             catch (Exception ex) { throw ex; }
         }
     
-        // ==================== INICIAR SESION ====================
+        // ==================== INICIAR & CERRAR SESION ====================
         public void Iniciar_Sesion(ref cls_Usuarios_DAL obj)
         {
             try
@@ -238,6 +238,35 @@ namespace BLL_Naia_ASPNET.Entidades
 
                 obj.sMSJError = obj_BD_DAL.sMsjErrorBD;
                 obj.dtDatos = (obj_BD_DAL.sMsjErrorBD == string.Empty) ? obj_BD_DAL.DS.Tables["Sesion"] : null;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        /// <summary>
+        /// SP_CERRAR_SESION: registra el cierre de sesión en la auditoría.
+        /// Devuelve en sValorScalar: > 0 éxito · -2 usuario no existe · 0 error
+        /// </summary>
+        public void Cerrar_Sesion(ref cls_Usuarios_DAL obj)
+        {
+            try
+            {
+                cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+                cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+                obj.dtParametros = null;
+                obj.dtParametros = obj_BD_BLL.ObtieneDTParametros(obj.dtParametros);
+                obj.dtParametros.Rows.Add("@InstitucionId", "1", obj.iInstitucionId);
+                obj.dtParametros.Rows.Add("@IdUsuarioGlobal", "1", obj.iIdUsuarioGlobal);
+                obj.dtParametros.Rows.Add("@DireccionIp", "6", obj.sDireccionIp);
+
+                obj_BD_DAL.sNomSP = ConfigurationManager.AppSettings["SP_CERRAR_SESION"];
+                obj_BD_DAL.sIndAxn = "SCALAR";
+                obj_BD_DAL.DT_Parametros = obj.dtParametros;
+
+                obj_BD_BLL.EjecutaProcesosComando(ref obj_BD_DAL);
+
+                obj.sMSJError = obj_BD_DAL.sMsjErrorBD;
+                obj.sValorScalar = (obj_BD_DAL.sMsjErrorBD == string.Empty) ? obj_BD_DAL.sValorScalar : null;
             }
             catch (Exception ex) { throw ex; }
         }

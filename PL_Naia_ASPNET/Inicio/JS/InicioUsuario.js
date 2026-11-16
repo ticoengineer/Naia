@@ -75,6 +75,8 @@ $(document).ready(function () {
 // LISTA DE TIQUETES
 // =====================================================================================
 function CargarTickets() {
+    if (!ValidarSesion()) return;
+
     // EL ORDEN IMPORTA: el WebMethod lo lee por posición
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;   // @InstitucionId
@@ -182,6 +184,9 @@ function PintarHistorial(tickets) {
 // DETALLE DE UN TIQUETE (al abrir la fila)
 // =====================================================================================
 function CargarDetalleTicket(fila) {
+
+    if (!ValidarSesion()) return;
+
     var $fila = $(fila);
 
     var obj_Parametros_JS = new Array();

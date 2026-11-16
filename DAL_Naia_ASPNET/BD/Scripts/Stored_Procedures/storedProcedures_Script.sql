@@ -10,7 +10,7 @@
                                          Estados de tiquete y Transiciones (solo consultar;
                                          los planes también se pueden editar)
      SECCIÓN 3  · INSTITUCIÓN .......... Registrar universidad, consultar, editar, desactivar
-     SECCIÓN 4  · SEGURIDAD ............ Iniciar sesión
+     SECCIÓN 4  · SEGURIDAD ............ Iniciar y cerrar sesión
      SECCIÓN 5  · CARRERAS ............. CRUD completo
      SECCIÓN 6  · DEPARTAMENTOS ........ CRUD completo
      SECCIÓN 7  · EQUIPOS DE SOPORTE ... CRUD completo
@@ -116,7 +116,7 @@ CREATE OR ALTER PROCEDURE SP_INSERTA_AUDITORIA
 (
 @InstitucionId     INT,
 @IdUsuarioGlobal   INT,
-@Accion            NVARCHAR(30),     -- Crear | Actualizar | Desactivar | Asignar | CambiarEstado | InicioSesion
+@Accion            NVARCHAR(30),     -- Crear | Actualizar | Desactivar | Asignar | CambiarEstado | InicioSesion | CierreSesion
 @SeccionSistema    NVARCHAR(30),     -- Tiquetes | Usuarios | Catálogos | Configuración | Seguridad
 @ElementoAfectado  NVARCHAR(150),
 @Detalle           NVARCHAR(MAX),
@@ -168,6 +168,7 @@ AS BEGIN
 	       CASE AUD.Accion
 	            WHEN N'CambiarEstado' THEN N'Cambio de estado'
 	            WHEN N'InicioSesion'  THEN N'Inicio de sesión'
+	            WHEN N'CierreSesion'  THEN N'Cierre de sesión'
 	            ELSE AUD.Accion
 	       END AS AccionTexto,
 	       AUD.SeccionSistema,
@@ -215,6 +216,7 @@ AS BEGIN
 	       CASE AUD.Accion
 	            WHEN N'CambiarEstado' THEN N'Cambio de estado'
 	            WHEN N'InicioSesion'  THEN N'Inicio de sesión'
+	            WHEN N'CierreSesion'  THEN N'Cierre de sesión'
 	            ELSE AUD.Accion
 	       END AS AccionTexto,
 	       AUD.SeccionSistema,
@@ -889,6 +891,54 @@ AS BEGIN
 		EXEC SP_INSERTA_AUDITORIA @InstitucionId, @UsuarioId, N'InicioSesion', N'Seguridad', @ELEMENTO, @DSC, 0, @DireccionIp
 		-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
 		SELECT 0 AS Codigo
+	END CATCH
+END
+GO
+
+
+USE NaiaInc
+GO
+
+-- Cierre de sesión. Lo único que hace en la BD es dejar el registro en Auditoría.
+--   > 0 -> éxito (devuelve el UsuarioId)
+--    -2 -> el usuario no existe en esa universidad
+--     0 -> error inesperado
+CREATE OR ALTER PROCEDURE SP_CERRAR_SESION
+(
+@InstitucionId    INT,
+@IdUsuarioGlobal  INT,
+@DireccionIp      VARCHAR(45)
+)
+AS BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @ELEMENTO NVARCHAR(150)
+	DECLARE @DSC NVARCHAR(MAX)
+
+	BEGIN TRY
+		SELECT @ELEMENTO = Correo
+		FROM Usuario
+		WHERE UsuarioId = @IdUsuarioGlobal AND InstitucionId = @InstitucionId
+
+		IF @ELEMENTO IS NULL
+		BEGIN
+			SELECT -2 /*EL USUARIO NO EXISTE EN ESA UNIVERSIDAD*/
+			RETURN
+		END
+
+		-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+		EXEC SP_INSERTA_AUDITORIA @InstitucionId, @IdUsuarioGlobal, N'CierreSesion', N'Seguridad', @ELEMENTO,
+		     N'Cerró sesión.', 1, @DireccionIp
+		-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+
+		SELECT @IdUsuarioGlobal
+	END TRY
+	BEGIN CATCH
+		-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+		SET @DSC = N'Error al cerrar sesión: ' + ERROR_MESSAGE()
+		EXEC SP_INSERTA_AUDITORIA @InstitucionId, @IdUsuarioGlobal, N'CierreSesion', N'Seguridad', @ELEMENTO, @DSC, 0, @DireccionIp
+		-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+		SELECT 0
 	END CATCH
 END
 GO

@@ -8,6 +8,9 @@ window.Auditoria_AlAbrir = function () {
 
 // ==================== LISTAR ====================
 function Auditoria_Listar() {
+
+    if (!ValidarSesion()) return;
+
     var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
@@ -27,6 +30,9 @@ function Auditoria_Listar() {
 
 // ==================== FILTRAR ====================
 function Auditoria_Filtrar() {
+
+    if (!ValidarSesion()) return;
+
     var fechaInicio = $("#aud_fechaInicio").val();
     var fechaFin = $("#aud_fechaFin").val();
     var seccion = $("#aud_seccion").val();

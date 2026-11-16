@@ -95,7 +95,6 @@
     <Content Include="Admin\ucResumen.ascx" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\CSS\inicio-usuario.css" />
-    <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
     <Content Include="Inicio\frmInicioUsuario.aspx" />
     <Content Include="Inicio\Images\favicon.png" />
@@ -149,37 +148,38 @@
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Categorias.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Carreras.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Departamentos.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Equipos.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Usuarios.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Auditoria.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\frmPanelAdmin.Configuracion.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Inicio\frmInicioAdmin.aspx.cs">
-      <DependentUpon>frmInicioAdmin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Inicio\frmInicioAdmin.aspx.designer.cs">
-      <DependentUpon>frmInicioAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Inicio\frmInicioSoporte.aspx.cs">
       <DependentUpon>frmInicioSoporte.aspx</DependentUpon>

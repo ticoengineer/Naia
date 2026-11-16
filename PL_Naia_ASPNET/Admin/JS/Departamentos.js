@@ -10,6 +10,8 @@ function Departamentos_AlAbrir() {
 
 // ==================== LISTAR ====================
 function dep_Listar() {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
 
@@ -29,6 +31,8 @@ function dep_Listar() {
 
 // ==================== FILTRAR ====================
 function dep_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var texto = $("#txtDepBuscar").val().trim();
     if (texto === "") { dep_Listar(); return; }
 
@@ -79,6 +83,8 @@ function dep_PintarTabla(datos) {
 
 // ==================== CARGAR DROPDOWN DE CARRERAS ====================
 function dep_CargarCarreras(callback) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
 
@@ -123,6 +129,8 @@ function dep_AbrirModalNuevo() {
 
 // ==================== EDITAR ====================
 function dep_Editar(departamentoId) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -186,6 +194,8 @@ function dep_Guardar() {
 
 // ==================== INSERTAR ====================
 function dep_Insertar(carreraId, nombre, codigo) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -221,6 +231,8 @@ function dep_Insertar(carreraId, nombre, codigo) {
 
 // ==================== ACTUALIZAR ====================
 function dep_Actualizar(departamentoId, carreraId, nombre, codigo, activo) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -258,6 +270,8 @@ function dep_Actualizar(departamentoId, carreraId, nombre, codigo, activo) {
 
 // ==================== ELIMINAR ====================
 function dep_Eliminar(departamentoId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         icon: "warning",
         title: "¿Desactivar departamento?",

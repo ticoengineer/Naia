@@ -97,5 +97,38 @@ namespace PL_Naia_ASPNET.Login
                 return "0" + "<SPLITER>" + "Ocurrió un error inesperado. Intenta de nuevo.";
             }
         }
+
+        /// <summary>
+        /// Lo llama Sesion.js → CerrarSesion().
+        /// Parámetros: [0] InstitucionId · [1] IdUsuarioGlobal
+        /// Respuesta: "código<SPLITER>mensaje" (código > 0 = éxito)
+        /// </summary>
+        [WebMethod]
+        public static string CerrarSesion(List<string> obj_Parametros_JS)
+        {
+            try
+            {
+                cls_Usuarios_DAL obj_Usuarios_DAL = new cls_Usuarios_DAL();
+                cls_Usuarios_BLL obj_Usuarios_BLL = new cls_Usuarios_BLL();
+
+                obj_Usuarios_DAL.iInstitucionId = Convert.ToInt32(obj_Parametros_JS[0]);
+                obj_Usuarios_DAL.iIdUsuarioGlobal = Convert.ToInt32(obj_Parametros_JS[1]);
+                obj_Usuarios_DAL.sDireccionIp = HttpContext.Current.Request.UserHostAddress;
+
+                obj_Usuarios_BLL.Cerrar_Sesion(ref obj_Usuarios_DAL);
+
+                if (obj_Usuarios_DAL.sValorScalar == null)
+                    return "0<SPLITER>No se pudo conectar con la base de datos.";
+
+                if (Convert.ToInt32(obj_Usuarios_DAL.sValorScalar) > 0)
+                    return obj_Usuarios_DAL.sValorScalar + "<SPLITER>Sesión cerrada correctamente.";
+
+                return "0<SPLITER>No se pudo completar el cierre de sesión. Intente más tarde.";
+            }
+            catch (Exception)
+            {
+                return "0<SPLITER>No se pudo completar el cierre de sesión. Intente más tarde.";
+            }
+        }
     }
 }
