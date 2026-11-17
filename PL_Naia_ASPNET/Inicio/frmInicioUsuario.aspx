@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/inicio-usuario.css">
+    <link rel="stylesheet" href="CSS/inicio-usuario.css?v=2">
 </head>
 
 <!-- data-roles: 1 Estudiante · 2 Profesor (lo revisa Sesion.js) -->
@@ -156,11 +156,77 @@
         </form>
     </aside>
 
+        <!-- ===================== PANEL LATERAL: VER Y RESPONDER ===================== -->
+    <!-- Lo llena InicioUsuario.js → AbrirDetalle() → WebMethod VerTicket -->
+    <aside class="drawer drawer--wide" id="pnlDetalle" aria-labelledby="lblDetTitulo" aria-hidden="true">
+        <div class="drawer__header drawer__header--top">
+            <div class="detalle__head">
+                <div class="detalle__meta">
+                    <span id="lblDetNumero"></span>
+                    <span class="estado" id="lblDetEstado"></span>
+                </div>
+                <h2 class="drawer__title" id="lblDetTitulo">Cargando…</h2>
+            </div>
+            <button type="button" class="drawer__close" id="btnCerrarDetalle" aria-label="Cerrar">
+                <img src="Images/icon-close.png" alt="" aria-hidden="true" width="20" height="20">
+            </button>
+        </div>
+
+        <div class="drawer__body" id="pnlDetalleCuerpo">
+
+            <!-- Datos del tiquete -->
+            <div class="ticket__data detalle__datos">
+                <div><span class="ticket__data-label">Tipo de problema</span><span class="ticket__data-value" id="lblDetCategoria"></span></div>
+                <div><span class="ticket__data-label">¿Dónde ocurre?</span><span class="ticket__data-value" id="lblDetUbicacion"></span></div>
+                <div><span class="ticket__data-label">Prioridad</span><span class="ticket__data-value" id="lblDetPrioridad"></span></div>
+                <div><span class="ticket__data-label">Técnico asignado</span><span class="ticket__data-value" id="lblDetResponsable"></span></div>
+            </div>
+
+            <div class="ticket__block">
+                <span class="ticket__label" id="lblDetFecha"></span>
+                <p class="detalle__descripcion" id="lblDetDescripcion"></p>
+            </div>
+
+            <!-- Solo si está Resuelto (EstadoId = 5) -->
+            <div class="solucion is-hidden" id="boxSolucion">
+                <strong class="solucion__titulo">Soporte marcó tu solicitud como resuelta</strong>
+                <p class="solucion__texto" id="lblDetSolucion"></p>
+                <span class="solucion__pregunta">¿Se resolvió tu problema?</span>
+                <div class="solucion__acciones" id="accionesSolucion"></div>
+            </div>
+
+            <!-- Conversación -->
+            <div class="conversacion">
+                <span class="conversacion__titulo">Conversación</span>
+                <div class="conversacion__lista" id="lstConversacion"></div>
+            </div>
+        </div>
+
+        <div class="drawer__footer">
+            <!-- Responder (solo si PuedeComentar = 1) -->
+            <form class="responder is-hidden" id="frmResponder" action="javascript: ResponderTicket()">
+                <label class="field__label" for="txtRespuesta">Responder</label>
+                <textarea class="field__control field__control--area responder__texto" id="txtRespuesta" rows="3" maxlength="500"
+                          placeholder="Escribe tu mensaje para soporte…" required></textarea>
+                <div class="responder__fila">
+                    <span class="field__counter"><span id="lblContadorRespuesta">0</span> / 500</span>
+                    <button type="submit" class="btn btn--primary" id="btnResponder">Enviar</button>
+                </div>
+            </form>
+
+            <!-- Si ya no se puede comentar -->
+            <p class="detalle__cerrado is-hidden" id="msgDetalleCerrado">Esta solicitud está cerrada; ya no se pueden enviar mensajes.</p>
+
+            <!-- Otros botones de estado (ej. Cancelar esta solicitud) -->
+            <div class="detalle__acciones" id="accionesFooter"></div>
+        </div>
+    </aside>
+
     <!-- Librerías, sesión y lógica de esta página -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../JavaScript/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JavaScript/Sesion.js?v=2"></script>
-    <script src="JS/InicioUsuario.js?v=2"></script>
+    <script src="JS/InicioUsuario.js?v=3"></script>
 </body>
 </html>

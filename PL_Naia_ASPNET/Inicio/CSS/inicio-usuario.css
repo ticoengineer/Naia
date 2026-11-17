@@ -698,6 +698,211 @@ select.field__control {
     flex-shrink: 0;
 }
 
+/* ---------- 12. Panel "Ver y responder" ---------- */
+.drawer--wide {
+    --drawer-width: 40%;
+    --drawer-min: 440px;
+}
+
+.drawer__header--top {
+    align-items: flex-start;
+}
+
+.drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.drawer__footer {
+    border-top: 1px solid var(--color-border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.detalle__head {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    min-width: 0;
+}
+
+.detalle__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+    font-size: .82rem;
+    color: var(--color-muted);
+}
+
+.detalle__datos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0;
+}
+
+.detalle__descripcion {
+    padding: .75rem .9rem;
+    border-radius: 12px;
+    background: var(--color-bg);
+    font-size: .95rem;
+    white-space: pre-line;
+}
+
+/* Recuadro de solución (estado Resuelto) */
+.solucion {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: #E6EFEA;
+    border: 1px solid #C9DED2;
+    color: #2F5245;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.solucion__titulo {
+    font-size: .95rem;
+}
+
+.solucion__texto {
+    font-size: .95rem;
+    white-space: pre-line;
+}
+
+.solucion__pregunta {
+    font-size: .88rem;
+}
+
+.solucion__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+.btn--exito {
+    background: #3E6656;
+    color: #FFFFFF;
+}
+
+    .btn--exito:hover {
+        background: #335647;
+        color: #FFFFFF;
+    }
+
+/* Conversación tipo chat */
+.conversacion {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.conversacion__titulo {
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.conversacion__lista {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.conversacion__vacia {
+    font-size: .9rem;
+    color: var(--color-muted);
+}
+
+.mensaje {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    align-self: flex-start;
+}
+
+.mensaje__autor {
+    font-size: .75rem;
+    color: var(--color-muted);
+}
+
+.mensaje__burbuja {
+    padding: .6rem .9rem;
+    border-radius: 4px 14px 14px 14px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    font-size: .95rem;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+/* Mis mensajes: a la derecha y en azul */
+.mensaje--mio {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+    .mensaje--mio .mensaje__burbuja {
+        border-radius: 14px 4px 14px 14px;
+        background: var(--naia-dusk);
+        border-color: var(--naia-dusk);
+        color: #FFFFFF;
+    }
+
+/* Responder */
+.responder {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.responder__texto {
+    min-height: 80px;
+}
+
+.responder__fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+}
+
+.detalle__cerrado {
+    padding: .75rem .9rem;
+    border-radius: var(--radius-sm);
+    background: #EFEFF2;
+    color: var(--color-text-soft);
+    font-size: .9rem;
+}
+
+.detalle__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+    .detalle__acciones:empty {
+        display: none;
+    }
+
+.btn--peligro {
+    background: transparent;
+    border: 0;
+    padding: 0 .25rem;
+    color: #8E3B47;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+    .btn--peligro:hover {
+        color: #6F2C36;
+    }
+
 /* ---------- 11. Celular ---------- */
 @media (max-width: 640px) {
     .topbar__who,
@@ -720,6 +925,10 @@ select.field__control {
     .drawer {
         width: 100%;
         min-width: 0;
+    }
+
+    .detalle__datos {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
