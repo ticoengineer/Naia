@@ -117,7 +117,7 @@ function Usuarios_Listar() {
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) { Usuarios_RenderTabla(r.d); },
         error: function () {
-            $("#usr_tbodyUsuarios").html('<tr><td colspan="7" class="text-center">Error al cargar los usuarios.</td></tr>');
+            $("#usr_tbodyUsuarios").html('<tr><td colspan="7" class="admin-table__loading">Error al cargar los usuarios.</td></tr>');
         }
     });
 }
@@ -137,45 +137,72 @@ function Usuarios_Filtrar() {
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) { Usuarios_RenderTabla(r.d); },
         error: function () {
-            $("#usr_tbodyUsuarios").html('<tr><td colspan="7" class="text-center">Error al filtrar los usuarios.</td></tr>');
+            $("#usr_tbodyUsuarios").html('<tr><td colspan="7" class="admin-table__loading">Error al filtrar los usuarios.</td></tr>');
         }
     });
+}
+
+// -------------------- ESCAPAR HTML --------------------
+// Convierte los caracteres especiales en entidades para que un nombre como
+// <img onerror=...> se muestre como texto y nunca se ejecute.
+function Usuarios_Escapar(valor) {
+    var texto = (valor === null || valor === undefined) ? "" : String(valor);
+    return texto.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
 // -------------------- RENDER TABLA --------------------
 function Usuarios_RenderTabla(datos) {
     var tbody = $("#usr_tbodyUsuarios");
-    tbody.empty();
 
     if (!datos || datos.length === 0) {
-        tbody.html('<tr><td colspan="7" class="text-center">No se encontraron usuarios.</td></tr>');
+        tbody.html('<tr><td colspan="7" class="admin-table__loading">No se encontraron usuarios.</td></tr>');
         return;
     }
 
+    var html = "";
+
     for (var i = 0; i < datos.length; i++) {
         var u = datos[i];
-        var claseEstado = u.Activo === "True" ? "estado-activo" : "estado-inactivo";
-        var estadoTexto = u.Activo === "True" ? "Activo" : "Inactivo";
+        var activo = (u.Activo === "True");
+        var claseEstado = activo ? "badge badge--active" : "badge badge--inactive";
+        var estadoTexto = activo ? "Activo" : "Inactivo";
         var carreraDep = u.Carrera || u.Departamento || "-";
         if (u.Equipo) carreraDep += " / " + u.Equipo;
 
-        var fila = '<tr>' +
-            '<td>' + u.NombreCompleto + '</td>' +
-            '<td>' + u.Correo + '</td>' +
-            '<td>' + u.Rol + '</td>' +
-            '<td>' + carreraDep + '</td>' +
-            '<td>' + u.NumeroInterno + '</td>' +
+        html += '<tr>' +
+            '<td>' + Usuarios_Escapar(u.NombreCompleto) + '</td>' +
+            '<td>' + Usuarios_Escapar(u.Correo) + '</td>' +
+            '<td>' + Usuarios_Escapar(u.Rol) + '</td>' +
+            '<td>' + Usuarios_Escapar(carreraDep) + '</td>' +
+            '<td>' + Usuarios_Escapar(u.NumeroInterno) + '</td>' +
             '<td><span class="' + claseEstado + '">' + estadoTexto + '</span></td>' +
-            '<td class="acciones">' +
-                '<button type="button" class="btn btn-sm btn-editar" onclick="Usuarios_Editar(' + u.UsuarioId + ')" title="Editar"><i class="fa fa-pencil"></i></button> ' +
-                '<button type="button" class="btn btn-sm btn-eliminar" onclick="Usuarios_Eliminar(' + u.UsuarioId + ', \'' + u.NombreCompleto.replace(/'/g, "\\'") + '\')" title="Desactivar"><i class="fa fa-trash"></i></button>' +
+            '<td class="admin-table__actions-col">' +
+            '<button type="button" class="btn-action usr-btnEditar" title="Editar" aria-label="Editar"' +
+            ' data-id="' + Usuarios_Escapar(u.UsuarioId) + '">\u270F\uFE0F</button>' +
+            '<button type="button" class="btn-action usr-btnDesactivar" title="Desactivar" aria-label="Desactivar"' +
+            ' data-id="' + Usuarios_Escapar(u.UsuarioId) + '"' +
+            ' data-nombre="' + Usuarios_Escapar(u.NombreCompleto) + '">\uD83D\uDDD1\uFE0F</button>' +
             '</td>' +
             '</tr>';
-
-        tbody.append(fila);
     }
+
+    tbody.html(html);
 }
 
+// -------------------- EVENTOS DE LOS BOTONES DE LA TABLA --------------------
+// Delegación: un solo manejador en el documento atiende a todos los botones,
+// incluso a los que se vuelven a dibujar cada vez que se lista o filtra.
+$(document).on("click", "#usr_tbodyUsuarios .usr-btnEditar", function () {
+    Usuarios_Editar($(this).attr("data-id"));
+});
+
+$(document).on("click", "#usr_tbodyUsuarios .usr-btnDesactivar", function () {
+    Usuarios_Eliminar($(this).attr("data-id"), $(this).attr("data-nombre"));
+});
 // -------------------- CAMBIO DE ROL (condicional) --------------------
 function Usuarios_CambioRol() {
     var rolId = parseInt($("#usr_ddlRol").val()) || 0;
@@ -213,7 +240,7 @@ function Usuarios_CambioRol() {
     }
     if (rolSeleccionado) {
         var tipo = rolSeleccionado.TipoNumeroInterno || "Numero interno";
-        $("#usr_lblNumeroInterno").html(tipo + ' <span class="requerido">*</span>');
+        $("#usr_lblNumeroInterno").html(tipo + ' <span class="required">*</span>');
     }
 }
 
@@ -239,7 +266,7 @@ function Usuarios_AbrirModalNuevo() {
     $("#usr_grupoEquipo").hide();
     $("#usr_filaEstado").hide();
     $("#usr_grupoContrasena").show();
-    $("#usr_lblContrasena").html('Contrase&#241;a <span class="requerido">*</span>');
+    $("#usr_lblContrasena").html('Contrase&#241;a <span class="required">*</span>');
     $("#usr_modal").fadeIn(200);
 }
 
