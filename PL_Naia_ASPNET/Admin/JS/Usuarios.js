@@ -15,7 +15,7 @@ window.Usuarios_AlAbrir = function () {
 function Usuarios_CargarDropdowns(callback) {
     if (!ValidarSesion()) return;
 
-    var pendientes = 4;
+    var pendientes = 2;
     var listo = function () { pendientes--; if (pendientes === 0 && callback) callback(); };
 
     // Roles
@@ -51,59 +51,71 @@ function Usuarios_CargarDropdowns(callback) {
         },
         error: listo
     });
-
-    // Carreras (reutiliza el WebMethod existente de Carreras)
-    $.ajax({
-        type: "POST", url: "frmPanelAdmin.aspx/ListarCarreras",
-        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
-        contentType: "application/json; charset=utf-8", dataType: "json",
-        success: function (r) {
-            var ddl = $("#usr_ddlCarrera");
-            ddl.find("option:gt(0)").remove();
-            var datos = r.d || [];
-            for (var i = 0; i < datos.length; i++) {
-                if (datos[i].Activa === "True")
-                    ddl.append('<option value="' + datos[i].CarreraId + '">' + datos[i].Nombre + '</option>');
-            }
-            listo();
-        },
-        error: listo
-    });
-
-    // Departamentos (reutiliza el WebMethod existente de Departamentos)
-    $.ajax({
-        type: "POST", url: "frmPanelAdmin.aspx/ListarDepartamentos",
-        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
-        contentType: "application/json; charset=utf-8", dataType: "json",
-        success: function (r) {
-            var ddl = $("#usr_ddlDepartamento");
-            ddl.find("option:gt(0)").remove();
-            var datos = r.d || [];
-            for (var i = 0; i < datos.length; i++) {
-                if (datos[i].Activo === "True")
-                    ddl.append('<option value="' + datos[i].DepartamentoId + '">' + datos[i].Nombre + '</option>');
-            }
-            listo();
-        },
-        error: listo
-    });
-
-    // Equipos de soporte (reutiliza el WebMethod de Equipos)
-    $.ajax({
-        type: "POST", url: "frmPanelAdmin.aspx/ListarEquipos",
-        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
-        contentType: "application/json; charset=utf-8", dataType: "json",
-        success: function (r) {
-            var ddl = $("#usr_ddlEquipo");
-            ddl.find("option:gt(0)").remove();
-            var datos = r.d || [];
-            for (var i = 0; i < datos.length; i++) {
-                if (datos[i].Activo === "True")
-                    ddl.append('<option value="' + datos[i].EquipoId + '">' + datos[i].Equipo + '</option>');
-            }
-        }
-    });
 }
+
+    // -------------------- CARGAR CATÁLOGOS (Parte B) --------------------
+    // Carreras, departamentos y equipos cambian cuando el administrador trabaja en las
+    // secciones de catálogos, así que se recargan cada vez que se abre el modal.
+    function Usuarios_CargarCatalogos(callback) {
+        if (!ValidarSesion()) return;
+
+        var pendientes = 3;
+        var listo = function () { pendientes--; if (pendientes === 0 && callback) callback(); };
+
+        // Carreras
+        $.ajax({
+            type: "POST", url: "frmPanelAdmin.aspx/ListarCarreras",
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            contentType: "application/json; charset=utf-8", dataType: "json",
+            success: function (r) {
+                var ddl = $("#usr_ddlCarrera");
+                ddl.find("option:gt(0)").remove();
+                var datos = r.d || [];
+                for (var i = 0; i < datos.length; i++) {
+                    if (datos[i].Activa === "True")
+                        ddl.append($("<option>").val(datos[i].CarreraId).text(datos[i].Nombre));
+                }
+                listo();
+            },
+            error: listo
+        });
+
+        // Departamentos
+        $.ajax({
+            type: "POST", url: "frmPanelAdmin.aspx/ListarDepartamentos",
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            contentType: "application/json; charset=utf-8", dataType: "json",
+            success: function (r) {
+                var ddl = $("#usr_ddlDepartamento");
+                ddl.find("option:gt(0)").remove();
+                var datos = r.d || [];
+                for (var i = 0; i < datos.length; i++) {
+                    if (datos[i].Activo === "True")
+                        ddl.append($("<option>").val(datos[i].DepartamentoId).text(datos[i].Nombre));
+                }
+                listo();
+            },
+            error: listo
+        });
+
+        // Equipos de soporte (WebMethod de la Parte B: Equipos.cs, devuelve la columna Activo)
+        $.ajax({
+            type: "POST", url: "frmPanelAdmin.aspx/ListarEquiposTodos",
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            contentType: "application/json; charset=utf-8", dataType: "json",
+            success: function (r) {
+                var ddl = $("#usr_ddlEquipo");
+                ddl.find("option:gt(0)").remove();
+                var datos = r.d || [];
+                for (var i = 0; i < datos.length; i++) {
+                    if (datos[i].Activo === "True")
+                        ddl.append($("<option>").val(datos[i].EquipoId).text(datos[i].Equipo));
+                }
+                listo();
+            },
+            error: listo
+        });
+    }
 
 // -------------------- LISTAR --------------------
 function Usuarios_Listar() {
@@ -279,6 +291,7 @@ function Usuarios_AbrirModalNuevo() {
     $("#usr_filaEstado").hide();
     $("#usr_grupoContrasena").show();
     $("#usr_lblContrasena").html('Contrase&#241;a <span class="required">*</span>');
+    Usuarios_CargarCatalogos();
     $("#usr_modal").fadeIn(200);
 }
 
@@ -293,8 +306,14 @@ function Usuarios_Editar(usuarioId) {
         data: JSON.stringify({ obj_Parametros_JS: params }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
-            if (r.d && r.d.length > 0) {
-                var u = r.d[0];
+            if (!r.d || r.d.length === 0) {
+                Swal.fire("Error", "No se pudo obtener la informacion del usuario.", "error");
+                return;
+            }
+            var u = r.d[0];
+
+            // Primero se refrescan los combos de la Parte B; después se selecciona el valor del usuario.
+            Usuarios_CargarCatalogos(function () {
                 usr_esEdicion = true;
                 $("#usr_modalTitulo").text("Editar Usuario");
                 $("#usr_hdnUsuarioId").val(u.UsuarioId);
@@ -315,9 +334,7 @@ function Usuarios_Editar(usuarioId) {
                 $("#usr_lblContrasena").html('Contrase&#241;a <small>(dejar vac&#237;o para no cambiar)</small>');
                 Usuarios_CambioRol();
                 $("#usr_modal").fadeIn(200);
-            } else {
-                Swal.fire("Error", "No se pudo obtener la informacion del usuario.", "error");
-            }
+            });
         },
         error: function () {
             Swal.fire("Error", "Error al obtener la informacion del usuario.", "error");
