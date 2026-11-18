@@ -173,8 +173,18 @@ function Usuarios_RenderTabla(datos) {
         var carreraDep = u.Carrera || u.Departamento || "-";
         if (u.Equipo) carreraDep += " / " + u.Equipo;
 
+        var id = Usuarios_Escapar(u.UsuarioId);
+        var nombre = Usuarios_Escapar(u.NombreCompleto);
+
+        // Activo -> se puede desactivar. Inactivo -> se puede reactivar.
+        var botonEstado = activo
+            ? '<button type="button" class="btn-action usr-btnDesactivar" title="Desactivar" aria-label="Desactivar"' +
+            ' data-id="' + id + '" data-nombre="' + nombre + '">\uD83D\uDDD1\uFE0F</button>'
+            : '<button type="button" class="btn-action usr-btnReactivar" title="Reactivar" aria-label="Reactivar"' +
+            ' data-id="' + id + '" data-nombre="' + nombre + '">\u267B\uFE0F</button>';
+
         html += '<tr>' +
-            '<td>' + Usuarios_Escapar(u.NombreCompleto) + '</td>' +
+            '<td>' + nombre + '</td>' +
             '<td>' + Usuarios_Escapar(u.Correo) + '</td>' +
             '<td>' + Usuarios_Escapar(u.Rol) + '</td>' +
             '<td>' + Usuarios_Escapar(carreraDep) + '</td>' +
@@ -182,10 +192,8 @@ function Usuarios_RenderTabla(datos) {
             '<td><span class="' + claseEstado + '">' + estadoTexto + '</span></td>' +
             '<td class="admin-table__actions-col">' +
             '<button type="button" class="btn-action usr-btnEditar" title="Editar" aria-label="Editar"' +
-            ' data-id="' + Usuarios_Escapar(u.UsuarioId) + '">\u270F\uFE0F</button>' +
-            '<button type="button" class="btn-action usr-btnDesactivar" title="Desactivar" aria-label="Desactivar"' +
-            ' data-id="' + Usuarios_Escapar(u.UsuarioId) + '"' +
-            ' data-nombre="' + Usuarios_Escapar(u.NombreCompleto) + '">\uD83D\uDDD1\uFE0F</button>' +
+            ' data-id="' + id + '">\u270F\uFE0F</button>' +
+            botonEstado +
             '</td>' +
             '</tr>';
     }
@@ -202,6 +210,10 @@ $(document).on("click", "#usr_tbodyUsuarios .usr-btnEditar", function () {
 
 $(document).on("click", "#usr_tbodyUsuarios .usr-btnDesactivar", function () {
     Usuarios_Eliminar($(this).attr("data-id"), $(this).attr("data-nombre"));
+});
+
+$(document).on("click", "#usr_tbodyUsuarios .usr-btnReactivar", function () {
+    Usuarios_Reactivar($(this).attr("data-id"), $(this).attr("data-nombre"));
 });
 // -------------------- CAMBIO DE ROL (condicional) --------------------
 function Usuarios_CambioRol() {
@@ -431,6 +443,64 @@ function Usuarios_Eliminar(usuarioId, nombre) {
     });
 }
 
+// -------------------- REACTIVAR --------------------
+// SP_ELIMINA_USUARIOS solo desactiva. Reactivar = SP_ACTUALIZA_USUARIOS con Activo = true.
+// Como ese SP actualiza todos los campos, primero leemos los datos actuales (InfoUsuario)
+// y los reenviamos sin cambios. Contraseña vacía = se conserva la actual.
+function Usuarios_Reactivar(usuarioId, nombre) {
+    if (!ValidarSesion()) return;
+
+    Swal.fire({
+        title: "Reactivar usuario",
+        text: "¿Deseas reactivar al usuario \"" + nombre + "\"?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, reactivar",
+        cancelButtonText: "Cancelar"
+    }).then(function (result) {
+        if (!result.isConfirmed) return;
+
+        // 1) Leer los datos actuales del usuario
+        $.ajax({
+            type: "POST", url: "frmPanelAdmin.aspx/InfoUsuario",
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId, usuarioId] }),
+            contentType: "application/json; charset=utf-8", dataType: "json",
+            success: function (r) {
+                if (!r.d || r.d.length === 0) {
+                    Swal.fire("Error", "No se pudo obtener la información del usuario.", "error");
+                    return;
+                }
+                var u = r.d[0];
+
+                // 2) Reenviar los mismos datos con Activo = true (mismo orden que Usuarios_Guardar al editar)
+                var params = [g_InstitucionId, g_UsuarioId, u.UsuarioId, u.RolId, u.CarreraId, u.DepartamentoId,
+                    u.EquipoId, u.TipoIdentificacionId, u.Identificacion, u.NumeroInterno,
+                    u.Nombre, u.Apellidos, u.Correo, "", "true"];
+
+                $.ajax({
+                    type: "POST", url: "frmPanelAdmin.aspx/ActualizarUsuario",
+                    data: JSON.stringify({ obj_Parametros_JS: params }),
+                    contentType: "application/json; charset=utf-8", dataType: "json",
+                    success: function (r2) {
+                        var partes = r2.d.split("<SPLITER>");
+                        if (parseInt(partes[0]) > 0) {
+                            Swal.fire("Reactivado", "El usuario se reactivó correctamente.", "success");
+                            Usuarios_Filtrar();
+                        } else {
+                            Swal.fire("Error", partes[1], "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "error");
+                    }
+                });
+            },
+            error: function () {
+                Swal.fire("Error", "Error al obtener la información del usuario.", "error");
+            }
+        });
+    });
+}
 // -------------------- CERRAR MODAL --------------------
 function Usuarios_CerrarModal() {
     $("#usr_modal").fadeOut(200);
