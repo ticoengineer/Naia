@@ -21,7 +21,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Roles
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarRoles",
-        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             usr_roles = r.d || [];
@@ -38,7 +38,7 @@ function Usuarios_CargarDropdowns(callback) {
     // Tipos de identificacion
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarTiposIdentificacion",
-        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+        data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId] }),
         contentType: "application/json; charset=utf-8", dataType: "json",
         success: function (r) {
             usr_tiposId = r.d || [];
@@ -65,7 +65,7 @@ function Usuarios_CargarDropdowns(callback) {
         // Carreras
         $.ajax({
             type: "POST", url: "frmPanelAdmin.aspx/ListarCarreras",
-            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId] }),
             contentType: "application/json; charset=utf-8", dataType: "json",
             success: function (r) {
                 var ddl = $("#usr_ddlCarrera");
@@ -83,7 +83,7 @@ function Usuarios_CargarDropdowns(callback) {
         // Departamentos
         $.ajax({
             type: "POST", url: "frmPanelAdmin.aspx/ListarDepartamentos",
-            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId] }),
             contentType: "application/json; charset=utf-8", dataType: "json",
             success: function (r) {
                 var ddl = $("#usr_ddlDepartamento");
@@ -101,7 +101,7 @@ function Usuarios_CargarDropdowns(callback) {
         // Equipos de soporte (WebMethod de la Parte B: Equipos.cs, devuelve la columna Activo)
         $.ajax({
             type: "POST", url: "frmPanelAdmin.aspx/ListarEquiposTodos",
-            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId] }),
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId] }),
             contentType: "application/json; charset=utf-8", dataType: "json",
             success: function (r) {
                 var ddl = $("#usr_ddlEquipo");
@@ -121,7 +121,7 @@ function Usuarios_CargarDropdowns(callback) {
 function Usuarios_Listar() {
     if (!ValidarSesion()) return;
 
-    var params = [g_InstitucionId];
+    var params = [g_InstitucionId, g_UsuarioId];
 
     $.ajax({
         type: "POST", url: "frmPanelAdmin.aspx/ListarUsuarios",

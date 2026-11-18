@@ -24,7 +24,10 @@ namespace PL_Naia_ASPNET.Admin
                 obj_DAL.iInstitucionId = Convert.ToInt32(obj_Parametros_JS[0]);
                 obj_BLL.Listar_Usuarios(ref obj_DAL);
 
-                if (obj_DAL.dtDatos != null)
+				if (!string.IsNullOrEmpty(obj_DAL.sMSJError))
+					throw new Exception(obj_DAL.sMSJError);
+
+				if (obj_DAL.dtDatos != null)
                 {
                     foreach (DataRow fila in obj_DAL.dtDatos.Rows)
                     {
@@ -44,8 +47,14 @@ namespace PL_Naia_ASPNET.Admin
                     }
                 }
             }
-            catch (Exception) { }
-            return lista;
+			catch (Exception)
+			{
+				// No se traga el error: ASP.NET responde HTTP 500 y el JS (callback "error")
+				// muestra "Error al cargar". Una lista vacía significaría "no hay usuarios".
+				throw;
+			}
+
+			return lista;
         }
 
         [WebMethod]
@@ -61,7 +70,10 @@ namespace PL_Naia_ASPNET.Admin
                 obj_DAL.sFiltro = obj_Parametros_JS[2];
                 obj_BLL.Filtrar_Usuarios(ref obj_DAL);
 
-                if (obj_DAL.dtDatos != null)
+				if (!string.IsNullOrEmpty(obj_DAL.sMSJError))
+					throw new Exception(obj_DAL.sMSJError);
+
+				if (obj_DAL.dtDatos != null)
                 {
                     foreach (DataRow fila in obj_DAL.dtDatos.Rows)
                     {
@@ -81,8 +93,14 @@ namespace PL_Naia_ASPNET.Admin
                     }
                 }
             }
-            catch (Exception) { }
-            return lista;
+			catch (Exception)
+			{
+				// No se traga el error: ASP.NET responde HTTP 500 y el JS (callback "error")
+				// muestra "Error al cargar". Una lista vacía significaría "no hay usuarios".
+				throw;
+			}
+
+			return lista;
         }
 
         [WebMethod]
