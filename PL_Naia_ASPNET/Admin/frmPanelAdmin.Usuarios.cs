@@ -175,11 +175,13 @@ namespace PL_Naia_ASPNET.Admin
 
                 switch (obj_DAL.sValorScalar)
                 {
-                    case "-1": return "-1<SPLITER>Ya existe un usuario con ese correo, identificacion o numero interno.";
-                    case "-3": return "-3<SPLITER>No tienes permisos para crear usuarios.";
+					case "-1": return "-1<SPLITER>Ya existe un usuario con ese correo o numero interno.";
+					case "-3": return "-3<SPLITER>No tienes permisos para crear usuarios.";
                     case "-4": return "-4<SPLITER>Hay campos obligatorios vacios o datos invalidos.";
                     case "-5": return "-5<SPLITER>Se alcanzo el limite de usuarios del plan.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+					case "-7": return "-7<SPLITER>El correo debe pertenecer al dominio de la universidad.";
+					case "-8": return "-8<SPLITER>Ya existe un usuario con esa identificacion.";
+					case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
                     default:
                         return obj_DAL.sValorScalar + "<SPLITER>El usuario se registro correctamente.";
                 }
@@ -225,13 +227,17 @@ namespace PL_Naia_ASPNET.Admin
 
                 switch (obj_DAL.sValorScalar)
                 {
-                    case "-1": return "-1<SPLITER>Ya existe un usuario con ese correo, identificacion o numero interno.";
-                    case "-2": return "-2<SPLITER>El usuario no fue encontrado.";
+					case "-1": return "-1<SPLITER>Ya existe un usuario con ese correo o numero interno.";
+					case "-2": return "-2<SPLITER>El usuario no fue encontrado.";
                     case "-3": return "-3<SPLITER>No tienes permisos para modificar usuarios.";
-                    case "-4": return "-4<SPLITER>Hay campos obligatorios vacios o datos invalidos.";
+                    case "-4": return "-4<SPLITER>Hay campos obligatorios vacios o datos invalidos.";  
                     case "-5": return "-5<SPLITER>Se alcanzo el limite de usuarios del plan.";
-                    case "-6": return "-6<SPLITER>No se puede realizar esa accion.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+					case "-6": return "-6<SPLITER>No se puede realizar esa accion.";
+					case "-7": return "-7<SPLITER>El correo debe pertenecer al dominio de la universidad.";
+					case "-8": return "-8<SPLITER>Ya existe un usuario con esa identificacion.";
+					case "-9": return "-9<SPLITER>No se puede desactivar ni cambiar el rol del unico administrador activo.";
+					case "-10": return "-10<SPLITER>No puedes cambiar tu propio rol ni desactivar tu propia cuenta.";
+					case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
                     default:
                         return obj_DAL.sValorScalar + "<SPLITER>El usuario se actualizo correctamente.";
                 }
@@ -264,8 +270,10 @@ namespace PL_Naia_ASPNET.Admin
                 {
                     case "-2": return "-2<SPLITER>El usuario no fue encontrado.";
                     case "-3": return "-3<SPLITER>No tienes permisos para desactivar usuarios.";
-                    case "-6": return "-6<SPLITER>No se puede desactivar este usuario.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+					case "-6": return "-6<SPLITER>El usuario ya esta desactivado.";
+					case "-9": return "-9<SPLITER>No se puede desactivar al unico administrador activo.";
+					case "-10": return "-10<SPLITER>No puedes desactivar tu propia cuenta.";
+					case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
                     default:
                         return obj_DAL.sValorScalar + "<SPLITER>El usuario se desactivo correctamente.";
                 }
