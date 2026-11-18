@@ -1,13 +1,12 @@
-﻿using BLL_Naia_ASPNET.Entidades;
+﻿
+using BLL_Naia_ASPNET.Entidades;
 using DAL_Naia_ASPNET.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace PL_Naia_ASPNET.Login
 {
@@ -15,87 +14,253 @@ namespace PL_Naia_ASPNET.Login
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
-        /// <summary>
-        /// Lo llama InicioSesion.js por AJAX.
-        /// Respuesta (separada por <SPLITER>):
-        /// [0] Codigo (UsuarioId si es correcto) · [1] Mensaje · [2] InstitucionId · [3] RolId
-        /// [4] Nombre completo · [5] Correo · [6] Nombre de la universidad · [7] Página destino
-        /// </summary>
-        [WebMethod]
-        public static string IniciarSesion(List<string> obj_Parametros_JS)
+        // ===================================================
+        // INICIO DE SESION - NAIA
+        //
+        // Valida las credenciales mediante SQL Server.
+        // Si son correctas, crea una sesion ASP.NET.
+        //
+        // Mantiene la respuesta compatible con
+        // InicioSesion.js y las paginas existentes.
+        // ===================================================
+
+        [WebMethod(EnableSession = true)]
+        public static string IniciarSesion(
+            List<string> obj_Parametros_JS)
         {
             try
             {
-                string _mensaje = string.Empty;
+                // ===========================================
+                // 1. VALIDAR PARAMETROS
+                // ===========================================
 
-                /*Objetos de la entidad con la que estamos trabajando*/
-                cls_Usuarios_DAL obj_Usuarios_DAL = new cls_Usuarios_DAL();
-                cls_Usuarios_BLL obj_Usuarios_BLL = new cls_Usuarios_BLL();
-
-                /*Descomponer el objeto de parámetros de JS y asignar los valores a los atributos de nuestra entidad*/
-                obj_Usuarios_DAL.sCorreo = obj_Parametros_JS[0].ToString();
-                obj_Usuarios_DAL.sContrasena = obj_Parametros_JS[1].ToString();
-                obj_Usuarios_DAL.sDireccionIp = HttpContext.Current.Request.UserHostAddress;
-
-                /*Ejecutamos la lógica de negocio correspondiente*/
-                obj_Usuarios_BLL.Iniciar_Sesion(ref obj_Usuarios_DAL);
-
-                /*Sin respuesta de la base de datos*/
-                if (obj_Usuarios_DAL.dtDatos == null || obj_Usuarios_DAL.dtDatos.Rows.Count == 0)
+                if (obj_Parametros_JS == null ||
+                    obj_Parametros_JS.Count < 2)
                 {
-                    return "0" + "<SPLITER>" + "No se pudo conectar con la base de datos.";
+                    return "-1<SPLITER>Ingresá tu correo y contraseña.";
                 }
 
-                /*Recuperamos los valores y los evaluamos*/
-                DataRow fila = obj_Usuarios_DAL.dtDatos.Rows[0];
-                string sCodigo = fila["Codigo"].ToString();
+                string correo = obj_Parametros_JS[0];
+                string contrasena = obj_Parametros_JS[1];
 
-                if (sCodigo == "-1")
+                if (string.IsNullOrWhiteSpace(correo) ||
+                    string.IsNullOrEmpty(contrasena))
                 {
-                    _mensaje = "-1" + "<SPLITER>" + "Correo o contraseña incorrectos. Verifique.";
-                }
-                else if (sCodigo == "-3")
-                {
-                    _mensaje = "-3" + "<SPLITER>" + "Tu cuenta está desactivada. Contacta al administrador de tu universidad.";
-                }
-                else if (sCodigo == "-6")
-                {
-                    _mensaje = "-6" + "<SPLITER>" + "Tu universidad no tiene una suscripción activa en Naia.";
-                }
-                else if (sCodigo == "0")
-                {
-                    _mensaje = "0" + "<SPLITER>" + "Ocurrió un error inesperado. Intenta de nuevo.";
-                }
-                else
-                {
-                    /*Página de inicio según el rol*/
-                    string sDestino;
-                    switch (Convert.ToInt32(fila["RolId"]))
-                    {
-                        case 4: sDestino = "../Inicio/frmInicioAdmin.aspx"; break;   // Administrativo
-                        case 3: sDestino = "../Inicio/frmInicioSoporte.aspx"; break;   // Soporte técnico
-                        default: sDestino = "../Inicio/frmInicioUsuario.aspx"; break;   // Estudiante y Profesor
-                    }
-
-                    _mensaje = fila["UsuarioId"].ToString() + "<SPLITER>" +
-                               "Bienvenid@ de nuevo " + fila["Nombre"].ToString() + "<SPLITER>" +
-                               fila["InstitucionId"].ToString() + "<SPLITER>" +
-                               fila["RolId"].ToString() + "<SPLITER>" +
-                               fila["NombreCompleto"].ToString() + "<SPLITER>" +
-                               fila["Correo"].ToString() + "<SPLITER>" +
-                               fila["NombreInstitucion"].ToString() + "<SPLITER>" +
-                               sDestino;
+                    return "-1<SPLITER>Ingresá tu correo y contraseña.";
                 }
 
-                return _mensaje;
+                // ===========================================
+                // 2. OBTENER CONTEXTO DEL SERVIDOR
+                // ===========================================
+
+                HttpContext contexto = HttpContext.Current;
+
+                if (contexto == null ||
+                    contexto.Session == null)
+                {
+                    return "0<SPLITER>No fue posible iniciar la sesión del servidor.";
+                }
+
+                // ===========================================
+                // 3. VALIDAR CREDENCIALES EN SQL SERVER
+                // ===========================================
+
+                cls_Usuarios_DAL obj_Usuarios_DAL =
+                    new cls_Usuarios_DAL();
+
+                cls_Usuarios_BLL obj_Usuarios_BLL =
+                    new cls_Usuarios_BLL();
+
+                obj_Usuarios_DAL.sCorreo =
+                    correo.Trim();
+
+                obj_Usuarios_DAL.sContrasena =
+                    contrasena;
+
+                obj_Usuarios_DAL.sDireccionIp =
+                    contexto.Request.UserHostAddress;
+
+                obj_Usuarios_BLL.Iniciar_Sesion(
+                    ref obj_Usuarios_DAL);
+
+                if (obj_Usuarios_DAL.dtDatos == null ||
+                    obj_Usuarios_DAL.dtDatos.Rows.Count == 0)
+                {
+                    return "0<SPLITER>No se pudo consultar la base de datos.";
+                }
+
+                // ===========================================
+                // 4. EVALUAR RESULTADO
+                // ===========================================
+
+                DataRow fila =
+                    obj_Usuarios_DAL.dtDatos.Rows[0];
+
+                int codigo;
+
+                if (!int.TryParse(
+                    fila["Codigo"].ToString(),
+                    out codigo))
+                {
+                    return "0<SPLITER>Respuesta de autenticación no válida.";
+                }
+
+                if (codigo == -1)
+                {
+                    return "-1<SPLITER>Correo o contraseña incorrectos. Verifique.";
+                }
+
+                if (codigo == -3)
+                {
+                    return "-3<SPLITER>Tu cuenta está desactivada. Contacta al administrador de tu universidad.";
+                }
+
+                if (codigo == -6)
+                {
+                    return "-6<SPLITER>Tu universidad no tiene una suscripción activa en Naia.";
+                }
+
+                if (codigo <= 0)
+                {
+                    return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
+                }
+
+                // ===========================================
+                // 5. VALIDAR IDENTIFICADORES DEL USUARIO
+                // ===========================================
+
+                int usuarioId;
+                int institucionId;
+                int rolId;
+
+                bool usuarioValido = int.TryParse(
+                    fila["UsuarioId"].ToString(),
+                    out usuarioId);
+
+                bool institucionValida = int.TryParse(
+                    fila["InstitucionId"].ToString(),
+                    out institucionId);
+
+                bool rolValido = int.TryParse(
+                    fila["RolId"].ToString(),
+                    out rolId);
+
+                if (!usuarioValido ||
+                    !institucionValida ||
+                    !rolValido ||
+                    usuarioId <= 0 ||
+                    institucionId <= 0 ||
+                    rolId <= 0)
+                {
+                    return "0<SPLITER>Los datos de autenticación no son válidos.";
+                }
+
+                // ===========================================
+                // 6. CREAR SESION ASP.NET
+                // ===========================================
+
+                // Borrar datos de una identidad anterior.
+                contexto.Session.Clear();
+
+                // Guardar los valores autenticados
+                // obtenidos desde SQL Server.
+                contexto.Session["UsuarioId"] = usuarioId;
+                contexto.Session["InstitucionId"] = institucionId;
+                contexto.Session["RolId"] = rolId;
+
+                // Verificar que los datos quedaron guardados
+                // en la sesion de esta solicitud.
+                if (contexto.Session["UsuarioId"] == null ||
+                    contexto.Session["InstitucionId"] == null ||
+                    contexto.Session["RolId"] == null)
+                {
+                    return "0<SPLITER>No se pudo establecer la sesión del usuario.";
+                }
+
+                // ===========================================
+                // 7. PAGINA DESTINO SEGUN EL ROL
+                // ===========================================
+
+                string sDestino;
+
+                switch (rolId)
+                {
+                    case 4:
+                        sDestino = "../Inicio/frmInicioAdmin.aspx";
+                        break;
+
+                    case 3:
+                        sDestino = "../Inicio/frmInicioSoporte.aspx";
+                        break;
+
+                    default:
+                        sDestino = "../Inicio/frmInicioUsuario.aspx";
+                        break;
+                }
+
+                // ===========================================
+                // 8. RESPUESTA PARA INICIOSESION.JS
+                // ===========================================
+
+                string mensaje =
+                    usuarioId.ToString() + "<SPLITER>" +
+                    "Bienvenid@ de nuevo " +
+                    fila["Nombre"].ToString() + "<SPLITER>" +
+                    institucionId.ToString() + "<SPLITER>" +
+                    rolId.ToString() + "<SPLITER>" +
+                    fila["NombreCompleto"].ToString() + "<SPLITER>" +
+                    fila["Correo"].ToString() + "<SPLITER>" +
+                    fila["NombreInstitucion"].ToString() + "<SPLITER>" +
+                    sDestino;
+
+                return mensaje;
             }
             catch (Exception)
             {
-                return "0" + "<SPLITER>" + "Ocurrió un error inesperado. Intenta de nuevo.";
+                return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
             }
+        }
+
+        // ===================================================
+        // CERRAR SESION - NAIA
+        //
+        // Finaliza la sesion ASP.NET del usuario actual.
+        // Se invoca desde Sesion.js.
+        //
+        // No modifica datos en SQL Server.
+        // ===================================================
+
+        [WebMethod(EnableSession = true)]
+        public static bool CerrarSesionServidor()
+        {
+            HttpContext contexto = HttpContext.Current;
+
+            // Validar que exista una sesion
+            if (contexto == null ||
+                contexto.Session == null)
+            {
+                return false;
+            }
+
+            // ===========================================
+            // 1. ELIMINAR DATOS DE AUTENTICACION
+            // ===========================================
+
+            contexto.Session.Clear();
+
+            // ===========================================
+            // 2. FINALIZAR SESION ASP.NET
+            // ===========================================
+
+            contexto.Session.Abandon();
+
+            // ===========================================
+            // 3. CONFIRMAR OPERACION
+            // ===========================================
+
+            return true;
         }
     }
 }

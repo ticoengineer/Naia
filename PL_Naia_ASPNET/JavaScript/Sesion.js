@@ -1,52 +1,197 @@
+
 // =====================================================================================
-// SESIÓN DEL USUARIO · Sesion.js  (se incluye en TODAS las páginas después del login)
-// Lee las cookies que guardó InicioSesion.js.
-// Cada página indica qué roles la pueden ver con data-roles en el <body>:
-//   <body data-roles="4">    → solo Administrativo
-//   <body data-roles="1,2">  → Estudiante y Profesor
+// SESION DEL USUARIO · Sesion.js
+// Control de acceso visual y cierre de sesion.
+//
+// IMPORTANTE:
+// La autorizacion real de cada operacion
+// debe comprobarse en ASP.NET mediante
+// la sesion del servidor.
 // =====================================================================================
 
 var g_Dominio = "localhost";
 var g_PaginaLogin = "../Login/frmLogin.aspx";
 
-// Valores de la sesión para los demás JS (ej. @IdUsuarioGlobal e @InstitucionId de los SP)
-var g_UsuarioId = $.cookie('USRUNI');
-var g_InstitucionId = $.cookie('USRINS');
-var g_RolId = $.cookie('USRROL');
+// Datos utilizados por las interfaces existentes
+var g_UsuarioId = $.cookie("USRUNI");
+var g_InstitucionId = $.cookie("USRINS");
+var g_RolId = $.cookie("USRROL");
+
+var g_CerrandoSesion = false;
 
 $(document).ready(function () {
 
-    // 1. Sin sesión → al login
-    if (!g_UsuarioId || !g_InstitucionId || !g_RolId) {
-        location.href = g_PaginaLogin;
+    // ==========================================
+    // 1. Comprobar cookies de la interfaz
+    // ==========================================
+
+    if (!g_UsuarioId ||
+        !g_InstitucionId ||
+        !g_RolId) {
+
+        location.replace(g_PaginaLogin);
         return;
     }
 
-    // 2. Rol sin permiso para esta página → al login
-    var rolesPermitidos = String($("body").data("roles") || "").split(",");
-    if (rolesPermitidos[0] !== "" && rolesPermitidos.indexOf(String(g_RolId)) === -1) {
-        location.href = g_PaginaLogin;
+    // ==========================================
+    // 2. Comprobar rol para la navegacion
+    // ==========================================
+
+    var rolesPermitidos = String(
+        $("body").data("roles") || ""
+    ).split(",");
+
+    if (rolesPermitidos[0] !== "" &&
+        rolesPermitidos.indexOf(
+            String(g_RolId)
+        ) === -1) {
+
+        location.replace(g_PaginaLogin);
         return;
     }
 
-    // 3. Datos del usuario en pantalla
-    $(".js-usuario-nombre").text($.cookie('USRNOM'));
-    $(".js-usuario-correo").text($.cookie('USREML'));
-    $(".js-usuario-universidad").text($.cookie('USRUNV'));
+    // ==========================================
+    // 3. Mostrar informacion del usuario
+    // ==========================================
 
-    // 4. Cerrar sesión
-    $(".js-cerrar-sesion").on("click", function (e) {
-        e.preventDefault();
-        CerrarSesion();
-    });
+    $(".js-usuario-nombre").text(
+        $.cookie("USRNOM") || ""
+    );
+
+    $(".js-usuario-correo").text(
+        $.cookie("USREML") || ""
+    );
+
+    $(".js-usuario-universidad").text(
+        $.cookie("USRUNV") || ""
+    );
+
+    // ==========================================
+    // 4. Cerrar sesion
+    // ==========================================
+
+    $(".js-cerrar-sesion").on(
+        "click",
+        function (e) {
+
+            e.preventDefault();
+            CerrarSesion();
+
+        }
+    );
+
 });
 
-function CerrarSesion() {
-    var cookies = ['USRUNI', 'USRINS', 'USRROL', 'USRNOM', 'USREML', 'USRUNV'];
+// ==========================================
+// ELIMINAR COOKIES DE LA INTERFAZ
+// ==========================================
+
+function ses_EliminarCookies() {
+
+    var cookies = [
+        "USRUNI",
+        "USRINS",
+        "USRROL",
+        "USRNOM",
+        "USREML",
+        "USRUNV"
+    ];
 
     $.each(cookies, function (i, nombre) {
-        $.removeCookie(nombre, { path: '/', domain: g_Dominio });
+
+        // Cookies guardadas sin dominio explicito
+        $.removeCookie(nombre, {
+            path: "/"
+        });
+
+        // Compatibilidad con cookies anteriores
+        // guardadas con dominio localhost
+        $.removeCookie(nombre, {
+            path: "/",
+            domain: g_Dominio
+        });
+
     });
 
-    location.href = g_PaginaLogin;
+    g_UsuarioId = null;
+    g_InstitucionId = null;
+    g_RolId = null;
+}
+
+// ==========================================
+// CERRAR SESION EN SERVIDOR Y NAVEGADOR
+// ==========================================
+
+function CerrarSesion() {
+
+    if (g_CerrandoSesion) {
+        return;
+    }
+
+    g_CerrandoSesion = true;
+
+    $(".js-cerrar-sesion")
+        .css("pointer-events", "none");
+
+    $.ajax({
+
+        type: "POST",
+
+        url: g_PaginaLogin + "/CerrarSesionServidor",
+
+        data: "{}",
+
+        contentType: "application/json; charset=utf-8",
+
+        dataType: "json",
+
+        timeout: 15000
+
+    })
+        .done(function (respuesta) {
+
+            if (respuesta && respuesta.d === true) {
+
+                // El servidor confirmo el cierre
+                ses_EliminarCookies();
+
+                // Volver al login
+                location.replace(g_PaginaLogin);
+
+            } else {
+
+                ses_ErrorCerrarSesion();
+
+            }
+
+        })
+        .fail(function (xhr, estado) {
+
+            console.error(
+                "Error al cerrar sesion:",
+                estado,
+                xhr.status
+            );
+
+            ses_ErrorCerrarSesion();
+
+        });
+
+}
+
+// ==========================================
+// ERROR AL CERRAR SESION
+// ==========================================
+
+function ses_ErrorCerrarSesion() {
+
+    g_CerrandoSesion = false;
+
+    $(".js-cerrar-sesion")
+        .css("pointer-events", "");
+
+    alert(
+        "No se pudo confirmar el cierre de sesion " +
+        "en el servidor. Intentá nuevamente."
+    );
 }

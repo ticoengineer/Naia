@@ -67,6 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\JS\Auditoria.js" />
+    <Content Include="Admin\JS\Configuracion.js" />
+    <Content Include="Admin\JS\Resumen.js" />
+    <Content Include="Admin\ucAuditoria.ascx" />
+    <Content Include="Admin\ucConfiguracion.ascx" />
+    <Content Include="Admin\ucResumen.ascx" />
     <Content Include="Global.asax" />
     <Content Include="Inicio\frmInicioAdmin.aspx" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
@@ -113,6 +119,36 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\frmPanelAdmin.Auditoria.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Configuracion.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Resumen.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ucAuditoria.ascx.cs">
+      <DependentUpon>ucAuditoria.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ucAuditoria.ascx.designer.cs">
+      <DependentUpon>ucAuditoria.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ucConfiguracion.ascx.cs">
+      <DependentUpon>ucConfiguracion.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ucConfiguracion.ascx.designer.cs">
+      <DependentUpon>ucConfiguracion.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ucResumen.ascx.cs">
+      <DependentUpon>ucResumen.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ucResumen.ascx.designer.cs">
+      <DependentUpon>ucResumen.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -144,8 +180,12 @@
     <Compile Include="Login\frmLogin.aspx.designer.cs">
       <DependentUpon>frmLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs" />
-    <Compile Include="Admin\frmPanelAdmin.Categorias.cs" />
+    <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Categorias.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Admin\frmPanelAdmin.aspx.cs">
       <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

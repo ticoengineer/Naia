@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BD\cls_BD_DAL.cs" />
+    <Compile Include="Entidades\cls_Auditoria_DAL.cs" />
+    <Compile Include="Entidades\cls_Configuracion_DAL.cs" />
     <Compile Include="Entidades\cls_Instituciones_DAL.cs" />
     <Compile Include="Entidades\cls_Planes_DAL.cs" />
+    <Compile Include="Entidades\cls_Resumen_DAL.cs" />
     <Compile Include="Entidades\cls_Ubicaciones_DAL.cs" />
     <Compile Include="Entidades\cls_Categorias_DAL.cs" />
     <Compile Include="Entidades\cls_Usuarios_DAL.cs" />
