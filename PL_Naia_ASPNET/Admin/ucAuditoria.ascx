@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" %>
 
 <!-- ========== SECCIÓN AUDITORÍA ========== -->
 <div id="seccion_auditoria">
