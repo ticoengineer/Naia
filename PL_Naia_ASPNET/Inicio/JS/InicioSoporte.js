@@ -355,20 +355,7 @@ function PintarDetalle(d) {
     $("#btnGuardarCambios").toggleClass("is-hidden", !puedeEditar && !puedeAsignar);
 
     // ---------- Conversación ----------
-    if (d.Comentarios.length === 0) {
-        $("#lstConversacion").html('<p class="conversacion__vacia">Todavía no hay mensajes en este tiquete.</p>');
-    } else {
-        var html = "";
-        $.each(d.Comentarios, function (i, c) {
-            var mio = c.EsMio === "1";
-            html +=
-                '<div class="mensaje' + (mio ? ' mensaje--mio' : '') + '">' +
-                '<span class="mensaje__autor">' + (mio ? 'Tú' : Esc(c.Autor) + ' · ' + Esc(c.Rol)) + ' · ' + Esc(c.Fecha) + '</span>' +
-                '<div class="mensaje__burbuja">' + Esc(c.Texto) + '</div>' +
-                '</div>';
-        });
-        $("#lstConversacion").html(html);
-    }
+    PintarActividad(d.Comentarios, "#lstConversacion", "Todavía no hay mensajes.");
 
     // ---------- Solución ya registrada (Resuelto o Cerrado) ----------
     var tieneSolucion = t.Solucion !== "" && (t.EstadoId === "5" || t.EstadoId === "6");
@@ -702,6 +689,51 @@ function ResponderTicket() {
         $("#btnResponder").prop("disabled", false);
         Swal.fire({ icon: 'error', title: 'Error en la conexión', text: 'No se pudo conectar con el servidor.' });
     });
+}
+
+// =====================================================================================
+// ACTIVIDAD DEL TIQUETE (SP_LISTAR_ACTIVIDAD_TICKET)
+// Mensajes (burbujas) y cambios de estado (línea centrada + motivo o solución) en orden.
+// =====================================================================================
+function PintarActividad(lista, contenedor, textoVacio) {
+    if (!lista || lista.length === 0) {
+        $(contenedor).html('<p class="conversacion__vacia">' + textoVacio + '</p>');
+        return;
+    }
+
+    var html = "";
+    $.each(lista, function (i, a) {
+        var mio = a.EsMio === "1";
+
+        // Si no viene Tipo (respaldo con solo comentarios), se pinta como mensaje
+        if (a.Tipo !== "Estado") {
+            html +=
+                '<div class="mensaje' + (mio ? ' mensaje--mio' : '') + '">' +
+                '<span class="mensaje__autor">' + (mio ? 'Tú' : Esc(a.Autor) + ' · ' + Esc(a.Rol)) + ' · ' + Esc(a.Fecha) + '</span>' +
+                '<div class="mensaje__burbuja">' + Esc(a.Texto) + '</div>' +
+                '</div>';
+            return;
+        }
+
+        var e = DescribirEvento(parseInt(a.EstadoAnteriorId), parseInt(a.EstadoNuevoId), a.EstadoNuevo);
+        html +=
+            '<div class="evento ' + e.clase + '">' +
+            '<span class="evento__linea"><strong>' + e.titulo + '</strong> · ' + (mio ? 'por ti' : 'por ' + Esc(a.Autor)) + ' · ' + Esc(a.Fecha) + '</span>' +
+            (a.Texto ? '<div class="evento__detalle">' + (e.prefijo ? '<strong>' + e.prefijo + ':</strong> ' : '') + Esc(a.Texto) + '</div>' : '') +
+            '</div>';
+    });
+    $(contenedor).html(html);
+}
+
+// Texto corto para cada cambio de estado (anterior → nuevo)
+function DescribirEvento(anterior, nuevo, nombreNuevo) {
+    if (nuevo === 5) return { titulo: 'Marcado como resuelto', prefijo: 'Solución', clase: 'evento--resuelto' };
+    if (anterior === 5 && nuevo === 2) return { titulo: 'Reabierto: el problema sigue', prefijo: 'Motivo', clase: 'evento--reabierto' };
+    if (anterior === 5 && nuevo === 6) return { titulo: 'Confirmado y cerrado', prefijo: '', clase: 'evento--resuelto' };
+    if (anterior === 1 && nuevo === 2) return { titulo: 'Asignado', prefijo: 'Motivo', clase: '' };
+    if (nuevo === 2) return { titulo: 'Reasignado', prefijo: 'Motivo', clase: '' };
+    if (nuevo === 7) return { titulo: 'Cancelado', prefijo: 'Motivo', clase: 'evento--reabierto' };
+    return { titulo: 'Pasó a ' + Esc(nombreNuevo), prefijo: 'Motivo', clase: '' };
 }
 
 

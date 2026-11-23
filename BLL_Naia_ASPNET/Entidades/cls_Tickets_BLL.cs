@@ -132,6 +132,36 @@ namespace BLL_Naia_ASPNET.Entidades
         }
 
         /// <summary>
+        /// SP_LISTAR_ACTIVIDAD_TICKET: comentarios + cambios de estado del tiquete, en orden.
+        /// </summary>
+        public void Listar_Actividad(ref cls_Tickets_DAL obj_Tickets_DAL)
+        {
+            try
+            {
+                cls_BD_DAL obj_BD_DAL = new cls_BD_DAL();
+                cls_BD_BLL obj_BD_BLL = new cls_BD_BLL();
+
+                obj_Tickets_DAL.dtParametros = null;
+                obj_Tickets_DAL.dtParametros = obj_BD_BLL.ObtieneDTParametros(obj_Tickets_DAL.dtParametros);
+
+                obj_Tickets_DAL.dtParametros.Rows.Add("@InstitucionId", "1", obj_Tickets_DAL.iInstitucionId);
+                obj_Tickets_DAL.dtParametros.Rows.Add("@TicketId", "1", obj_Tickets_DAL.iTicketId);
+                obj_Tickets_DAL.dtParametros.Rows.Add("@IdUsuarioGlobal", "1", obj_Tickets_DAL.iIdUsuarioGlobal);
+
+                obj_BD_DAL.sNomSP = ConfigurationManager.AppSettings["SP_LISTAR_ACTIVIDAD_TICKET"];
+                obj_BD_DAL.sNomTabla = "Actividad";
+                obj_BD_DAL.DT_Parametros = obj_Tickets_DAL.dtParametros;
+
+                obj_BD_BLL.EjecutaProcesosTabla(ref obj_BD_DAL);
+
+                obj_Tickets_DAL.sMSJError = obj_BD_DAL.sMsjErrorBD;
+                obj_Tickets_DAL.dtDatos = (obj_BD_DAL.sMsjErrorBD == string.Empty && obj_BD_DAL.DS.Tables.Count > 0)
+                                          ? obj_BD_DAL.DS.Tables[0] : null;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        /// <summary>
         /// SP_INSERTA_TICKETS: crea el tiquete. La prioridad, el estado (Nuevo), el SLA,
         /// el historial y la auditoría los pone el SP.
         /// sValorScalar: > 0 TicketId creado · -3 usuario sin permiso · -4 dato inválido · 0 error

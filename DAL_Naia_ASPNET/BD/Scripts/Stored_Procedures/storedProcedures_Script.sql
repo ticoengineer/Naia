@@ -3701,8 +3701,10 @@ AS BEGIN
 			    FechaCierre        = CASE WHEN @EstadoNuevoId IN (6,7) THEN SYSDATETIME() ELSE FechaCierre END
 			WHERE TicketId = @TicketId AND InstitucionId = @InstitucionId
 
+			-- Al pasar a Resuelto no hay motivo: se guarda la solución, para que la actividad la muestre
 			INSERT INTO HistorialEstado (TicketId, EstadoAnteriorId, EstadoNuevoId, UsuarioId, Motivo)
-			VALUES (@TicketId, @EstadoId, @EstadoNuevoId, @IdUsuarioGlobal, @Motivo)
+			VALUES (@TicketId, @EstadoId, @EstadoNuevoId, @IdUsuarioGlobal,
+			        ISNULL(@Motivo, CASE WHEN @EstadoNuevoId = 5 THEN LEFT(@Solucion, 500) END))
 
 			-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
 			SET @DSC = N'Estado: ' + @Estado + N' → ' + @EstadoNuevo + N'; '
@@ -3833,6 +3835,63 @@ GO
 USE NaiaInc
 GO
 
+-- Actividad del tiquete: comentarios + cambios de estado, en orden.
+-- Tipo = 'Comentario' -> Texto es el mensaje · Tipo = 'Estado' -> Texto es el motivo o la solución (puede ser NULL)
+-- No incluye la creación del tiquete (eso ya se ve en "Lo que reportaste").
+CREATE OR ALTER PROCEDURE SP_LISTAR_ACTIVIDAD_TICKET
+(
+@InstitucionId    INT,
+@TicketId         INT,
+@IdUsuarioGlobal  INT
+)
+AS BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @RolUsuario TINYINT, @PuedeResolver BIT
+	SELECT @RolUsuario = USR.RolId, @PuedeResolver = ROL.PuedeResolverTickets
+	FROM Usuario USR INNER JOIN Rol ROL ON ROL.RolId = USR.RolId
+	WHERE USR.UsuarioId = @IdUsuarioGlobal AND USR.InstitucionId = @InstitucionId AND USR.Activo = 1
+
+	SELECT X.Tipo, X.UsuarioId, X.Autor, X.RolAutor, X.Texto,
+	       X.EstadoAnteriorId, X.EstadoAnterior, X.EstadoNuevoId, X.EstadoNuevo,
+	       X.Fecha, CONVERT(VARCHAR(10), X.Fecha, 103) + ' ' + CONVERT(VARCHAR(5), X.Fecha, 108) AS FechaTexto
+	FROM (
+		SELECT N'Comentario' AS Tipo, COM.UsuarioId, USR.Nombre + ' ' + USR.Apellidos AS Autor, ROL.Nombre AS RolAutor,
+		       COM.Texto, CAST(NULL AS TINYINT) AS EstadoAnteriorId, CAST(NULL AS NVARCHAR(30)) AS EstadoAnterior,
+		       CAST(NULL AS TINYINT) AS EstadoNuevoId, CAST(NULL AS NVARCHAR(30)) AS EstadoNuevo,
+		       COM.FechaCreacion AS Fecha, CAST(COM.ComentarioId AS BIGINT) AS Orden
+		FROM Comentario COM
+		INNER JOIN Usuario USR ON USR.UsuarioId = COM.UsuarioId
+		INNER JOIN Rol ROL     ON ROL.RolId = USR.RolId
+		WHERE COM.TicketId = @TicketId
+
+		UNION ALL
+
+		SELECT N'Estado', HIS.UsuarioId, USR.Nombre + ' ' + USR.Apellidos, ROL.Nombre,
+		       HIS.Motivo, HIS.EstadoAnteriorId, ANT.Nombre, HIS.EstadoNuevoId, NUE.Nombre,
+		       HIS.Fecha, HIS.HistorialId
+		FROM HistorialEstado HIS
+		INNER JOIN EstadoTicket ANT ON ANT.EstadoId = HIS.EstadoAnteriorId   -- deja fuera la creación (anterior NULL)
+		INNER JOIN EstadoTicket NUE ON NUE.EstadoId = HIS.EstadoNuevoId
+		INNER JOIN Usuario USR      ON USR.UsuarioId = HIS.UsuarioId
+		INNER JOIN Rol ROL          ON ROL.RolId = USR.RolId
+		WHERE HIS.TicketId = @TicketId
+	) X
+	INNER JOIN Ticket TIC ON TIC.TicketId = @TicketId
+	WHERE TIC.InstitucionId = @InstitucionId
+	  AND @RolUsuario IS NOT NULL
+	  AND (TIC.SolicitanteId = @IdUsuarioGlobal OR @PuedeResolver = 1)
+	-- Si un comentario y un cambio de estado caen en el mismo segundo, primero va el comentario
+	ORDER BY X.Fecha, X.Tipo, X.Orden
+END
+GO
+
+USE NaiaInc
+GO
+
+-- Agrega un comentario a la conversación del tiquete.
+-- Si el tiquete estaba 4 En espera y quien escribe es el SOLICITANTE, se asume que respondió
+-- lo que soporte le pidió: el tiquete vuelve solo a 3 En progreso (queda en HistorialEstado y Auditoría).
 CREATE OR ALTER PROCEDURE SP_INSERTA_COMENTARIOS
 (
 @InstitucionId    INT,
@@ -3851,7 +3910,7 @@ AS BEGIN
 	DECLARE @DSC NVARCHAR(MAX)
 	DECLARE @ELEMENTO NVARCHAR(150)
 	DECLARE @RolUsuario TINYINT, @PuedeResolver BIT
-	DECLARE @SolicitanteId INT, @EsFinal BIT
+	DECLARE @SolicitanteId INT, @EsFinal BIT, @EstadoId TINYINT
 
 	BEGIN TRY
 		IF NOT EXISTS (SELECT 1 FROM Ticket WHERE TicketId=@TicketId AND InstitucionId=@InstitucionId)
@@ -3862,7 +3921,7 @@ AS BEGIN
 
 		SET @Texto = LTRIM(RTRIM(@Texto))
 
-		SELECT @SolicitanteId = TIC.SolicitanteId, @EsFinal = EST.EsFinal, @ELEMENTO = TIC.Numero
+		SELECT @SolicitanteId = TIC.SolicitanteId, @EsFinal = EST.EsFinal, @EstadoId = TIC.EstadoId, @ELEMENTO = TIC.Numero
 		FROM Ticket TIC INNER JOIN EstadoTicket EST ON EST.EstadoId = TIC.EstadoId
 		WHERE TIC.TicketId = @TicketId
 
@@ -3899,6 +3958,21 @@ AS BEGIN
 			SET @DSC = N'Agregó un comentario: «' + LEFT(@Texto, 300) + CASE WHEN LEN(@Texto) > 300 THEN N'…' ELSE N'' END + N'»'
 			EXEC SP_INSERTA_AUDITORIA @InstitucionId, @IdUsuarioGlobal, N'Crear', N'Tiquetes', @ELEMENTO, @DSC, 1, @DireccionIp
 			-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+
+			-- El solicitante respondió mientras soporte esperaba: el tiquete vuelve a En progreso
+			IF @EstadoId = 4 AND @IdUsuarioGlobal = @SolicitanteId
+			BEGIN
+				UPDATE Ticket SET EstadoId = 3, FechaActualizacion = SYSDATETIME()
+				WHERE TicketId = @TicketId AND InstitucionId = @InstitucionId
+
+				INSERT INTO HistorialEstado (TicketId, EstadoAnteriorId, EstadoNuevoId, UsuarioId, Motivo)
+				VALUES (@TicketId, 4, 3, @IdUsuarioGlobal, N'El usuario respondió.')
+
+				-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+				EXEC SP_INSERTA_AUDITORIA @InstitucionId, @IdUsuarioGlobal, N'CambiarEstado', N'Tiquetes', @ELEMENTO,
+				     N'Estado: En espera → En progreso (automático: el usuario respondió)', 1, @DireccionIp
+				-----------------------PARA EL CONTROL DE AUDITORIA DEL SISTEMA-------------------------------------------
+			END
 		COMMIT TRANSACTION
 
 		SELECT @NuevoId

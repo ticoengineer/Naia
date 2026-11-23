@@ -1000,3 +1000,52 @@ select.field__control {
         width: 100%;
     }
 }
+/* ---------- 14. Cambios de estado dentro de la conversación ---------- */
+.evento {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .35rem;
+    margin: .15rem 0;
+}
+
+.evento__linea {
+    padding: .25rem .8rem;
+    border-radius: 999px;
+    background: #EEEDF4;
+    color: var(--color-text-soft);
+    font-size: .78rem;
+    text-align: center;
+}
+
+.evento__detalle {
+    max-width: 90%;
+    padding: .6rem .85rem;
+    border-radius: 10px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--naia-ash);
+    color: var(--color-text-soft);
+    font-size: .9rem;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.evento--resuelto .evento__linea {
+    background: #E6EFEA;
+    color: #2F5245;
+}
+
+.evento--resuelto .evento__detalle {
+    border-left-color: #3E6656;
+}
+
+.evento--reabierto .evento__linea {
+    background: #F6E9EB;
+    color: #8E3B47;
+}
+
+.evento--reabierto .evento__detalle {
+    border-left-color: #A9545E;
+}

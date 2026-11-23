@@ -13,9 +13,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Base compartida con el inicio de usuario (encabezado, panel lateral, botones, chat) -->
-    <link rel="stylesheet" href="CSS/inicio-usuario.css?v=2">
+    <link rel="stylesheet" href="CSS/inicio-usuario.css?v=3">
     <!-- Lo propio de soporte (tarjetas, tabla, panel de dos columnas) -->
-    <link rel="stylesheet" href="CSS/inicio-soporte.css?v=1">
+    <link rel="stylesheet" href="CSS/inicio-soporte.css?v=2">
 </head>
 
 <!-- data-roles: 3 Soporte técnico · 4 Administrativo (lo revisa Sesion.js) -->
@@ -235,6 +235,6 @@
     <script src="../JavaScript/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JavaScript/Sesion.js?v=2"></script>
-    <script src="JS/InicioSoporte.js?v=1"></script>
+    <script src="JS/InicioSoporte.js?v=2"></script>
 </body>
 </html>

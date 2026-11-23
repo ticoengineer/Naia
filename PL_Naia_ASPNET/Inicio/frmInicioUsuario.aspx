@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/inicio-usuario.css?v=2">
+    <link rel="stylesheet" href="CSS/inicio-usuario.css?v=3">
 </head>
 
 <!-- data-roles: 1 Estudiante · 2 Profesor (lo revisa Sesion.js) -->
@@ -202,18 +202,19 @@
                 <p class="detalle__descripcion" id="lblDetDescripcion"></p>
             </div>
 
-            <!-- Solo si está Resuelto (EstadoId = 5) -->
+            <!-- Conversación -->
+            <div class="conversacion">
+                <span class="conversacion__titulo">Conversación</span>
+                <div class="conversacion__lista" id="lstConversacion"></div>
+            </div>
+
+            <!-- Solo si está Resuelto (EstadoId = 5). Va DESPUÉS de la conversación: como el panel
+                 baja solo al último mensaje, es lo primero que ve el usuario al abrirlo. -->
             <div class="solucion is-hidden" id="boxSolucion">
                 <strong class="solucion__titulo">Soporte marcó tu solicitud como resuelta</strong>
                 <p class="solucion__texto" id="lblDetSolucion"></p>
                 <span class="solucion__pregunta">¿Se resolvió tu problema?</span>
                 <div class="solucion__acciones" id="accionesSolucion"></div>
-            </div>
-
-            <!-- Conversación -->
-            <div class="conversacion">
-                <span class="conversacion__titulo">Conversación</span>
-                <div class="conversacion__lista" id="lstConversacion"></div>
             </div>
         </div>
 
@@ -242,6 +243,6 @@
     <script src="../JavaScript/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../JavaScript/Sesion.js?v=2"></script>
-    <script src="JS/InicioUsuario.js?v=3"></script>
+    <script src="JS/InicioUsuario.js?v=4"></script>
 </body>
 </html>

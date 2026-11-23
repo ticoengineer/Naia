@@ -287,23 +287,38 @@ namespace PL_Naia_ASPNET.Inicio
             { "PuedeComentar", t["PuedeComentar"].ToString() }
         });
 
-                /*2. Conversación*/
+                /*2. Conversación + cambios de estado.
+     Si la actividad falla (SP o llave faltante), se usan solo los comentarios:
+     así el panel nunca deja de cargar por esto.*/
                 List<Dictionary<string, string>> comentarios = new List<Dictionary<string, string>>();
-                obj_Tickets_BLL.Listar_Comentarios(ref obj_Tickets_DAL);
+                bool bConActividad = false;
+
+                try
+                {
+                    obj_Tickets_BLL.Listar_Actividad(ref obj_Tickets_DAL);
+                    bConActividad = obj_Tickets_DAL.dtDatos != null;
+                }
+                catch (Exception) { bConActividad = false; }
+
+                if (!bConActividad)
+                    obj_Tickets_BLL.Listar_Comentarios(ref obj_Tickets_DAL);
 
                 if (obj_Tickets_DAL.dtDatos != null)
                 {
                     foreach (DataRow c in obj_Tickets_DAL.dtDatos.Rows)
                     {
                         comentarios.Add(new Dictionary<string, string>
-                {
-                    { "Autor", c["Autor"].ToString() },
-                    { "Rol",   c["RolAutor"].ToString() },
-                    { "Texto", c["Texto"].ToString() },
-                    { "Fecha", c["FechaTexto"].ToString() },
-                    /*Se compara aquí y no con la columna EsMio del SP, porque esa vale 0 cuando el tiquete ya está cerrado*/
-                    { "EsMio", Convert.ToInt32(c["UsuarioId"]) == obj_Tickets_DAL.iIdUsuarioGlobal ? "1" : "0" }
-                });
+                        {
+                            { "Tipo",             bConActividad ? c["Tipo"].ToString() : "Comentario" },
+                            { "Autor",            c["Autor"].ToString() },
+                            { "Rol",              c["RolAutor"].ToString() },
+                            { "Texto",            c["Texto"] == DBNull.Value ? "" : c["Texto"].ToString() },
+                            { "Fecha",            c["FechaTexto"].ToString() },
+                            { "EstadoAnteriorId", bConActividad ? c["EstadoAnteriorId"].ToString() : "" },
+                            { "EstadoNuevoId",    bConActividad ? c["EstadoNuevoId"].ToString() : "" },
+                            { "EstadoNuevo",      bConActividad ? c["EstadoNuevo"].ToString() : "" },
+                            { "EsMio",            Convert.ToInt32(c["UsuarioId"]) == obj_Tickets_DAL.iIdUsuarioGlobal ? "1" : "0" }
+                        });
                     }
                 }
                 respuesta.Add("Comentarios", comentarios);
