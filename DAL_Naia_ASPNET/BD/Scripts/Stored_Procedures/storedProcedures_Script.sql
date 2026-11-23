@@ -2627,7 +2627,7 @@ AS BEGIN
 			SELECT @Codigo = -4, @Motivo = N'Solo el rol Soporte técnico puede pertenecer a un equipo.'
 
 		ELSE IF NOT EXISTS (SELECT 1 FROM Institucion WHERE InstitucionId = @InstitucionId AND @Correo LIKE '%@' + DominioCorreo)
-			SELECT @Codigo = -4, @Motivo = N'El correo no pertenece al dominio de la universidad.'
+			SELECT @Codigo = -7, @Motivo = N'El correo no pertenece al dominio de la universidad.'
 
 		ELSE IF @CarreraId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Carrera WHERE CarreraId=@CarreraId AND InstitucionId=@InstitucionId AND Activo=1)
 			SELECT @Codigo = -4, @Motivo = N'La carrera no es válida.'
@@ -2642,7 +2642,7 @@ AS BEGIN
 			SELECT @Codigo = -1, @Motivo = N'Ya existe un usuario con ese correo.'
 
 		ELSE IF EXISTS (SELECT 1 FROM Usuario WHERE InstitucionId=@InstitucionId AND TipoIdentificacionId=@TipoIdentificacionId AND Identificacion=@Identificacion)
-			SELECT @Codigo = -1, @Motivo = N'Ya existe un usuario con esa identificación.'
+			SELECT @Codigo = -8, @Motivo = N'Ya existe un usuario con esa identificación.'
 
 		ELSE IF EXISTS (SELECT 1 FROM Usuario WHERE InstitucionId=@InstitucionId AND NumeroInterno=@NumeroInterno)
 			SELECT @Codigo = -1, @Motivo = N'Ya existe un usuario con ese carné o número de empleado.'
@@ -2805,7 +2805,7 @@ AS BEGIN
 			SELECT @Codigo = -4, @Motivo = N'Solo el rol Soporte técnico puede pertenecer a un equipo.'
 
 		ELSE IF NOT EXISTS (SELECT 1 FROM Institucion WHERE InstitucionId = @InstitucionId AND @Correo LIKE '%@' + DominioCorreo)
-			SELECT @Codigo = -4, @Motivo = N'El correo no pertenece al dominio de la universidad.'
+			SELECT @Codigo = -7, @Motivo = N'El correo no pertenece al dominio de la universidad.'
 
 		ELSE IF @CarreraId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM Carrera WHERE CarreraId=@CarreraId AND InstitucionId=@InstitucionId AND Activo=1)
 			SELECT @Codigo = -4, @Motivo = N'La carrera no es válida.'
@@ -2821,20 +2821,21 @@ AS BEGIN
 
 		ELSE IF EXISTS (SELECT 1 FROM Usuario WHERE InstitucionId=@InstitucionId AND TipoIdentificacionId=@TipoIdentificacionId
 		                AND Identificacion=@Identificacion AND UsuarioId<>@UsuarioId)
-			SELECT @Codigo = -1, @Motivo = N'Ya existe un usuario con esa identificación.'
+			SELECT @Codigo = -8, @Motivo = N'Ya existe un usuario con esa identificación.'
 
 		ELSE IF EXISTS (SELECT 1 FROM Usuario WHERE InstitucionId=@InstitucionId AND NumeroInterno=@NumeroInterno AND UsuarioId<>@UsuarioId)
 			SELECT @Codigo = -1, @Motivo = N'Ya existe un usuario con ese carné o número de empleado.'
 
-		-- Un administrador no puede cambiarse su propio rol ni desactivarse
-		ELSE IF @UsuarioId = @IdUsuarioGlobal AND (@RolId <> @AntRolId OR @Activo = 0)
-			SELECT @Codigo = -6, @Motivo = N'No puede cambiar su propio rol ni desactivar su propia cuenta.'
+        -- Siempre debe quedar al menos un administrador activo.
+        -- Se revisa ANTES que "propia cuenta": si el único administrador intenta quitarse
+        -- el rol o desactivarse, el mensaje correcto es este.
+        ELSE IF @AntRolId = 4 AND @AntActivo = 1 AND (@RolId <> 4 OR @Activo = 0)
+             AND (SELECT COUNT(*) FROM Usuario WHERE InstitucionId=@InstitucionId AND RolId=4 AND Activo=1) <= 1
+            SELECT @Codigo = -9, @Motivo = N'No se puede quitar al único administrador activo.'
 
-		-- Siempre debe quedar al menos un administrador activo
-		ELSE IF @AntRolId = 4 AND @AntActivo = 1 AND (@RolId <> 4 OR @Activo = 0)
-		     AND (SELECT COUNT(*) FROM Usuario WHERE InstitucionId=@InstitucionId AND RolId=4 AND Activo=1) <= 1
-			SELECT @Codigo = -6, @Motivo = N'No se puede quitar al único administrador activo.'
-
+        -- Un administrador no puede cambiarse su propio rol ni desactivarse
+        ELSE IF @UsuarioId = @IdUsuarioGlobal AND (@RolId <> @AntRolId OR @Activo = 0)
+            SELECT @Codigo = -10, @Motivo = N'No puede cambiar su propio rol ni desactivar su propia cuenta.'
 		-- Si se reactiva, se revisa el límite del plan
 		ELSE IF @AntActivo = 0 AND @Activo = 1
 		BEGIN
@@ -2963,14 +2964,11 @@ AS BEGIN
 		                 AND USR.Activo = 1 AND ROL.PuedeAdministrar = 1)
 			SELECT @Codigo = -3, @Motivo = N'No tiene permisos para desactivar usuarios.'
 
-		ELSE IF @Activo = 0
-			SELECT @Codigo = -6, @Motivo = N'El usuario ya está desactivado.'
+		        ELSE IF @RolId = 4 AND (SELECT COUNT(*) FROM Usuario WHERE InstitucionId=@InstitucionId AND RolId=4 AND Activo=1) <= 1
+            SELECT @Codigo = -9, @Motivo = N'No se puede desactivar al único administrador activo.'
 
-		ELSE IF @UsuarioId = @IdUsuarioGlobal
-			SELECT @Codigo = -6, @Motivo = N'No puede desactivar su propia cuenta.'
-
-		ELSE IF @RolId = 4 AND (SELECT COUNT(*) FROM Usuario WHERE InstitucionId=@InstitucionId AND RolId=4 AND Activo=1) <= 1
-			SELECT @Codigo = -6, @Motivo = N'No se puede desactivar al único administrador activo.'
+        ELSE IF @UsuarioId = @IdUsuarioGlobal
+            SELECT @Codigo = -10, @Motivo = N'No puede desactivar su propia cuenta.'
 
 		---------------------------------------- SI NO PASA LAS VALIDACIONES ----------------------------------------
 		IF @Codigo < 0

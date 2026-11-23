@@ -255,12 +255,12 @@ SET @CorreoMal = 'otro.carlos@' + @Dominio
 DELETE FROM #R
 INSERT INTO #R EXEC SP_INSERTA_USUARIOS @Inst, 1, @CarIng, NULL, NULL, 1, '2-2222-2222', '2026-00098',
      N'Otro', N'Carlos', @CorreoMal, 'Clave123', @Admin, @IP
-EXEC #Verificar N'4.3 Otro usuario con la MISMA cédula', '-1'
+EXEC #Verificar N'4.3 Otro usuario con la MISMA cédula', '-8'
 
 DELETE FROM #R
 INSERT INTO #R EXEC SP_INSERTA_USUARIOS @Inst, 1, @CarIng, NULL, NULL, 1, '2-5555-5555', '2026-00002',
      N'Pedro', N'Demo', 'pedro.demo@gmail.com', 'Clave123', @Admin, @IP
-EXEC #Verificar N'4.4 Usuario con correo de otro dominio', '-4'
+EXEC #Verificar N'4.4 Usuario con correo de otro dominio', '-7'
 
 SET @CorreoMal = 'pedro.demo@' + @Dominio
 DELETE FROM #R
@@ -293,11 +293,11 @@ EXEC #Verificar N'4.9 Cambiar la carrera de la profesora (detalle anterior → n
 DELETE FROM #R
 INSERT INTO #R EXEC SP_ACTUALIZA_USUARIOS @Inst, @Admin, 3, NULL, @DepAdmGen, NULL, 1, '1-1111-1111', 'EMP-0001',
      N'Ana', N'Demo Admin', @CorreoAna, NULL, 1, @Admin, @IP
-EXEC #Verificar N'4.10 La admin intenta quitarse su propio rol', '-6'
+EXEC #Verificar N'4.10 La admin intenta quitarse su propio rol', '-9'
 
 DELETE FROM #R
 INSERT INTO #R EXEC SP_ELIMINA_USUARIOS @Inst, @Admin, @Admin, @IP
-EXEC #Verificar N'4.11 La admin intenta desactivarse a sí misma', '-6'
+EXEC #Verificar N'4.11 La admin intenta desactivarse a sí misma', '-9'
 
 DELETE FROM #R
 INSERT INTO #R EXEC SP_ELIMINA_CARRERAS @Inst, @CarIng, @Admin, @IP
