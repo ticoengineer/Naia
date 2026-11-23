@@ -79,7 +79,7 @@ function dep_PintarTabla(datos) {
             : '<button class="btn-icon btn-icon--activar" type="button" title="Activar" data-nombre="' + dep_Esc(dep.Nombre) + '"' +
             ' onclick="dep_Activar(' + dep.DepartamentoId + ', this.getAttribute(\'data-nombre\'))">♻️</button>';
 
-        html += "<tr>";
+        html += '<tr class="fila-clic" data-id="' + dep.DepartamentoId + '" title="Clic para ver quiénes están en este departamento">';
         html += "  <td>" + dep_Esc(dep.Nombre) + "</td>";
         html += "  <td>" + dep_Esc(dep.UsuariosActivos) + "</td>";
         html += '  <td><span class="' + claseEstado + '">' + dep_Esc(dep.EstadoTexto) + "</span></td>";

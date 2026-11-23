@@ -71,7 +71,7 @@ function Equipos_RenderTabla(datos) {
         var eq = datos[i];
         var claseEstado = eq.Activo === "True" ? "badge badge--active" : "badge badge--inactive";
 
-        html += '<tr>' +
+        html += '<tr class="fila-clic" data-id="' + eq.EquipoId + '" title="Clic para ver los técnicos de este equipo">' +
             '<td>' + eqp_Esc(eq.Equipo) + '</td>' +
             '<td>' + (eq.Descripcion ? eqp_Esc(eq.Descripcion) : '\u2014') + '</td>' +
             '<td>' + eqp_Esc(eq.TecnicosActivos) + '</td>' +

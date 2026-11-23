@@ -78,7 +78,7 @@ function car_PintarTabla(datos) {
             : '<button class="btn-icon btn-icon--activar" type="button" title="Activar" data-nombre="' + car_Esc(car.Nombre) + '"' +
             ' onclick="car_Activar(' + car.CarreraId + ', this.getAttribute(\'data-nombre\'))">♻️</button>';
 
-        html += "<tr>";
+        html += '<tr class="fila-clic" data-id="' + car.CarreraId + '" title="Clic para ver quiénes están en esta carrera">';
         html += "  <td>" + car_Esc(car.Nombre) + "</td>";
         html += "  <td>" + car_Esc(car.UsuariosActivos) + "</td>";
         html += '  <td><span class="' + claseEstado + '">' + car_Esc(car.EstadoTexto) + "</span></td>";
