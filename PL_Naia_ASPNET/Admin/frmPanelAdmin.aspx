@@ -21,7 +21,7 @@
     <title>Panel del administrador | Naia</title>
 
     <link rel="stylesheet" href="CSS/panel.css" />
-    <link rel="stylesheet" href="CSS/panel-admin.css" />
+    <link rel="stylesheet" href="CSS/panel-admin.css?v=3" />
 </head>
 
 <!-- data-roles: 4 Administrativo (lo revisa Sesion.js) -->
@@ -185,7 +185,7 @@
 <script src="JS/Categorias.js?v=2"></script>
 <script src="JS/Carreras.js?v=2"></script>
 <script src="JS/Departamentos.js?v=2"></script>
-<script src="JS/Equipos.js?v=3"></script>
+<script src="JS/Equipos.js?v=5"></script>
 <script src="JS/Usuarios.js?v=3"></script>
 <script src="JS/Auditoria.js?v=3"></script>
 <script src="JS/Configuracion.js?v=3"></script>

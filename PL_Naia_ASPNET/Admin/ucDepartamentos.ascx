@@ -5,7 +5,7 @@
     Prefijo "dep" en todos los IDs.
 --%>
 
-<div id="seccionDepartamentos" class="admin-section" style="display: none;">
+<div id="seccionDepartamentos" class="admin-section">
 
     <div class="admin-section__header">
         <div>

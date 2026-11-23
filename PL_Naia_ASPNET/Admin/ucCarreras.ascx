@@ -6,7 +6,7 @@
     Prefijo "car" en todos los IDs para evitar choques con otras secciones.
 --%>
 
-<div id="seccionCarreras" class="admin-section" style="display: none;">
+<div id="seccionCarreras" class="admin-section">
 
     <!-- ====== Encabezado de la seccion ====== -->
     <div class="admin-section__header">

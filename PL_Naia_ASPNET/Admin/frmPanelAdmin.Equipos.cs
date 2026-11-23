@@ -132,14 +132,14 @@ namespace PL_Naia_ASPNET.Admin
                     case "-1": return "-1<SPLITER>Ya existe un equipo con ese nombre.";
                     case "-3": return "-3<SPLITER>No tienes permisos para realizar esta accion.";
                     case "-4": return "-4<SPLITER>El nombre es obligatorio.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                    case "0": return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
                     default:
                         return obj_DAL.sValorScalar + "<SPLITER>El equipo se registro correctamente.";
                 }
             }
             catch (Exception)
             {
-                return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
             }
         }
 
@@ -168,16 +168,17 @@ namespace PL_Naia_ASPNET.Admin
                 {
                     case "-1": return "-1<SPLITER>Ya existe otro equipo con ese nombre.";
                     case "-2": return "-2<SPLITER>El equipo no fue encontrado.";
-                    case "-3": return "-3<SPLITER>No tienes permisos para realizar esta accion.";
-                    case "-6": return "-6<SPLITER>No se puede desactivar: tiene tecnicos activos o categorias que lo usan.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                    case "-3": return "-3<SPLITER>No tienes permisos para realizar esta acción.";
+                    case "-4": return "-4<SPLITER>El nombre del equipo es obligatorio.";
+                    case "-6": return "-6<SPLITER>No se puede desactivar: tiene técnicos activos o categorías que lo usan.";
+                    case "0": return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
                     default:
                         return obj_DAL.sValorScalar + "<SPLITER>El equipo se actualizo correctamente.";
                 }
             }
             catch (Exception)
             {
-                return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
             }
         }
 
@@ -202,16 +203,16 @@ namespace PL_Naia_ASPNET.Admin
                 switch (obj_DAL.sValorScalar)
                 {
                     case "-2": return "-2<SPLITER>El equipo no fue encontrado.";
-                    case "-3": return "-3<SPLITER>No tienes permisos para realizar esta accion.";
-                    case "-6": return "-6<SPLITER>No se puede desactivar: tiene tecnicos activos o categorias que lo usan.";
-                    case "0":  return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                    case "-3": return "-3<SPLITER>No tienes permisos para realizar esta acción.";
+                    case "-6": return "-6<SPLITER>No se puede desactivar: tiene técnicos activos o categorías que lo usan.";
+                    case "0": return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
                     default:
-                        return obj_DAL.sValorScalar + "<SPLITER>El equipo se desactivo correctamente.";
+                        return obj_DAL.sValorScalar + "<SPLITER>El equipo se desactivó correctamente.";
                 }
             }
             catch (Exception)
             {
-                return "0<SPLITER>Ocurrio un error inesperado. Intenta de nuevo.";
+                return "0<SPLITER>Ocurrió un error inesperado. Intenta de nuevo.";
             }
         }
     }

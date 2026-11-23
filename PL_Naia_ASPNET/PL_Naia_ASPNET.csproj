@@ -67,12 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\CSS\panel-admin.css" />
     <Content Include="Admin\CSS\panel.css" />
     <Content Include="Admin\frmPanelAdmin.aspx" />
     <Content Include="Admin\JS\Panel.js" />
     <Content Include="Admin\JS\Ubicaciones.js" />
     <Content Include="Admin\JS\Categorias.js" />
-    <Content Include="Admin\CSS\panel-admin.css" />
     <Content Include="Admin\Images\naia-icon.png" />
     <Content Include="Admin\Images\favicon.png" />
     <Content Include="Admin\Images\icon-tag.png" />
