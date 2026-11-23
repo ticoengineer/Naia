@@ -567,3 +567,91 @@ body {
         text-align: center;
     }
 }
+
+/* ---------- 19. Botones de icono de las tablas (editar / desactivar) ----------
+   Los usan Ubicaciones, Categorías, Carreras, Departamentos y Equipos; no tenían estilo. */
+.btn-icon {
+    width: 34px;
+    height: 34px;
+    margin-left: .25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #FFFFFF;
+    font-size: .95rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+}
+.btn-icon--edit:hover {
+    background: #F1F0FA;
+    border-color: #D6D4E3;
+}
+.btn-icon--delete:hover {
+    background: var(--color-danger-bg);
+    border-color: #F5C2C7;
+}
+.btn-icon--activar:hover {
+    background: var(--color-success-bg);
+    border-color: #B9DFBB;
+}
+
+/* Alias en español: los JS de los catálogos usan badge--activo / badge--inactivo */
+.badge--activo {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+.badge--inactivo {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+/* ---------- 20. Fila desplegable con los miembros (Carreras, Departamentos, Equipos) ---------- */
+.admin-table tr.fila-clic {
+    cursor: pointer;
+}
+.admin-table tr.fila-clic:hover td {
+    background: #F8F7FC;
+}
+.admin-table tr.fila-clic.is-open td {
+    background: #F1F0FA;
+    border-bottom-color: transparent;
+}
+.admin-table tr.fila-miembros td {
+    padding: 0 1rem 1rem;
+    background: #F1F0FA;
+}
+.miembros {
+    max-height: 260px;
+    overflow-y: auto;
+    padding: .75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #FFFFFF;
+}
+.miembros__lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .35rem 1.5rem;
+}
+.miembros__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .3rem 0;
+    border-bottom: 1px dashed var(--color-border);
+    font-size: .88rem;
+}
+.miembros__rol {
+    flex-shrink: 0;
+    font-size: .78rem;
+    color: #6B7080;
+}
+.miembros__vacio {
+    margin: 0;
+    font-size: .88rem;
+    color: #6B7080;
+}

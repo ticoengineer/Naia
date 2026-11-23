@@ -1,6 +1,7 @@
 // ==================== EQUIPOS DE SOPORTE ====================
 
 var eqp_esEdicion = false;
+var eqp_activoActual = "true";   // al editar se conserva el estado: activar/desactivar va por los botones de la tabla
 
 // Función que Panel.js llama al abrir la sección
 window.Equipos_AlAbrir = function () {
@@ -23,7 +24,7 @@ function Equipos_Listar() {
             Equipos_RenderTabla(r.d);
         },
         error: function () {
-            $("#eqp_tbodyEquipos").html('<tr><td colspan="5" class="text-center">Error al cargar los equipos.</td></tr>');
+            $("#eqp_tbodyEquipos").html('<tr><td colspan="5" class="admin-table__loading">Error al cargar los equipos.</td></tr>');
         }
     });
 }
@@ -50,49 +51,57 @@ function Equipos_Filtrar() {
             Equipos_RenderTabla(r.d);
         },
         error: function () {
-            $("#eqp_tbodyEquipos").html('<tr><td colspan="5" class="text-center">Error al filtrar los equipos.</td></tr>');
+            $("#eqp_tbodyEquipos").html('<tr><td colspan="5" class="admin-table__loading">Error al filtrar los equipos.</td></tr>');
         }
     });
 }
 
 // -------------------- RENDER TABLA --------------------
+// Mismas clases que Carreras/Departamentos (panel-admin.css). Los textos van escapados con eqp_Esc.
 function Equipos_RenderTabla(datos) {
     var tbody = $("#eqp_tbodyEquipos");
-    tbody.empty();
 
     if (!datos || datos.length === 0) {
-        tbody.html('<tr><td colspan="5" class="text-center">No se encontraron equipos.</td></tr>');
+        tbody.html('<tr><td colspan="5" class="admin-table__loading">No se encontraron equipos.</td></tr>');
         return;
     }
 
+    var html = "";
     for (var i = 0; i < datos.length; i++) {
         var eq = datos[i];
-        var claseEstado = eq.Activo === "True" ? "estado-activo" : "estado-inactivo";
+        var claseEstado = eq.Activo === "True" ? "badge badge--active" : "badge badge--inactive";
 
-        var fila = '<tr>' +
-            '<td>' + eq.Equipo + '</td>' +
-            '<td>' + (eq.Descripcion || '-') + '</td>' +
-            '<td class="text-center">' + eq.TecnicosActivos + '</td>' +
-            '<td><span class="' + claseEstado + '">' + eq.EstadoTexto + '</span></td>' +
-            '<td class="acciones">' +
-                '<button type="button" class="btn btn-sm btn-editar" onclick="Equipos_Editar(' + eq.EquipoId + ')" title="Editar"><i class="fa fa-pencil"></i></button> ' +
-                '<button type="button" class="btn btn-sm btn-eliminar" onclick="Equipos_Eliminar(' + eq.EquipoId + ', \'' + eq.Equipo.replace(/'/g, "\\'") + '\')" title="Desactivar"><i class="fa fa-trash"></i></button>' +
+        html += '<tr class="fila-clic" data-id="' + eq.EquipoId + '" title="Clic para ver los técnicos de este equipo">' +
+            '<td>' + eqp_Esc(eq.Equipo) + '</td>' +
+            '<td>' + (eq.Descripcion ? eqp_Esc(eq.Descripcion) : '\u2014') + '</td>' +
+            '<td>' + eqp_Esc(eq.TecnicosActivos) + '</td>' +
+            '<td><span class="' + claseEstado + '">' + eqp_Esc(eq.EstadoTexto) + '</span></td>' +
+            '<td class="admin-table__actions-col">' +
+            '<button class="btn-icon btn-icon--edit" type="button" title="Editar" onclick="Equipos_Editar(' + eq.EquipoId + ')">\u270F\uFE0F</button>' +
+            (eq.Activo === "True"
+                ? '<button class="btn-icon btn-icon--delete" type="button" title="Desactivar" data-nombre="' + eqp_Esc(eq.Equipo) + '"' +
+                ' onclick="Equipos_Eliminar(' + eq.EquipoId + ', this.getAttribute(\'data-nombre\'))">\uD83D\uDDD1\uFE0F</button>'
+                : '<button class="btn-icon btn-icon--activar" type="button" title="Activar" data-nombre="' + eqp_Esc(eq.Equipo) + '"' +
+                ' onclick="Equipos_Activar(' + eq.EquipoId + ', this.getAttribute(\'data-nombre\'))">\u267B\uFE0F</button>') +
             '</td>' +
             '</tr>';
-
-        tbody.append(fila);
     }
+    tbody.html(html);
+}
+
+// Escapa el texto antes de meterlo en el HTML (los nombres los escribe el admin)
+function eqp_Esc(texto) {
+    return $("<div>").text(texto == null ? "" : String(texto)).html();
 }
 
 // -------------------- ABRIR MODAL NUEVO --------------------
 function Equipos_AbrirModalNuevo() {
     eqp_esEdicion = false;
-    $("#eqp_modalTitulo").text("Nuevo Equipo");
+    $("#eqp_modalTitulo").text("Nuevo equipo");
     $("#eqp_hdnEquipoId").val("0");
     $("#eqp_txtNombre").val("");
     $("#eqp_txtDescripcion").val("");
-    $("#eqp_ddlEstado").val("true");
-    $("#eqp_grupoEstado").hide();
+    eqp_activoActual = "true";
     $("#eqp_modal").fadeIn(200);
 }
 
@@ -112,19 +121,19 @@ function Equipos_Editar(equipoId) {
             if (r.d && r.d.length > 0) {
                 var eq = r.d[0];
                 eqp_esEdicion = true;
-                $("#eqp_modalTitulo").text("Editar Equipo");
+                $("#eqp_modalTitulo").text("Editar equipo");
                 $("#eqp_hdnEquipoId").val(eq.EquipoId);
                 $("#eqp_txtNombre").val(eq.Equipo);
                 $("#eqp_txtDescripcion").val(eq.Descripcion || "");
-                $("#eqp_ddlEstado").val(eq.Activo);
-                $("#eqp_grupoEstado").show();
+                // El estado no se edita aquí: se guarda tal cual estaba
+                eqp_activoActual = (eq.Activo === "True") ? "true" : "false";
                 $("#eqp_modal").fadeIn(200);
             } else {
-                Swal.fire("Error", "No se pudo obtener la informacion del equipo.", "error");
+                Swal.fire("Error", "No se pudo obtener la información del equipo.", "error");
             }
         },
         error: function () {
-            Swal.fire("Error", "Error al obtener la informacion del equipo.", "error");
+            Swal.fire("Error", "Error al obtener la información del equipo.", "error");
         }
     });
 }
@@ -135,7 +144,7 @@ function Equipos_Guardar() {
 
     var nombre = $.trim($("#eqp_txtNombre").val());
     if (nombre.length === 0) {
-        Swal.fire("Atencion", "El nombre del equipo es obligatorio.", "warning");
+        Swal.fire("Atención", "El nombre del equipo es obligatorio.", "warning");
         return;
     }
 
@@ -145,7 +154,7 @@ function Equipos_Guardar() {
 
     if (eqp_esEdicion) {
         var equipoId = $("#eqp_hdnEquipoId").val();
-        var activo = $("#eqp_ddlEstado").val();
+        var activo = eqp_activoActual;   // editar NO cambia el estado
         params = [g_InstitucionId, g_UsuarioId, equipoId, nombre, descripcion, activo];
         metodo = "ActualizarEquipo";
     } else {
@@ -165,7 +174,7 @@ function Equipos_Guardar() {
             var mensaje = partes[1];
 
             if (parseInt(codigo) > 0) {
-                Swal.fire("Exito", mensaje, "success");
+                Swal.fire("Éxito", mensaje, "success");
                 Equipos_CerrarModal();
                 Equipos_Listar();
             } else {
@@ -173,7 +182,7 @@ function Equipos_Guardar() {
             }
         },
         error: function () {
-            Swal.fire("Error", "Ocurrio un error inesperado. Intenta de nuevo.", "error");
+            Swal.fire("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "error");
         }
     });
 }
@@ -184,11 +193,11 @@ function Equipos_Eliminar(equipoId, nombre) {
 
     Swal.fire({
         title: "Desactivar equipo",
-        text: "¿Estas seguro de desactivar el equipo \"" + nombre + "\"?",
+        text: "¿Estás seguro de desactivar el equipo \"" + nombre + "\"?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
-        confirmButtonText: "Si, desactivar",
+        confirmButtonText: "Sí, desactivar",
         cancelButtonText: "Cancelar"
     }).then(function (result) {
         if (result.isConfirmed) {
@@ -213,10 +222,70 @@ function Equipos_Eliminar(equipoId, nombre) {
                     }
                 },
                 error: function () {
-                    Swal.fire("Error", "Ocurrio un error inesperado. Intenta de nuevo.", "error");
+                    Swal.fire("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "error");
                 }
             });
         }
+    });
+}
+
+// -------------------- ACTIVAR (reactivar un equipo desactivado) --------------------
+// No hay SP de "activar": se usa SP_ACTUALIZA_EQUIPOS con Activo = 1 y el mismo nombre y descripción.
+// El SP deja en auditoría "Estado: Inactivo → Activo".
+function Equipos_Activar(equipoId, nombre) {
+    if (!ValidarSesion()) return;
+
+    Swal.fire({
+        title: "Activar equipo",
+        text: "¿Quieres activar de nuevo el equipo \"" + nombre + "\"? Volverá a aparecer al asignar técnicos y categorías.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, activar",
+        cancelButtonText: "Cancelar"
+    }).then(function (result) {
+        if (!result.isConfirmed) return;
+
+        // 1) Datos actuales del equipo
+        $.ajax({
+            type: "POST",
+            url: "frmPanelAdmin.aspx/InfoEquipo",
+            data: JSON.stringify({ obj_Parametros_JS: [g_InstitucionId, g_UsuarioId, equipoId.toString()] }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                if (!r.d || r.d.length === 0) {
+                    Swal.fire("Error", "No se pudo obtener la información del equipo.", "error");
+                    return;
+                }
+                var eq = r.d[0];
+
+                // 2) Mismo nombre y descripción, Activo = true
+                var params = [g_InstitucionId, g_UsuarioId, eq.EquipoId, eq.Equipo, eq.Descripcion || "", "true"];
+
+                $.ajax({
+                    type: "POST",
+                    url: "frmPanelAdmin.aspx/ActualizarEquipo",
+                    data: JSON.stringify({ obj_Parametros_JS: params }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r2) {
+                        var partes = r2.d.split("<SPLITER>");
+                        if (parseInt(partes[0]) > 0) {
+                            Swal.fire("Activado", "El equipo \"" + nombre + "\" está activo de nuevo.", "success");
+                            Equipos_Listar();
+                        } else {
+                            Swal.fire("Error", partes[1], "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "error");
+                    }
+                });
+            },
+            error: function () {
+                Swal.fire("Error", "Error al obtener la información del equipo.", "error");
+            }
+        });
     });
 }
 

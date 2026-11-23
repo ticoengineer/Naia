@@ -4,15 +4,16 @@
     User Control: Seccion de Carreras del panel de administracion.
     Se muestra/oculta desde Panel.js cuando el admin navega a esta seccion.
     Prefijo "car" en todos los IDs para evitar choques con otras secciones.
+    Editar solo cambia el nombre; activar/desactivar se hace con los botones de la tabla.
 --%>
 
-<div id="seccionCarreras" class="admin-section" style="display: none;">
+<div id="seccionCarreras" class="admin-section">
 
     <!-- ====== Encabezado de la seccion ====== -->
     <div class="admin-section__header">
         <div>
             <h2 class="admin-section__title">Carreras</h2>
-            <p class="admin-section__subtitle">Administra las carreras o programas academicos de la institucion.</p>
+            <p class="admin-section__subtitle">Carreras o programas académicos. Cada estudiante y profesor pertenece a una.</p>
         </div>
         <button id="btnCarNueva" class="btn btn--primary" type="button" onclick="car_AbrirModalNuevo()">
             + Nueva carrera
@@ -23,7 +24,7 @@
     <div class="admin-search">
         <div class="input input--search">
             <img class="input__icon" src="Images/icon-tag.png" alt="" aria-hidden="true" width="16" height="16">
-            <input id="txtCarBuscar" class="input__control" type="text" placeholder="Buscar por nombre o codigo..."
+            <input id="txtCarBuscar" class="input__control" type="text" placeholder="Buscar por nombre..."
                    onkeyup="car_Filtrar()">
         </div>
     </div>
@@ -33,8 +34,8 @@
         <table class="admin-table" id="tblCarreras">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Codigo</th>
+                    <th>Carrera</th>
+                    <th>Usuarios activos</th>
                     <th>Estado</th>
                     <th class="admin-table__actions-col">Acciones</th>
                 </tr>
@@ -64,26 +65,7 @@
                         <label class="field__label" for="txtCarNombre">Nombre <span class="required">*</span></label>
                         <div class="input">
                             <input id="txtCarNombre" class="input__control" type="text" maxlength="120"
-                                   placeholder="Ej. Ingenieria en Sistemas" required>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="field__label" for="txtCarCodigo">Codigo</label>
-                        <div class="input">
-                            <input id="txtCarCodigo" class="input__control" type="text" maxlength="20"
-                                   placeholder="Ej. ISI-01 (opcional)">
-                        </div>
-                        <p class="field__hint">Codigo interno para identificar la carrera. Es opcional.</p>
-                    </div>
-
-                    <div class="field" id="campoCarEstado" style="display: none;">
-                        <label class="field__label" for="ddlCarEstado">Estado</label>
-                        <div class="select">
-                            <select id="ddlCarEstado" class="select__control">
-                                <option value="true">Activa</option>
-                                <option value="false">Inactiva</option>
-                            </select>
+                                   placeholder="Ej. Ingeniería en Sistemas" required>
                         </div>
                     </div>
                 </div>

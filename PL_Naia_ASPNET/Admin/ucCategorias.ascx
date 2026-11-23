@@ -6,7 +6,7 @@
     Prefijo "cat" en todos los IDs para evitar choques con otras secciones.
 --%>
 
-<div id="seccionCategorias" class="admin-section" style="display: none;">
+<div id="seccionCategorias" class="admin-section">
 
     <!-- ====== Encabezado de la seccion ====== -->
     <div class="admin-section__header">

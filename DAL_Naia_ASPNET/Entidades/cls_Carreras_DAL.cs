@@ -8,8 +8,8 @@ namespace DAL_Naia_ASPNET.Entidades
         #region Variables Privadas
 
         private int _iInstitucionId, _iCarreraId, _iIdUsuarioGlobal;
-        private string _sNombre, _sCodigo, _sDireccionIp, _sFiltro;
-        private bool _bActiva;
+        private string _sNombre, _sDireccionIp, _sFiltro;
+        private bool _bActiva, _bSoloActivas;
 
         private string _sValorScalar, _sAXN, _sMSJError;
         private DataTable _dtDatos, _dtParametros;
@@ -21,8 +21,8 @@ namespace DAL_Naia_ASPNET.Entidades
         public int iInstitucionId { get => _iInstitucionId; set => _iInstitucionId = value; }
         public int iCarreraId { get => _iCarreraId; set => _iCarreraId = value; }
         public string sNombre { get => _sNombre; set => _sNombre = value; }
-        public string sCodigo { get => _sCodigo; set => _sCodigo = value; }
-        public bool bActiva { get => _bActiva; set => _bActiva = value; }
+        public bool bActiva { get => _bActiva; set => _bActiva = value; }            // @Activo del SP
+        public bool bSoloActivas { get => _bSoloActivas; set => _bSoloActivas = value; } // @SoloActivos de SP_LISTAR_CARRERAS
         public string sFiltro { get => _sFiltro; set => _sFiltro = value; }
 
         // Auditoria

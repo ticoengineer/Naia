@@ -1416,6 +1416,11 @@ AS BEGIN
 		ELSE IF EXISTS (SELECT 1 FROM Departamento WHERE InstitucionId=@InstitucionId AND Nombre=@Nombre AND DepartamentoId<>@DepartamentoId)
 			SELECT @Codigo = -1, @Motivo = N'Ya existe un departamento con ese nombre.'
 
+		-- "Administración General" lo crea el registro de la universidad y es el departamento de los
+		-- administrativos: no se puede renombrar ni desactivar (si no, la regla del rol 4 se rompe).
+		ELSE IF @AntNombre = N'Administración General' AND (@Nombre <> @AntNombre OR @Activo = 0)
+			SELECT @Codigo = -6, @Motivo = N'Administración General es el departamento de los administrativos: no se puede renombrar ni desactivar.'
+
 		ELSE IF @AntActivo = 1 AND @Activo = 0
 		     AND EXISTS (SELECT 1 FROM Usuario WHERE DepartamentoId=@DepartamentoId AND Activo=1)
 			SELECT @Codigo = -6, @Motivo = N'No se puede desactivar: tiene usuarios activos. Muévalos primero a otro departamento.'
@@ -1495,6 +1500,9 @@ AS BEGIN
 		               WHERE USR.UsuarioId = @IdUsuarioGlobal AND USR.InstitucionId = @InstitucionId
 		                 AND USR.Activo = 1 AND ROL.PuedeAdministrar = 1)
 			SELECT @Codigo = -3, @Motivo = N'No tiene permisos para desactivar departamentos.'
+
+		ELSE IF @ELEMENTO = N'Departamento: Administración General'
+			SELECT @Codigo = -6, @Motivo = N'Administración General es el departamento de los administrativos: no se puede desactivar.'
 
 		ELSE IF @Activo = 0
 			SELECT @Codigo = -6, @Motivo = N'Ya está desactivado.'
