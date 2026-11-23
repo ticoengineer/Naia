@@ -56,6 +56,21 @@
             </button>
         </section>
 
+                <!-- ===================== POR CONFIRMAR ===================== -->
+        <!-- Tiquetes en EstadoId 5 Resuelto: soporte dice que ya quedó y el usuario tiene que confirmar.
+             Solo se muestra si hay alguno. -->
+        <section class="section confirmar is-hidden" id="pnlConfirmar" aria-labelledby="ttlConfirmar">
+            <div class="confirmar__encabezado">
+                <h2 class="section__title" id="ttlConfirmar">Necesitan tu confirmación</h2>
+                <span class="confirmar__contador" id="lblTotalConfirmar"></span>
+            </div>
+            <p class="confirmar__lead">
+                Soporte marcó estas solicitudes como resueltas. Revisa la solución y dinos si quedó arreglado;
+                si no, la reabrimos.
+            </p>
+            <div class="ticket-list" id="lstConfirmar"></div>
+        </section>
+
         <!-- ===================== SOLICITUDES ABIERTAS ===================== -->
         <!-- Se llena con InicioUsuario.js → CargarTickets() → SP_LISTAR_TICKETS
              Abiertas = EstadoId 1 Nuevo, 2 Asignado, 3 En progreso, 4 En espera -->

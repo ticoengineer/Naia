@@ -3179,7 +3179,7 @@ GO
 USE NaiaInc
 GO
 
--- Filtros de la lista de tiquetes. Cualquier parámetro en NULL = "todos".
+-- Lista de la vista de soporte, con filtros. Cualquier parámetro en NULL = "todos".
 CREATE OR ALTER PROCEDURE SP_FILTRAR_TICKETS
 (
 @InstitucionId    INT,
@@ -3189,7 +3189,8 @@ CREATE OR ALTER PROCEDURE SP_FILTRAR_TICKETS
 @PrioridadId      TINYINT,         -- 1 Crítica … 4 Baja
 @CategoriaId      INT,
 @ResponsableId    INT,             -- 0 = solo los que están "Sin asignar"
-@SoloVencidos     BIT              -- 1 = solo los que pasaron su SLA
+@SoloVencidos     BIT,             -- 1 = solo los que pasaron su SLA
+@SoloAbiertos     BIT              -- 1 = oculta Cerrado y Cancelado
 )
 AS BEGIN
 	SET NOCOUNT ON;
@@ -3199,22 +3200,27 @@ AS BEGIN
 	FROM Usuario USR INNER JOIN Rol ROL ON ROL.RolId = USR.RolId
 	WHERE USR.UsuarioId = @IdUsuarioGlobal AND USR.InstitucionId = @InstitucionId AND USR.Activo = 1
 
+	SET @Filtro = NULLIF(LTRIM(RTRIM(@Filtro)), N'')
+
 	SELECT TIC.TicketId, TIC.Numero, TIC.Titulo,
 	       TIC.CategoriaId, CAT.Nombre AS Categoria, CAT.ColorHex AS CategoriaColor,
 	       TIC.PrioridadId, PRI.Nombre AS Prioridad, PRI.ColorHex AS PrioridadColor,
 	       TIC.EstadoId, EST.Nombre AS Estado, EST.EsFinal,
-	       TIC.SolicitanteId, SOL.Nombre + ' ' + SOL.Apellidos AS Solicitante,
+	       TIC.SolicitanteId, SOL.Nombre + ' ' + SOL.Apellidos AS Solicitante, ROLS.Nombre AS RolSolicitante,
 	       TIC.ResponsableId, ISNULL(RES.Nombre + ' ' + RES.Apellidos, N'Sin asignar') AS Responsable,
 	       ISNULL(UBI.Edificio + N' · ', N'') + UBI.Nombre AS Ubicacion,
 	       TIC.FechaCreacion,
 	       CONVERT(VARCHAR(10), TIC.FechaCreacion, 103) + ' ' + CONVERT(VARCHAR(5), TIC.FechaCreacion, 108) AS FechaCreacionTexto,
 	       TIC.FechaLimiteSla,
-	       CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 AND SYSDATETIME() > TIC.FechaLimiteSla THEN 1 ELSE 0 END AS SlaVencido
+	       CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 AND SYSDATETIME() > TIC.FechaLimiteSla THEN 1 ELSE 0 END AS SlaVencido,
+	       -- Minutos que le quedan al SLA (negativo = vencido). NULL si ya está Resuelto, Cerrado o Cancelado.
+	       CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 THEN DATEDIFF(MINUTE, SYSDATETIME(), TIC.FechaLimiteSla) END AS MinutosRestantes
 	FROM Ticket TIC
 	INNER JOIN Categoria CAT    ON CAT.CategoriaId = TIC.CategoriaId
 	INNER JOIN Prioridad PRI    ON PRI.PrioridadId = TIC.PrioridadId
 	INNER JOIN EstadoTicket EST ON EST.EstadoId = TIC.EstadoId
 	INNER JOIN Usuario SOL      ON SOL.UsuarioId = TIC.SolicitanteId
+	INNER JOIN Rol ROLS         ON ROLS.RolId = SOL.RolId
 	LEFT JOIN Usuario RES       ON RES.UsuarioId = TIC.ResponsableId
 	INNER JOIN Ubicacion UBI    ON UBI.UbicacionId = TIC.UbicacionId
 	WHERE TIC.InstitucionId = @InstitucionId
@@ -3232,7 +3238,9 @@ AS BEGIN
 	       OR TIC.ResponsableId = @ResponsableId)
 	  AND (ISNULL(@SoloVencidos,0) = 0
 	       OR (EST.EsFinal = 0 AND TIC.EstadoId <> 5 AND SYSDATETIME() > TIC.FechaLimiteSla))
-	ORDER BY EST.EsFinal, PRI.Nivel, TIC.FechaCreacion
+	  AND (ISNULL(@SoloAbiertos,0) = 0 OR EST.EsFinal = 0)
+	-- Primero los abiertos; los Resueltos al final de los abiertos; y entre ellos, lo que vence primero.
+	ORDER BY EST.EsFinal, CASE WHEN TIC.EstadoId = 5 THEN 1 ELSE 0 END, TIC.FechaLimiteSla
 END
 GO
 
@@ -3267,6 +3275,7 @@ AS BEGIN
 	       TIC.Solucion,
 	       TIC.FechaCreacion, TIC.FechaActualizacion, TIC.FechaLimiteSla, TIC.FechaResolucion, TIC.FechaCierre,
 	       CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 AND SYSDATETIME() > TIC.FechaLimiteSla THEN 1 ELSE 0 END AS SlaVencido,
+	       CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 THEN DATEDIFF(MINUTE, SYSDATETIME(), TIC.FechaLimiteSla) END AS MinutosRestantes,
 	       -- Permisos para los botones
 	       CASE WHEN EST.EsFinal = 0 AND (@PuedeResolver = 1 OR (TIC.SolicitanteId = @IdUsuarioGlobal AND TIC.EstadoId = 1))
 	            THEN 1 ELSE 0 END AS PuedeEditar,
@@ -3750,6 +3759,7 @@ AS BEGIN
 
 	DECLARE @RolUsuario TINYINT, @PuedeResolver BIT
 	DECLARE @InicioMes DATE = DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+	DECLARE @Manana DATETIME2 = DATEADD(DAY, 1, CAST(CAST(GETDATE() AS DATE) AS DATETIME2))
 
 	SELECT @RolUsuario = USR.RolId, @PuedeResolver = ROL.PuedeResolverTickets
 	FROM Usuario USR INNER JOIN Rol ROL ON ROL.RolId = USR.RolId
@@ -3763,7 +3773,11 @@ AS BEGIN
 	       ISNULL(SUM(CASE WHEN TIC.EstadoId = 5 THEN 1 ELSE 0 END), 0)     AS Resueltos,
 	       ISNULL(SUM(CASE WHEN TIC.EstadoId = 6 AND TIC.FechaCierre >= @InicioMes THEN 1 ELSE 0 END), 0) AS CerradosEsteMes,
 	       ISNULL(SUM(CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5 AND SYSDATETIME() > TIC.FechaLimiteSla THEN 1 ELSE 0 END), 0) AS Vencidos,
-	       ISNULL(SUM(CASE WHEN EST.EsFinal = 0 AND TIC.ResponsableId = @IdUsuarioGlobal THEN 1 ELSE 0 END), 0) AS AsignadosAMi
+	       ISNULL(SUM(CASE WHEN EST.EsFinal = 0 AND TIC.ResponsableId = @IdUsuarioGlobal THEN 1 ELSE 0 END), 0) AS AsignadosAMi,
+	       ISNULL(SUM(CASE WHEN EST.EsFinal = 0 AND TIC.ResponsableId IS NULL THEN 1 ELSE 0 END), 0) AS SinAsignar,
+	       -- Abiertos que todavía no vencen, pero vencen antes de la medianoche de hoy
+	       ISNULL(SUM(CASE WHEN EST.EsFinal = 0 AND TIC.EstadoId <> 5
+	                        AND TIC.FechaLimiteSla >= SYSDATETIME() AND TIC.FechaLimiteSla < @Manana THEN 1 ELSE 0 END), 0) AS VencenHoy
 	FROM Ticket TIC
 	INNER JOIN EstadoTicket EST ON EST.EstadoId = TIC.EstadoId
 	WHERE TIC.InstitucionId = @InstitucionId

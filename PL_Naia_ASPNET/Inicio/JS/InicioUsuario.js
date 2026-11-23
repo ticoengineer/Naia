@@ -106,9 +106,15 @@ function CargarTickets() {
         success: function (msg) {
             var tickets = msg.d || [];
 
+            // 5 Resuelto va aparte: el usuario tiene que confirmar (no se puede perder en el historial)
+            var porConfirmar = $.grep(tickets, function (t) { return parseInt(t.EstadoId) === 5; });
             var abiertos = $.grep(tickets, function (t) { return ESTADOS_ABIERTOS.indexOf(parseInt(t.EstadoId)) !== -1; });
-            var historial = $.grep(tickets, function (t) { return ESTADOS_ABIERTOS.indexOf(parseInt(t.EstadoId)) === -1; });
+            var historial = $.grep(tickets, function (t) {
+                var estado = parseInt(t.EstadoId);
+                return ESTADOS_ABIERTOS.indexOf(estado) === -1 && estado !== 5;   // solo Cerrado y Cancelado
+            });
 
+            PintarPorConfirmar(porConfirmar);
             PintarAbiertos(abiertos);
             PintarHistorial(historial);
         },
@@ -116,6 +122,34 @@ function CargarTickets() {
             $("#lstAbiertas").html('<p class="loading loading--error">No se pudieron cargar tus solicitudes. Recarga la página para intentarlo de nuevo.</p>');
         }
     });
+}
+
+// Tiquetes Resueltos que esperan que el usuario confirme. El botón abre el panel "Ver y responder",
+// que ya tiene "Sí, se resolvió" y "No, sigue el problema".
+function PintarPorConfirmar(tickets) {
+    if (tickets.length === 0) {
+        $("#pnlConfirmar").addClass("is-hidden");
+        $("#lstConfirmar").empty();
+        return;
+    }
+
+    $("#lblTotalConfirmar").text(tickets.length);
+    $("#pnlConfirmar").removeClass("is-hidden");
+
+    var html = "";
+    $.each(tickets, function (i, t) {
+        html +=
+            '<div class="confirmar__fila">' +
+            '<span class="ticket__main">' +
+            '<span class="ticket__meta">' + Esc(t.Numero) + ' · ' + Esc(t.Categoria) + ' · ' + Esc(t.FechaCreacion) + '</span>' +
+            '<span class="ticket__title">' + Esc(t.Titulo) + '</span>' +
+            '<span class="confirmar__nota">Lo resolvió ' + Esc(t.Responsable) + '</span>' +
+            '</span>' +
+            '<a class="btn btn--exito js-ver-ticket" href="#" data-ticket-id="' + t.TicketId + '">Revisar y confirmar</a>' +
+            '</div>';
+    });
+
+    $("#lstConfirmar").html(html);
 }
 
 // Una fila desplegable (<details>) por cada tiquete abierto

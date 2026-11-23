@@ -94,6 +94,7 @@
     <Content Include="Admin\ucConfiguracion.ascx" />
     <Content Include="Admin\ucResumen.ascx" />
     <Content Include="Global.asax" />
+    <Content Include="Inicio\CSS\inicio-soporte.css" />
     <Content Include="Inicio\CSS\inicio-usuario.css" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
     <Content Include="Inicio\frmInicioUsuario.aspx" />
@@ -103,6 +104,7 @@
     <Content Include="Inicio\Images\icon-inbox.png" />
     <Content Include="Inicio\Images\icon-info.png" />
     <Content Include="Inicio\Images\naia-icon.png" />
+    <Content Include="Inicio\JS\InicioSoporte.js" />
     <Content Include="Inicio\JS\InicioUsuario.js" />
     <Content Include="JavaScript\jquery.cookie.js" />
     <Content Include="JavaScript\Sesion.js" />

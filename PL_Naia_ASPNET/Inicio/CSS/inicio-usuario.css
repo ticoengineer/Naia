@@ -941,3 +941,62 @@ select.field__control {
         transition: none;
     }
 }
+
+/* ---------- 13. Solicitudes que necesitan confirmación (EstadoId 5) ---------- */
+.confirmar {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    background: #E6EFEA;
+    border: 1px solid #C9DED2;
+}
+
+.confirmar__encabezado {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+    .confirmar__encabezado .section__title {
+        color: #2F5245;
+    }
+
+.confirmar__contador {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 .5rem;
+    border-radius: 999px;
+    background: #3E6656;
+    color: #FFFFFF;
+    font-size: .85rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+.confirmar__lead {
+    font-size: .95rem;
+    color: #2F5245;
+}
+
+.confirmar__fila {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid #C9DED2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem 1rem;
+}
+
+.confirmar__nota {
+    font-size: .85rem;
+    color: #3E6656;
+}
+
+@media (max-width: 640px) {
+    .confirmar__fila .btn {
+        width: 100%;
+    }
+}
