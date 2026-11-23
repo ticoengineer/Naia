@@ -941,3 +941,111 @@ select.field__control {
         transition: none;
     }
 }
+
+/* ---------- 13. Solicitudes que necesitan confirmación (EstadoId 5) ---------- */
+.confirmar {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    background: #E6EFEA;
+    border: 1px solid #C9DED2;
+}
+
+.confirmar__encabezado {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+    .confirmar__encabezado .section__title {
+        color: #2F5245;
+    }
+
+.confirmar__contador {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 .5rem;
+    border-radius: 999px;
+    background: #3E6656;
+    color: #FFFFFF;
+    font-size: .85rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+.confirmar__lead {
+    font-size: .95rem;
+    color: #2F5245;
+}
+
+.confirmar__fila {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid #C9DED2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem 1rem;
+}
+
+.confirmar__nota {
+    font-size: .85rem;
+    color: #3E6656;
+}
+
+@media (max-width: 640px) {
+    .confirmar__fila .btn {
+        width: 100%;
+    }
+}
+/* ---------- 14. Cambios de estado dentro de la conversación ---------- */
+.evento {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .35rem;
+    margin: .15rem 0;
+}
+
+.evento__linea {
+    padding: .25rem .8rem;
+    border-radius: 999px;
+    background: #EEEDF4;
+    color: var(--color-text-soft);
+    font-size: .78rem;
+    text-align: center;
+}
+
+.evento__detalle {
+    max-width: 90%;
+    padding: .6rem .85rem;
+    border-radius: 10px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--naia-ash);
+    color: var(--color-text-soft);
+    font-size: .9rem;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.evento--resuelto .evento__linea {
+    background: #E6EFEA;
+    color: #2F5245;
+}
+
+.evento--resuelto .evento__detalle {
+    border-left-color: #3E6656;
+}
+
+.evento--reabierto .evento__linea {
+    background: #F6E9EB;
+    color: #8E3B47;
+}
+
+.evento--reabierto .evento__detalle {
+    border-left-color: #A9545E;
+}

@@ -106,9 +106,15 @@ function CargarTickets() {
         success: function (msg) {
             var tickets = msg.d || [];
 
+            // 5 Resuelto va aparte: el usuario tiene que confirmar (no se puede perder en el historial)
+            var porConfirmar = $.grep(tickets, function (t) { return parseInt(t.EstadoId) === 5; });
             var abiertos = $.grep(tickets, function (t) { return ESTADOS_ABIERTOS.indexOf(parseInt(t.EstadoId)) !== -1; });
-            var historial = $.grep(tickets, function (t) { return ESTADOS_ABIERTOS.indexOf(parseInt(t.EstadoId)) === -1; });
+            var historial = $.grep(tickets, function (t) {
+                var estado = parseInt(t.EstadoId);
+                return ESTADOS_ABIERTOS.indexOf(estado) === -1 && estado !== 5;   // solo Cerrado y Cancelado
+            });
 
+            PintarPorConfirmar(porConfirmar);
             PintarAbiertos(abiertos);
             PintarHistorial(historial);
         },
@@ -116,6 +122,34 @@ function CargarTickets() {
             $("#lstAbiertas").html('<p class="loading loading--error">No se pudieron cargar tus solicitudes. Recarga la página para intentarlo de nuevo.</p>');
         }
     });
+}
+
+// Tiquetes Resueltos que esperan que el usuario confirme. El botón abre el panel "Ver y responder",
+// que ya tiene "Sí, se resolvió" y "No, sigue el problema".
+function PintarPorConfirmar(tickets) {
+    if (tickets.length === 0) {
+        $("#pnlConfirmar").addClass("is-hidden");
+        $("#lstConfirmar").empty();
+        return;
+    }
+
+    $("#lblTotalConfirmar").text(tickets.length);
+    $("#pnlConfirmar").removeClass("is-hidden");
+
+    var html = "";
+    $.each(tickets, function (i, t) {
+        html +=
+            '<div class="confirmar__fila">' +
+            '<span class="ticket__main">' +
+            '<span class="ticket__meta">' + Esc(t.Numero) + ' · ' + Esc(t.Categoria) + ' · ' + Esc(t.FechaCreacion) + '</span>' +
+            '<span class="ticket__title">' + Esc(t.Titulo) + '</span>' +
+            '<span class="confirmar__nota">Lo resolvió ' + Esc(t.Responsable) + '</span>' +
+            '</span>' +
+            '<a class="btn btn--exito js-ver-ticket" href="#" data-ticket-id="' + t.TicketId + '">Revisar y confirmar</a>' +
+            '</div>';
+    });
+
+    $("#lstConfirmar").html(html);
 }
 
 // Una fila desplegable (<details>) por cada tiquete abierto
@@ -491,20 +525,7 @@ function PintarDetalle(d) {
     $("#lblDetDescripcion").text(t.Descripcion);
 
     // Conversación
-    if (d.Comentarios.length === 0) {
-        $("#lstConversacion").html('<p class="conversacion__vacia">Todavía no hay mensajes en esta solicitud.</p>');
-    } else {
-        var html = "";
-        $.each(d.Comentarios, function (i, c) {
-            var mio = c.EsMio === "1";
-            html +=
-                '<div class="mensaje' + (mio ? ' mensaje--mio' : '') + '">' +
-                '<span class="mensaje__autor">' + (mio ? 'Tú' : Esc(c.Autor) + ' · ' + Esc(c.Rol)) + ' · ' + Esc(c.Fecha) + '</span>' +
-                '<div class="mensaje__burbuja">' + Esc(c.Texto) + '</div>' +
-                '</div>';
-        });
-        $("#lstConversacion").html(html);
-    }
+    PintarActividad(d.Comentarios, "#lstConversacion", "Todavía no hay mensajes.");
 
     // Recuadro de solución (solo Resuelto)
     var resuelto = t.EstadoId === "5";
@@ -669,6 +690,52 @@ function CerrarDetalle() {
 function CerrarTodo() {
     if ($("#pnlDetalle").hasClass("is-open")) CerrarDetalle();
     if ($("#pnlReportar").hasClass("is-open")) CerrarPanel();
+}
+
+
+// =====================================================================================
+// ACTIVIDAD DEL TIQUETE (SP_LISTAR_ACTIVIDAD_TICKET)
+// Mensajes (burbujas) y cambios de estado (línea centrada + motivo o solución) en orden.
+// =====================================================================================
+function PintarActividad(lista, contenedor, textoVacio) {
+    if (!lista || lista.length === 0) {
+        $(contenedor).html('<p class="conversacion__vacia">' + textoVacio + '</p>');
+        return;
+    }
+
+    var html = "";
+    $.each(lista, function (i, a) {
+        var mio = a.EsMio === "1";
+
+        // Si no viene Tipo (respaldo con solo comentarios), se pinta como mensaje
+        if (a.Tipo !== "Estado") {
+            html +=
+                '<div class="mensaje' + (mio ? ' mensaje--mio' : '') + '">' +
+                '<span class="mensaje__autor">' + (mio ? 'Tú' : Esc(a.Autor) + ' · ' + Esc(a.Rol)) + ' · ' + Esc(a.Fecha) + '</span>' +
+                '<div class="mensaje__burbuja">' + Esc(a.Texto) + '</div>' +
+                '</div>';
+            return;
+        }
+
+        var e = DescribirEvento(parseInt(a.EstadoAnteriorId), parseInt(a.EstadoNuevoId), a.EstadoNuevo);
+        html +=
+            '<div class="evento ' + e.clase + '">' +
+            '<span class="evento__linea"><strong>' + e.titulo + '</strong> · ' + (mio ? 'por ti' : 'por ' + Esc(a.Autor)) + ' · ' + Esc(a.Fecha) + '</span>' +
+            (a.Texto ? '<div class="evento__detalle">' + (e.prefijo ? '<strong>' + e.prefijo + ':</strong> ' : '') + Esc(a.Texto) + '</div>' : '') +
+            '</div>';
+    });
+    $(contenedor).html(html);
+}
+
+// Texto corto para cada cambio de estado (anterior → nuevo)
+function DescribirEvento(anterior, nuevo, nombreNuevo) {
+    if (nuevo === 5) return { titulo: 'Marcado como resuelto', prefijo: 'Solución', clase: 'evento--resuelto' };
+    if (anterior === 5 && nuevo === 2) return { titulo: 'Reabierto: el problema sigue', prefijo: 'Motivo', clase: 'evento--reabierto' };
+    if (anterior === 5 && nuevo === 6) return { titulo: 'Confirmado y cerrado', prefijo: '', clase: 'evento--resuelto' };
+    if (anterior === 1 && nuevo === 2) return { titulo: 'Asignado', prefijo: 'Motivo', clase: '' };
+    if (nuevo === 2) return { titulo: 'Reasignado', prefijo: 'Motivo', clase: '' };
+    if (nuevo === 7) return { titulo: 'Cancelado', prefijo: 'Motivo', clase: 'evento--reabierto' };
+    return { titulo: 'Pasó a ' + Esc(nombreNuevo), prefijo: 'Motivo', clase: '' };
 }
 
 

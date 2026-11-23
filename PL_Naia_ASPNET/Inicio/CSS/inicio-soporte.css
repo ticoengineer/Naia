@@ -1,0 +1,449 @@
+﻿/* =====================================================================================
+   NAIA · Vista de soporte técnico · inicio-soporte.css
+   Se carga DESPUÉS de inicio-usuario.css: reutiliza sus colores, botones, encabezado,
+   panel lateral y chat, y aquí solo se agrega lo propio de soporte.
+   ===================================================================================== */
+
+/* ---------- 1. Utilidades ---------- */
+/* Texto solo para lectores de pantalla (etiquetas de campos sin texto visible) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Soporte necesita más ancho que el inicio de usuario (tabla de 7 columnas) */
+.topbar__inner--ancho,
+.page--ancha {
+    max-width: 1280px;
+}
+
+.page--ancha {
+    gap: 1.25rem;
+}
+
+/* ---------- 2. Tarjetas de arriba ---------- */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: .9rem;
+}
+
+.kpi {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.kpi__label {
+    font-size: .9rem;
+    color: var(--color-text-soft);
+}
+
+.kpi__valor {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.kpi__valor--azul {
+    color: var(--naia-dusk);
+}
+
+.kpi__valor--ambar {
+    color: #80604A;
+}
+
+.kpi--alerta {
+    background: #FBF3F4;
+    border-color: #EBC9CE;
+}
+
+    .kpi--alerta .kpi__label,
+    .kpi--alerta .kpi__valor {
+        color: #8E3B47;
+    }
+
+/* ---------- 3. Bandeja: pestañas y filtros ---------- */
+.bandeja {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.bandeja__barra {
+    padding: .9rem 1.1rem;
+    border-bottom: 1px solid #F0EFF5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.tab {
+    min-height: 40px;
+    padding: 0 .9rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-lavender-50);
+    color: var(--color-text);
+    font: inherit;
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+    .tab:hover {
+        background: var(--naia-lavender);
+    }
+
+    .tab.is-active {
+        background: var(--naia-dusk);
+        color: #FFFFFF;
+        font-weight: 600;
+    }
+
+.tab__num:not(:empty)::before {
+    content: "· ";
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+}
+
+    .filtros .field__control {
+        min-height: 40px;
+        font-size: .9rem;
+    }
+
+.filtros__buscar {
+    width: 280px;
+    max-width: 100%;
+}
+
+.filtros__item {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+}
+
+.filtros__select {
+    width: auto;
+    min-width: 120px;
+}
+
+.filtros__check {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .9rem;
+    color: var(--color-text-soft);
+    cursor: pointer;
+}
+
+    .filtros__check input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--naia-dusk);
+    }
+
+/* ---------- 4. Tabla ---------- */
+.tabla-wrap {
+    overflow-x: auto;
+}
+
+.tabla {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+    .tabla th {
+        padding: .65rem .75rem;
+        border-bottom: 1px solid var(--color-border);
+        color: var(--color-text-soft);
+        font-size: .82rem;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .tabla td {
+        padding: .75rem;
+        border-bottom: 1px solid #F0EFF5;
+        vertical-align: middle;
+    }
+
+    .tabla th:first-child,
+    .tabla td:first-child {
+        padding-left: 1.1rem;
+    }
+
+    .tabla th:last-child,
+    .tabla td:last-child {
+        padding-right: 1.1rem;
+        text-align: right;
+    }
+
+    .tabla tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .tabla tbody tr:hover {
+        background: #FAFAFD;
+    }
+
+    /* Fila del tiquete que está abierto en el panel */
+    .tabla tbody tr.is-selected {
+        background: var(--color-lavender-50);
+    }
+
+.tabla__numero {
+    color: var(--color-muted);
+    white-space: nowrap;
+}
+
+.tabla__problema {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+}
+
+.tabla__titulo {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+    .tabla__titulo:hover {
+        color: var(--naia-dusk);
+        text-decoration: underline;
+    }
+
+.tabla__sub {
+    font-size: .8rem;
+    color: var(--color-muted);
+}
+
+.tabla__vacia {
+    padding: 2.5rem 1rem !important;
+    text-align: center !important;
+    color: var(--color-muted);
+}
+
+.btn--chico {
+    min-height: 36px;
+    padding: 0 .9rem;
+    font-size: .82rem;
+}
+
+/* ---------- 5. Etiquetas de prioridad (prioridad--PrioridadId) ---------- */
+.prioridad {
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.prioridad--1 { background: #7E2F3A; color: #FFFFFF; }   /* Crítica */
+.prioridad--2 { background: #A9545E; color: #FFFFFF; }   /* Alta */
+.prioridad--3 { background: #D1BEB0; color: #383F51; }   /* Media */
+.prioridad--4 { background: #3C4F76; color: #FFFFFF; }   /* Baja */
+
+/* ---------- 6. Tiempo restante del SLA ---------- */
+.sla {
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sla--ok      { background: var(--color-dusk-50); color: var(--naia-dusk); }
+.sla--pronto  { background: #F6F0EB;              color: #80604A; }   /* 2 horas o menos */
+.sla--vencido { background: #FBF3F4;              color: #8E3B47; }
+.sla--neutro  { background: #EFEFF2;              color: #555B6B; }   /* Resuelto / Cerrado */
+
+/* ---------- 7. Panel lateral de dos columnas ---------- */
+.drawer--soporte {
+    --drawer-width: 62%;
+    --drawer-min: 720px;
+}
+
+.detalle__solicitante {
+    font-size: .88rem;
+    color: var(--color-text-soft);
+}
+
+/* Debajo del encabezado: izquierda (chat) + derecha (datos) */
+.drawer__columnas {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 270px;
+}
+
+.drawer__principal {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Responder en una sola línea: campo + botón */
+.responder--linea {
+    flex-direction: row;
+    align-items: center;
+}
+
+    .responder--linea .field__control {
+        flex: 1;
+        min-height: 44px;
+    }
+
+/* Recuadro para escribir la solución */
+.solucion--editar {
+    background: #F3F8F5;
+}
+
+.solucion__texto-area {
+    min-height: 80px;
+    border-color: #C9DED2;
+    font-size: .95rem;
+}
+
+/* Columna derecha */
+.datos {
+    border-left: 1px solid var(--color-border);
+    background: #FAFAFC;
+    padding: 1.1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.datos__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .3rem;
+}
+
+.datos__label {
+    font-size: .78rem;
+    font-weight: 400;
+    color: var(--color-muted);
+}
+
+.datos__valor {
+    font-size: .9rem;
+    word-break: break-all;
+}
+
+.datos__tiempo {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.datos__nota {
+    font-size: .78rem;
+    color: var(--color-muted);
+}
+
+.field--compacto {
+    gap: .3rem;
+}
+
+    .field--compacto .field__control {
+        min-height: 40px;
+        font-size: .9rem;
+    }
+
+        .field--compacto .field__control:disabled {
+            background-color: #F1F1F4;
+            color: var(--color-text-soft);
+            cursor: not-allowed;
+        }
+
+/* Barra del tiempo consumido */
+.barra {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: #ECEAF2;
+    overflow: hidden;
+}
+
+.barra__relleno {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: var(--naia-dusk);
+    transition: width .3s ease;
+}
+
+    .barra__relleno.is-pronto {
+        background: #B08A6B;
+    }
+
+    .barra__relleno.is-vencido {
+        background: #A9545E;
+    }
+
+/* ---------- 8. Pantallas medianas y celular ---------- */
+@media (max-width: 900px) {
+    .drawer--soporte {
+        --drawer-width: 100%;
+        --drawer-min: 0;
+    }
+
+    /* Una sola columna: todo el panel hace scroll, los datos quedan abajo */
+    .drawer__columnas {
+        display: block;
+        overflow-y: auto;
+    }
+
+    .drawer__body {
+        overflow: visible;
+    }
+
+    .datos {
+        border-left: 0;
+        border-top: 1px solid var(--color-border);
+    }
+}
+
+@media (max-width: 640px) {
+    .filtros__buscar {
+        width: 100%;
+    }
+}
