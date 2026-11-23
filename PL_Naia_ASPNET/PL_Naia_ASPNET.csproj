@@ -67,10 +67,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\CSS\panel-admin.css" />
+    <Content Include="Admin\CSS\panel.css" />
+    <Content Include="Admin\frmPanelAdmin.aspx" />
+    <Content Include="Admin\JS\Miembros.js" />
+    <Content Include="Admin\JS\Panel.js" />
+    <Content Include="Admin\JS\Ubicaciones.js" />
+    <Content Include="Admin\JS\Categorias.js" />
+    <Content Include="Admin\Images\naia-icon.png" />
+    <Content Include="Admin\Images\favicon.png" />
+    <Content Include="Admin\Images\icon-tag.png" />
+    <Content Include="Admin\Images\icon-activity.png" />
+    <Content Include="Admin\ucUbicaciones.ascx" />
+    <Content Include="Admin\ucCategorias.ascx" />
+    <Content Include="Admin\ucCarreras.ascx" />
+    <Content Include="Admin\ucDepartamentos.ascx" />
+    <Content Include="Admin\JS\Carreras.js" />
+    <Content Include="Admin\JS\Departamentos.js" />
+    <Content Include="Admin\JS\Equipos.js" />
+    <Content Include="Admin\JS\Usuarios.js" />
+    <Content Include="Admin\JS\Auditoria.js" />
+    <Content Include="Admin\JS\Configuracion.js" />
+    <Content Include="Admin\JS\Resumen.js" />
+    <Content Include="Admin\ucEquipos.ascx" />
+    <Content Include="Admin\ucUsuarios.ascx" />
+    <Content Include="Admin\ucAuditoria.ascx" />
+    <Content Include="Admin\ucConfiguracion.ascx" />
+    <Content Include="Admin\ucResumen.ascx" />
     <Content Include="Global.asax" />
-    <Content Include="Inicio\frmInicioAdmin.aspx" />
+    <Content Include="Inicio\CSS\inicio-soporte.css" />
+    <Content Include="Inicio\CSS\inicio-usuario.css" />
     <Content Include="Inicio\frmInicioSoporte.aspx" />
     <Content Include="Inicio\frmInicioUsuario.aspx" />
+    <Content Include="Inicio\Images\favicon.png" />
+    <Content Include="Inicio\Images\icon-chevron-down.png" />
+    <Content Include="Inicio\Images\icon-close.png" />
+    <Content Include="Inicio\Images\icon-inbox.png" />
+    <Content Include="Inicio\Images\icon-info.png" />
+    <Content Include="Inicio\Images\naia-icon.png" />
+    <Content Include="Inicio\JS\InicioSoporte.js" />
+    <Content Include="Inicio\JS\InicioUsuario.js" />
     <Content Include="JavaScript\jquery.cookie.js" />
     <Content Include="JavaScript\Sesion.js" />
     <Content Include="Login\CSS\naia-brand.css" />
@@ -113,15 +149,50 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Inicio\frmInicioAdmin.aspx.cs">
-      <DependentUpon>frmInicioAdmin.aspx</DependentUpon>
+    <Compile Include="Admin\frmPanelAdmin.aspx.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Inicio\frmInicioAdmin.aspx.designer.cs">
-      <DependentUpon>frmInicioAdmin.aspx</DependentUpon>
+    <Compile Include="Admin\frmPanelAdmin.aspx.designer.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Miembros.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Ubicaciones.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Categorias.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Carreras.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Departamentos.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Equipos.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Usuarios.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Auditoria.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\frmPanelAdmin.Configuracion.cs">
+      <DependentUpon>frmPanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Inicio\frmInicioSoporte.aspx.cs">
       <DependentUpon>frmInicioSoporte.aspx</DependentUpon>
@@ -172,6 +243,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Admin\Secciones\" />
+    <Folder Include="Admin\WebMethods\" />
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>

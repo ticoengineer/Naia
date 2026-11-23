@@ -1,0 +1,198 @@
+﻿
+/* ==========================================
+   NAIA - PANEL DEL ADMINISTRADOR
+   Parte D - Anthony
+   ========================================== */
+
+:root {
+    --azul-carbon: #383F51;
+    --azul-principal: #3C4F76;
+    --lavanda: #DDDBF1;
+    --roble-palido: #D1BEB0;
+    --ceniza-lila: #AB9F9D;
+    --fondo: #F5F6FA;
+    --blanco: #FFFFFF;
+    --borde: #E1E5ED;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--fondo);
+    color: var(--azul-carbon);
+}
+
+/* ESTRUCTURA PRINCIPAL */
+
+.panel-admin {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* MENÚ LATERAL */
+
+.panel-sidebar {
+    width: 255px;
+    min-width: 255px;
+    background: var(--azul-carbon);
+    color: var(--blanco);
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-logo {
+    font-size: 26px;
+    font-weight: 700;
+    padding: 5px 15px 28px;
+    color: var(--blanco);
+}
+
+    .panel-logo span {
+        color: var(--roble-palido);
+    }
+
+.panel-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+    .panel-menu a {
+        display: block;
+        padding: 12px 15px;
+        color: #E5E7EF;
+        text-decoration: none;
+        border-radius: 9px;
+        font-size: 14px;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+        .panel-menu a:hover {
+            background: #4A5773;
+            transform: translateX(3px);
+        }
+
+        .panel-menu a.activo {
+            background: var(--azul-principal);
+            color: var(--blanco);
+            font-weight: 600;
+        }
+
+.panel-menu-titulo {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    color: var(--roble-palido);
+    padding: 22px 15px 9px;
+    font-weight: 700;
+}
+
+/* ÁREA PRINCIPAL */
+
+.panel-principal {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* BARRA SUPERIOR */
+
+.panel-header {
+    min-height: 76px;
+    background: var(--blanco);
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 15px 35px;
+}
+
+.panel-universidad {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.panel-usuario {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 14px;
+}
+
+.panel-salir {
+    color: var(--azul-principal);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+    .panel-salir:hover {
+        color: var(--azul-carbon);
+        text-decoration: underline;
+    }
+
+/* CONTENIDO */
+
+.panel-contenido {
+    flex: 1;
+    padding: 35px;
+}
+
+.panel-seccion {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 6px 22px rgba(56, 63, 81, 0.06);
+}
+
+    .panel-seccion h1 {
+        margin: 0 0 15px;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .panel-seccion p {
+        color: #667085;
+        line-height: 1.6;
+    }
+
+    .panel-seccion[hidden] {
+        display: none !important;
+    }
+
+/* DISEÑO RESPONSIVO */
+
+@media (max-width: 768px) {
+    .panel-admin {
+        flex-direction: column;
+    }
+
+    .panel-sidebar {
+        width: 100%;
+        min-width: 0;
+        padding: 18px;
+    }
+
+    .panel-logo {
+        padding-bottom: 15px;
+    }
+
+    .panel-header {
+        padding: 18px;
+        flex-wrap: wrap;
+    }
+
+    .panel-contenido {
+        padding: 18px;
+    }
+
+    .panel-seccion {
+        padding: 20px;
+    }
+}

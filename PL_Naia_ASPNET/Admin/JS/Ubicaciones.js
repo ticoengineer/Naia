@@ -1,8 +1,13 @@
-// =====================================================================================
+﻿// =====================================================================================
 // UBICACIONES · Ubicaciones.js
 // Funciones para listar, filtrar, crear, editar y eliminar ubicaciones.
 // Todas las llamadas van a frmPanelAdmin.aspx/<NombreMetodo> via AJAX.
 // =====================================================================================
+
+// Hook que Panel.js llama al abrir la seccion
+function Ubicaciones_AlAbrir() {
+    ubi_Inicializar();
+}
 
 // Se ejecuta cuando el admin abre la seccion de Ubicaciones desde el menu
 function ubi_Inicializar() {
@@ -12,6 +17,8 @@ function ubi_Inicializar() {
 // ==================== LISTAR ====================
 // Trae todas las ubicaciones y las pinta en la tabla
 function ubi_Listar() {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;   // viene de Sesion.js (cookie)
 
@@ -35,6 +42,8 @@ function ubi_Listar() {
 // ==================== FILTRAR ====================
 // Se llama cada vez que el usuario escribe en el buscador (onkeyup)
 function ubi_Filtrar() {
+    if (!ValidarSesion()) return;
+
     var texto = $("#txtUbiBuscar").val().trim();
 
     // Si el buscador esta vacio, recargamos toda la lista
@@ -115,6 +124,8 @@ function ubi_AbrirModalNuevo() {
 // ==================== EDITAR (cargar datos) ====================
 // Pide la info de una ubicacion y la carga en el modal para editar
 function ubi_Editar(ubicacionId) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -197,6 +208,8 @@ function ubi_Guardar() {
 
 // ==================== INSERTAR ====================
 function ubi_Insertar(nombre, edificio, esFisica) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -236,6 +249,8 @@ function ubi_Insertar(nombre, edificio, esFisica) {
 
 // ==================== ACTUALIZAR ====================
 function ubi_Actualizar(ubicacionId, nombre, edificio, esFisica, activa) {
+    if (!ValidarSesion()) return;
+
     var obj_Parametros_JS = new Array();
     obj_Parametros_JS[0] = g_InstitucionId;
     obj_Parametros_JS[1] = g_UsuarioId;
@@ -278,6 +293,8 @@ function ubi_Actualizar(ubicacionId, nombre, edificio, esFisica, activa) {
 // ==================== ELIMINAR (desactivar) ====================
 // Pide confirmacion antes de desactivar la ubicacion
 function ubi_Eliminar(ubicacionId, nombre) {
+    if (!ValidarSesion()) return;
+
     Swal.fire({
         icon: 'warning',
         title: '¿Desactivar ubicación?',

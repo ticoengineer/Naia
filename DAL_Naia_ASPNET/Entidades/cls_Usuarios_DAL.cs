@@ -1,41 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL_Naia_ASPNET.Entidades
 {
     public class cls_Usuarios_DAL
     {
-        #region Variables Privadas
-        /*Campos del usuario*/
-        private int _iUsuarioId, _iInstitucionId, _iRolId;
-        private string _sNombre, _sApellidos, _sCorreo, _sContrasena;
-        /*Auditoría*/
+        // ==================== Campos privados ====================
+        private int _iInstitucionId;
+        private int _iUsuarioId;
+        private int _iIdUsuarioGlobal;
+        private int _iRolId;
+        private int _iCarreraId;
+        private int _iDepartamentoId;
+        private int _iEquipoId;
+        private int _iTipoIdentificacionId;
+        private string _sIdentificacion;
+        private string _sNumeroInterno;
+        private string _sNombre;
+        private string _sApellidos;
+        private string _sCorreo;
+        private string _sContrasena;
         private string _sDireccionIp;
+        private string _sFiltro;
+        private bool _bActivo;
 
-        /*Sección presente en todas las clases*/
-        private string _sValorScalar, _sAXN, _sMSJError;
-        private DataTable _dtDatos, _dtParametros;
-        #endregion
+        // ==================== Propiedades ====================
+        public int iInstitucionId { get { return _iInstitucionId; } set { _iInstitucionId = value; } }
+        public int iUsuarioId { get { return _iUsuarioId; } set { _iUsuarioId = value; } }
+        public int iIdUsuarioGlobal { get { return _iIdUsuarioGlobal; } set { _iIdUsuarioGlobal = value; } }
+        public int iRolId { get { return _iRolId; } set { _iRolId = value; } }
+        public int iCarreraId { get { return _iCarreraId; } set { _iCarreraId = value; } }
+        public int iDepartamentoId { get { return _iDepartamentoId; } set { _iDepartamentoId = value; } }
+        public int iEquipoId { get { return _iEquipoId; } set { _iEquipoId = value; } }
+        public int iTipoIdentificacionId { get { return _iTipoIdentificacionId; } set { _iTipoIdentificacionId = value; } }
+        public string sIdentificacion { get { return _sIdentificacion; } set { _sIdentificacion = value; } }
+        public string sNumeroInterno { get { return _sNumeroInterno; } set { _sNumeroInterno = value; } }
+        public string sNombre { get { return _sNombre; } set { _sNombre = value; } }
+        public string sApellidos { get { return _sApellidos; } set { _sApellidos = value; } }
+        public string sCorreo { get { return _sCorreo; } set { _sCorreo = value; } }
+        public string sContrasena { get { return _sContrasena; } set { _sContrasena = value; } }
+        public string sDireccionIp { get { return _sDireccionIp; } set { _sDireccionIp = value; } }
+        public string sFiltro { get { return _sFiltro; } set { _sFiltro = value; } }
+        public bool bActivo { get { return _bActivo; } set { _bActivo = value; } }
 
-        #region Variables Públicas o Constructores
-        public int iUsuarioId { get => _iUsuarioId; set => _iUsuarioId = value; }
-        public int iInstitucionId { get => _iInstitucionId; set => _iInstitucionId = value; }
-        public int iRolId { get => _iRolId; set => _iRolId = value; }
-        public string sNombre { get => _sNombre; set => _sNombre = value; }
-        public string sApellidos { get => _sApellidos; set => _sApellidos = value; }
-        public string sCorreo { get => _sCorreo; set => _sCorreo = value; }
-        public string sContrasena { get => _sContrasena; set => _sContrasena = value; }
-        public string sDireccionIp { get => _sDireccionIp; set => _sDireccionIp = value; }
-
-        public string sValorScalar { get => _sValorScalar; set => _sValorScalar = value; }
-        public string sAXN { get => _sAXN; set => _sAXN = value; }
-        public string sMSJError { get => _sMSJError; set => _sMSJError = value; }
-        public DataTable dtDatos { get => _dtDatos; set => _dtDatos = value; }
-        public DataTable dtParametros { get => _dtParametros; set => _dtParametros = value; }
-        #endregion
+        // ==================== DataTables ====================
+        public DataTable dtDatos { get; set; }
+        public DataTable dtParametros { get; set; }
+        public string sValorScalar { get; set; }
+        public string sMSJError { get; set; }
     }
 }

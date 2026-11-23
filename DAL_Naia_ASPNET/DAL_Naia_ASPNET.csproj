@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -42,14 +42,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BD\cls_BD_DAL.cs" />
+    <Compile Include="cls_Miembros_DAL.cs" />
     <Compile Include="Entidades\cls_Instituciones_DAL.cs" />
     <Compile Include="Entidades\cls_Planes_DAL.cs" />
+    <Compile Include="Entidades\cls_Tickets_DAL.cs" />
+    <Compile Include="Entidades\cls_Usuarios_DAL.cs" />
     <Compile Include="Entidades\cls_Ubicaciones_DAL.cs" />
     <Compile Include="Entidades\cls_Categorias_DAL.cs" />
-    <Compile Include="Entidades\cls_Usuarios_DAL.cs" />
+    <Compile Include="Entidades\cls_Carreras_DAL.cs" />
+    <Compile Include="Entidades\cls_Departamentos_DAL.cs" />
+    <Compile Include="Entidades\cls_Equipos_DAL.cs" />
+    <Compile Include="Entidades\cls_Catalogos_DAL.cs" />
+    <Compile Include="Entidades\cls_Auditoria_DAL.cs" />
+    <Compile Include="Entidades\cls_Configuracion_DAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BD\Scripts\Batch_Data\Universidades_BatchData.sql" />
     <Content Include="BD\Scripts\dataBase_Creation.sql" />
     <Content Include="BD\Scripts\Stored_Procedures\SP Testing\testingSPs.sql" />
     <Content Include="BD\Scripts\Stored_Procedures\storedProcedures_Script.sql" />

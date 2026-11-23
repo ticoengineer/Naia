@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" %>
 
 <%--
     User Control: Sección de Categorías del panel de administración.
@@ -6,7 +6,7 @@
     Prefijo "cat" en todos los IDs para evitar choques con otras secciones.
 --%>
 
-<div id="seccionCategorias" class="admin-section" style="display: none;">
+<div id="seccionCategorias" class="admin-section">
 
     <!-- ====== Encabezado de la seccion ====== -->
     <div class="admin-section__header">
@@ -22,7 +22,7 @@
     <!-- ====== Buscador ====== -->
     <div class="admin-search">
         <div class="input input--search">
-            <img class="input__icon" src="Admin/Images/icon-search.png" alt="" aria-hidden="true" width="16" height="16">
+            <img class="input__icon" src="Images/icon-tag.png" alt="" aria-hidden="true" width="16" height="16">
             <input id="txtCatBuscar" class="input__control" type="text" placeholder="Buscar por nombre, descripción o equipo..."
                    onkeyup="cat_Filtrar()">
         </div>

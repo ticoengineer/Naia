@@ -46,7 +46,7 @@ namespace PL_Naia_ASPNET.Login
                 /*Sin respuesta de la base de datos*/
                 if (obj_Usuarios_DAL.dtDatos == null || obj_Usuarios_DAL.dtDatos.Rows.Count == 0)
                 {
-                    return "0" + "<SPLITER>" + "No se pudo conectar con la base de datos.";
+                    return "0" + "<SPLITER>" + "Error al comunicarse con el servidor. Intente de nuevo.";
                 }
 
                 /*Recuperamos los valores y los evaluamos*/
@@ -75,7 +75,7 @@ namespace PL_Naia_ASPNET.Login
                     string sDestino;
                     switch (Convert.ToInt32(fila["RolId"]))
                     {
-                        case 4: sDestino = "../Inicio/frmInicioAdmin.aspx"; break;   // Administrativo
+                        case 4: sDestino = "../Admin/frmPanelAdmin.aspx"; break;   // Administrativo
                         case 3: sDestino = "../Inicio/frmInicioSoporte.aspx"; break;   // Soporte técnico
                         default: sDestino = "../Inicio/frmInicioUsuario.aspx"; break;   // Estudiante y Profesor
                     }
@@ -95,6 +95,39 @@ namespace PL_Naia_ASPNET.Login
             catch (Exception)
             {
                 return "0" + "<SPLITER>" + "Ocurrió un error inesperado. Intenta de nuevo.";
+            }
+        }
+
+        /// <summary>
+        /// Lo llama Sesion.js → CerrarSesion().
+        /// Parámetros: [0] InstitucionId · [1] IdUsuarioGlobal
+        /// Respuesta: "código<SPLITER>mensaje" (código > 0 = éxito)
+        /// </summary>
+        [WebMethod]
+        public static string CerrarSesion(List<string> obj_Parametros_JS)
+        {
+            try
+            {
+                cls_Usuarios_DAL obj_Usuarios_DAL = new cls_Usuarios_DAL();
+                cls_Usuarios_BLL obj_Usuarios_BLL = new cls_Usuarios_BLL();
+
+                obj_Usuarios_DAL.iInstitucionId = Convert.ToInt32(obj_Parametros_JS[0]);
+                obj_Usuarios_DAL.iIdUsuarioGlobal = Convert.ToInt32(obj_Parametros_JS[1]);
+                obj_Usuarios_DAL.sDireccionIp = HttpContext.Current.Request.UserHostAddress;
+
+                obj_Usuarios_BLL.Cerrar_Sesion(ref obj_Usuarios_DAL);
+
+                if (obj_Usuarios_DAL.sValorScalar == null)
+                    return "0<SPLITER>No se pudo conectar con la base de datos.";
+
+                if (Convert.ToInt32(obj_Usuarios_DAL.sValorScalar) > 0)
+                    return obj_Usuarios_DAL.sValorScalar + "<SPLITER>Sesión cerrada correctamente.";
+
+                return "0<SPLITER>No se pudo completar el cierre de sesión. Intente más tarde.";
+            }
+            catch (Exception)
+            {
+                return "0<SPLITER>No se pudo completar el cierre de sesión. Intente más tarde.";
             }
         }
     }
