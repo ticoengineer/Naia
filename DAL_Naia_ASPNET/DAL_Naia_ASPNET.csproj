@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BD\Scripts\Batch_Data\Universidades_BatchData.sql" />
     <Content Include="BD\Scripts\dataBase_Creation.sql" />
     <Content Include="BD\Scripts\Stored_Procedures\SP Testing\testingSPs.sql" />
     <Content Include="BD\Scripts\Stored_Procedures\storedProcedures_Script.sql" />
